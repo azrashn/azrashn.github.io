@@ -1,0 +1,167 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>azrashn — portfolyo</title>
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+<div class="editor">
+
+  <!-- Sol: dosya gezgini -->
+  <aside class="sidebar">
+    <div class="sidebar-title">
+      <span class="dot dot-red"></span>
+      <span class="dot dot-yellow"></span>
+      <span class="dot dot-green"></span>
+      <span class="sidebar-user">azrashn</span>
+    </div>
+
+    <nav class="file-tree">
+      <button class="file active" data-target="hakkimda">📄 hakkimda.md</button>
+      <button class="file" data-target="projeler">📁 projeler.json</button>
+      <button class="file" data-target="oyunlar">🎮 oyunlar.mp4</button>
+      <button class="file" data-target="iletisim">✉️ iletisim.txt</button>
+    </nav>
+
+    <div class="sidebar-footer">
+      <a href="https://github.com/azrashn" target="_blank" rel="noopener">github.com/azrashn</a>
+    </div>
+  </aside>
+
+  <!-- Sağ: editör alanı -->
+  <main class="editor-main">
+
+    <div class="tabs">
+      <span class="tab active" data-tab="hakkimda">hakkimda.md</span>
+      <span class="tab" data-tab="projeler">projeler.json</span>
+      <span class="tab" data-tab="oyunlar">oyunlar.mp4</span>
+      <span class="tab" data-tab="iletisim">iletisim.txt</span>
+    </div>
+
+    <div class="panes">
+
+      <!-- HAKKIMDA -->
+      <section id="hakkimda" class="pane active">
+        <div class="hero">
+          <p class="hero-eyebrow">// merhaba, ben</p>
+          <h1 class="hero-title"><span id="typed"></span><span class="cursor">▌</span></h1>
+          <p class="hero-sub">
+            Buraya kendini bir cümlede tanıt — ne yaptığını, hangi alanlarla ilgilendiğini yaz.
+          </p>
+        </div>
+
+        <div class="card-grid">
+          <div class="info-card">
+            <h3>Neyle uğraşıyorum</h3>
+            <p>Kısaca ilgi alanlarını / uzmanlık alanlarını yaz (örn. oyun geliştirme, web, tasarım).</p>
+          </div>
+          <div class="info-card">
+            <h3>Şu an üzerinde çalıştığım</h3>
+            <p>Şu anki projeni ya da öğrendiğin bir şeyi buraya yaz.</p>
+          </div>
+          <div class="info-card">
+            <h3>Araçlarım</h3>
+            <p>Kullandığın diller / motorlar / araçlar (örn. Unity, C#, HTML/CSS/JS).</p>
+          </div>
+        </div>
+      </section>
+
+      <!-- PROJELER -->
+      <section id="projeler" class="pane">
+        <p class="pane-eyebrow">// projeler.json</p>
+        <h2 class="pane-title">Projeler</h2>
+        <div class="project-grid">
+
+          <article class="project-card">
+            <div class="project-thumb">01</div>
+            <h3>Proje Adı</h3>
+            <p>Kısa açıklama: ne yapıyor, ne ile yapıldı.</p>
+            <div class="project-links">
+              <a href="#">canlı demo</a>
+              <a href="#">kaynak kod</a>
+            </div>
+          </article>
+
+          <article class="project-card">
+            <div class="project-thumb">02</div>
+            <h3>Proje Adı</h3>
+            <p>Kısa açıklama: ne yapıyor, ne ile yapıldı.</p>
+            <div class="project-links">
+              <a href="#">canlı demo</a>
+              <a href="#">kaynak kod</a>
+            </div>
+          </article>
+
+          <article class="project-card">
+            <div class="project-thumb">03</div>
+            <h3>Proje Adı</h3>
+            <p>Kısa açıklama: ne yapıyor, ne ile yapıldı.</p>
+            <div class="project-links">
+              <a href="#">canlı demo</a>
+              <a href="#">kaynak kod</a>
+            </div>
+          </article>
+
+        </div>
+      </section>
+
+      <!-- OYUNLAR -->
+      <section id="oyunlar" class="pane">
+        <p class="pane-eyebrow">// oyunlar.mp4</p>
+        <h2 class="pane-title">Oyunlar</h2>
+        <p class="pane-desc">
+          Kodlar henüz eklenmedi, şimdilik oynanış videoları burada. Kodları eklediğinde her karta bir "kaynak kod" linki koyabilirsin.
+        </p>
+
+        <div class="game-grid">
+
+          <article class="game-card">
+            <div class="video-wrap">
+              <!-- Kendi videonu buraya ekle: YouTube linki ya da video dosyası -->
+              <iframe
+                src="https://www.youtube.com/embed/BURAYA_VIDEO_ID"
+                title="Oyun 1 oynanış videosu"
+                allowfullscreen>
+              </iframe>
+            </div>
+            <h3>Oyun Adı</h3>
+            <p>Kısa açıklama: türü, kullanılan motor, ne aşamada.</p>
+          </article>
+
+          <article class="game-card">
+            <div class="video-wrap">
+              <iframe
+                src="https://www.youtube.com/embed/BURAYA_VIDEO_ID"
+                title="Oyun 2 oynanış videosu"
+                allowfullscreen>
+              </iframe>
+            </div>
+            <h3>Oyun Adı</h3>
+            <p>Kısa açıklama: türü, kullanılan motor, ne aşamada.</p>
+          </article>
+
+        </div>
+      </section>
+
+      <!-- İLETİŞİM -->
+      <section id="iletisim" class="pane">
+        <p class="pane-eyebrow">// iletisim.txt</p>
+        <h2 class="pane-title">İletişim</h2>
+        <p class="pane-desc">Bana buradan ulaşabilirsin:</p>
+        <ul class="contact-list">
+          <li><span>github</span><a href="https://github.com/azrashn" target="_blank" rel="noopener">github.com/azrashn</a></li>
+          <li><span>e-posta</span><a href="mailto:seninmailin@example.com">seninmailin@example.com</a></li>
+          <li><span>diğer</span><a href="#">buraya başka bir link ekleyebilirsin</a></li>
+        </ul>
+      </section>
+
+    </div>
+  </main>
+</div>
+
+<script src="script.js"></script>
+</body>
+</html>
