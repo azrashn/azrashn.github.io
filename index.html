@@ -52,13 +52,6 @@
           </svg>
           projeler.json
         </button>
-        <button class="file" data-target="sertifikalar" role="tab" aria-selected="false">
-          <svg width="16" height="16" viewBox="0 0 16 16" fill="none" aria-hidden="true">
-            <circle cx="8" cy="6" r="4" stroke="currentColor" stroke-width="1.2"/>
-            <path d="M6 9.5 5 15l3-1.5L11 15l-1-5.5" stroke="currentColor" stroke-width="1.2"/>
-          </svg>
-          sertifikalar.cert
-        </button>
         <button class="file" data-target="oyunlar" role="tab" aria-selected="false">
           <svg width="16" height="16" viewBox="0 0 16 16" fill="none" aria-hidden="true">
             <path d="M2 7a3 3 0 0 1 3-3h6a3 3 0 0 1 3 3v1.5a3 3 0 0 1-3 3H5a3 3 0 0 1-3-3V7z" stroke="currentColor" stroke-width="1.2"/>
@@ -92,7 +85,6 @@
       <div class="tabs" role="tablist" aria-label="Açık dosyalar">
         <button class="tab active" data-tab="hakkimda" role="tab" aria-selected="true">hakkimda.md</button>
         <button class="tab" data-tab="projeler" role="tab" aria-selected="false">projeler.json</button>
-        <button class="tab" data-tab="sertifikalar" role="tab" aria-selected="false">sertifikalar.cert</button>
         <button class="tab" data-tab="oyunlar" role="tab" aria-selected="false">oyunlar.mp4</button>
         <button class="tab" data-tab="iletisim" role="tab" aria-selected="false">iletisim.txt</button>
       </div>
@@ -101,6 +93,35 @@
 
         <!-- ═══ HAKKIMDA ═══ -->
         <section id="hakkimda" class="pane active" role="tabpanel">
+
+          <!-- İnteraktif Kişisel Rota -->
+          <div class="route-section" id="routeSection">
+            <div class="route-container" id="routeContainer">
+              <svg class="route-svg" viewBox="0 0 800 120" preserveAspectRatio="xMidYMid meet" aria-label="Kişisel kariyer rotası">
+                <!-- Background path -->
+                <path id="routePathBg" class="route-path-bg"
+                  d="M 40 80 C 120 20, 200 20, 240 60 S 360 110, 420 60 S 520 10, 580 60 S 680 110, 760 50" />
+                <!-- Active (lit) path -->
+                <path id="routePathActive" class="route-path-active"
+                  d="M 40 80 C 120 20, 200 20, 240 60 S 360 110, 420 60 S 520 10, 580 60 S 680 110, 760 50" />
+                <!-- Stop points -->
+                <circle class="route-stop" data-stop="0" data-label="Ankara Bilim Üniversitesi" cx="40" cy="80" r="6" />
+                <circle class="route-stop" data-stop="1" data-label="Ryse Soft — Stajyer" cx="240" cy="60" r="6" />
+                <circle class="route-stop" data-stop="2" data-label="Unity & C#" cx="420" cy="60" r="6" />
+                <circle class="route-stop" data-stop="3" data-label="Kariyer Topluluğu Başkanı" cx="580" cy="60" r="6" />
+                <circle class="route-stop" data-stop="4" data-label="Freelance Grafik Tasarım" cx="760" cy="50" r="6" />
+                <!-- Stop labels (below dots) -->
+                <text class="route-stop-label" x="40" y="102">Üniversite</text>
+                <text class="route-stop-label" x="240" y="82">Ryse Soft</text>
+                <text class="route-stop-label" x="420" y="82">Unity & C#</text>
+                <text class="route-stop-label" x="580" y="82">Kariyer Top.</text>
+                <text class="route-stop-label" x="760" y="72">Freelance</text>
+              </svg>
+              <!-- Tooltips rendered by JS -->
+            </div>
+            <p class="route-hint">rotayı keşfetmek için fareyi üzerinde gezdirin</p>
+          </div>
+
           <div class="hero">
             <p class="hero-eyebrow">// merhaba, ben</p>
             <h1 class="hero-name">Esma Azra Şahin</h1>
@@ -111,67 +132,74 @@
             </p>
             <div class="hero-bio">
               <p>
-                Ankara Bilim Üniversitesi Yazılım Mühendisliği son sınıf öğrencisiyim. Nesne Yönelimli 
-                Programlama (OOP) prensiplerine hâkim, C# ve Python dillerinde güçlü bir teknik altyapıyla 
-                çalışıyorum. Ryse Soft bünyesindeki stajım ve bugüne kadarki akademik projelerim boyunca 
-                simülasyon sistemleri, veri yönetimi ve kullanıcı arayüzü tasarımı alanlarında pratik 
+                Ankara Bilim Üniversitesi Yazılım Mühendisliği son sınıf öğrencisiyim. Nesne Yönelimli
+                Programlama (OOP) prensiplerine hâkim, C# ve Python dillerinde güçlü bir teknik altyapıyla
+                çalışıyorum. Ryse Soft bünyesindeki stajım ve bugüne kadarki akademik projelerim boyunca
+                simülasyon sistemleri, veri yönetimi ve kullanıcı arayüzü tasarımı alanlarında pratik
                 deneyim kazandım.
               </p>
               <p>
-                Kurucu başkanlığını üstlendiğim öğrenci topluluğuyla liderlik, organizasyon ve takım 
-                çalışması becerilerimi pekiştirdim. İki yıl boyunca freelance grafik tasarımcı olarak 
-                markalaşma, dijital medya ve sosyal medya projeleri yürüttüm. Edindiğim bu teknik 
-                birikimi yenilikçi projelerde kullanarak değer üretmeyi ve kariyerimde sürekli 
+                Kurucu başkanlığını üstlendiğim öğrenci topluluğuyla liderlik, organizasyon ve takım
+                çalışması becerilerimi pekiştirdim. İki yıl boyunca freelance grafik tasarımcı olarak
+                markalaşma, dijital medya ve sosyal medya projeleri yürüttüm. Edindiğim bu teknik
+                birikimi yenilikçi projelerde kullanarak değer üretmeyi ve kariyerimde sürekli
                 gelişmeyi hedefliyorum.
               </p>
             </div>
           </div>
 
-          <!-- Timeline -->
+          <!-- Timeline — kart bazlı -->
           <div class="timeline-section">
-            <p class="timeline-heading">// deneyim</p>
+            <p class="section-label">// deneyim</p>
             <div class="timeline">
-              <div class="timeline-item">
-                <span class="timeline-date">07/2025 – 09/2025</span>
-                <p class="timeline-role">Oyun Geliştirme Stajyeri</p>
+              <div class="timeline-card timeline-purple">
+                <div class="timeline-card-header">
+                  <span class="timeline-role">Oyun Geliştirme Stajyeri</span>
+                  <span class="timeline-date">07/2025 – 09/2025</span>
+                </div>
                 <p class="timeline-company">Ryse Soft</p>
                 <p class="timeline-desc">
-                  C# ve Unity kullanarak yeni oyun özellikleri geliştirdi ve mevcut sistemleri iyileştirdi. 
-                  Oyun mekaniklerinin tasarım, kodlama, test ve hata giderme süreçlerine katkı sağladı. 
+                  C# ve Unity kullanarak yeni oyun özellikleri geliştirdi ve mevcut sistemleri iyileştirdi.
+                  Oyun mekaniklerinin tasarım, kodlama, test ve hata giderme süreçlerine katkı sağladı.
                   Kod kalitesini artırmak ve bakım kolaylığını sağlamak için en iyi uygulamaları benimsedi.
                 </p>
               </div>
-              <div class="timeline-item">
-                <span class="timeline-date">10/2023 – 10/2024</span>
-                <p class="timeline-role">Yönetim Kurulu Başkanı</p>
+              <div class="timeline-card timeline-blue">
+                <div class="timeline-card-header">
+                  <span class="timeline-role">Yönetim Kurulu Başkanı</span>
+                  <span class="timeline-date">10/2023 – 10/2024</span>
+                </div>
                 <p class="timeline-company">Kariyer Topluluğu</p>
                 <p class="timeline-desc">
-                  Liderlik ve operasyon yönetimi deneyimi kazandı. Kariyer geliştirme etkinlikleri 
-                  planlayıp yürüttü, yeni projeler oluşturdu. Topluluk üyeleriyle etkileşimi artırma 
+                  Liderlik ve operasyon yönetimi deneyimi kazandı. Kariyer geliştirme etkinlikleri
+                  planlayıp yürüttü, yeni projeler oluşturdu. Topluluk üyeleriyle etkileşimi artırma
                   ve şirket/organizasyonlarla iş birlikleri kurma konularında deneyim edindi.
                 </p>
               </div>
-              <div class="timeline-item">
-                <span class="timeline-date">2022 – 2024</span>
-                <p class="timeline-role">Grafik Tasarımcı</p>
+              <div class="timeline-card timeline-amber">
+                <div class="timeline-card-header">
+                  <span class="timeline-role">Grafik Tasarımcı</span>
+                  <span class="timeline-date">2022 – 2024</span>
+                </div>
                 <p class="timeline-company">Freelance</p>
                 <p class="timeline-desc">
-                  Dijital medya tasarımı alanında markalaşma, pazarlama materyalleri ve sosyal medya 
-                  içerikleri geliştirdi. Kupa, defter, davetiye, dergi, kartvizit ve topluluk etkinlikleri 
+                  Dijital medya tasarımı alanında markalaşma, pazarlama materyalleri ve sosyal medya
+                  içerikleri geliştirdi. Kupa, defter, davetiye, dergi, kartvizit ve topluluk etkinlikleri
                   için poster ve sosyal medya grafikleri tasarladı.
                 </p>
               </div>
             </div>
           </div>
 
+          <!-- Info kartları -->
           <div class="card-grid">
             <div class="info-card">
               <h3>
                 <svg width="16" height="16" viewBox="0 0 16 16" fill="none" aria-hidden="true"><path d="M8 1v14M1 8h14" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg>
                 Neyle uğraşıyorum
               </h3>
-              <p>Oyun geliştirme, yazılım mühendisliği ve grafik tasarım — bu üçünü bir arada yürütüyorum. 
-                Oyun mekanikleri tasarlamaktan backend mimarisi kurmaya, dijital varlık üretiminden kullanıcı 
+              <p>Oyun geliştirme, yazılım mühendisliği ve grafik tasarım — bu üçünü bir arada yürütüyorum.
+                Oyun mekanikleri tasarlamaktan backend mimarisi kurmaya, dijital varlık üretiminden kullanıcı
                 arayüzü çizmeye kadar geniş bir yelpazede çalışıyorum.</p>
             </div>
             <div class="info-card">
@@ -179,7 +207,7 @@
                 <svg width="16" height="16" viewBox="0 0 16 16" fill="none" aria-hidden="true"><path d="M8 3v5l3 3" stroke="currentColor" stroke-width="1.3" stroke-linecap="round"/><circle cx="8" cy="8" r="6.5" stroke="currentColor" stroke-width="1.2"/></svg>
                 Şu an üzerinde çalıştığım
               </h3>
-              <p>Ryse Soft'ta Unity ile oyun geliştirme stajımı sürdürüyorum. Aynı zamanda kapsamlı bir 
+              <p>Ryse Soft'ta Unity ile oyun geliştirme stajımı sürdürüyorum. Aynı zamanda kapsamlı bir
                 Öğrenci Bilgi Sistemi projesi ve FastAPI tabanlı bir yüz warping uygulaması üzerinde çalışıyorum.</p>
             </div>
             <div class="info-card">
@@ -197,6 +225,115 @@
               </div>
             </div>
           </div>
+
+          <!-- Sertifikalar — kompakt liste -->
+          <div class="certs-compact">
+            <p class="section-label">// sertifikalar</p>
+            <ul class="cert-list">
+              <li class="cert-item">
+                <div class="cert-info">
+                  <svg width="14" height="14" viewBox="0 0 16 16" fill="none" aria-hidden="true"><path d="M4 7l3 3 5-6" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+                  <div class="cert-text">
+                    <span class="cert-name">Dijital Oyunlarda Kullanılan Yapay Zeka Algoritmaları</span>
+                    <span class="cert-credential">ID: df3dc295-cdb6-4b00-90aa-ee1c694ef082</span>
+                    <div class="cert-skills"><span class="cert-skill-tag">Unity</span><span class="cert-skill-tag">Yapay Zeka</span></div>
+                  </div>
+                </div>
+                <div class="cert-meta">
+                  <span class="cert-org">BTK Akademi</span>
+                  <span class="cert-date">02/2025</span>
+                </div>
+              </li>
+              <li class="cert-item">
+                <div class="cert-info">
+                  <svg width="14" height="14" viewBox="0 0 16 16" fill="none" aria-hidden="true"><path d="M4 7l3 3 5-6" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+                  <div class="cert-text">
+                    <span class="cert-name">Sayısal Çip Tasarımına Giriş</span>
+                    <span class="cert-credential">ID: 5d895df1-9bd0-4e14-b4d4-0a43d766efa3</span>
+                  </div>
+                </div>
+                <div class="cert-meta">
+                  <span class="cert-org">BTK Akademi</span>
+                  <span class="cert-date">02/2025</span>
+                </div>
+              </li>
+              <li class="cert-item">
+                <div class="cert-info">
+                  <svg width="14" height="14" viewBox="0 0 16 16" fill="none" aria-hidden="true"><path d="M4 7l3 3 5-6" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+                  <div class="cert-text">
+                    <span class="cert-name">Unity ile Oyun Geliştirme</span>
+                    <span class="cert-credential">ID: 06kBSz29B1A</span>
+                  </div>
+                </div>
+                <div class="cert-meta">
+                  <span class="cert-org">BTK Akademi</span>
+                  <span class="cert-date">08/2024</span>
+                </div>
+              </li>
+              <li class="cert-item">
+                <div class="cert-info">
+                  <svg width="14" height="14" viewBox="0 0 16 16" fill="none" aria-hidden="true"><path d="M4 7l3 3 5-6" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+                  <div class="cert-text">
+                    <span class="cert-name">Süreç İyileştirme ve Problem Çözme Teknikleri</span>
+                  </div>
+                </div>
+                <div class="cert-meta">
+                  <span class="cert-org">ASELSAN</span>
+                  <span class="cert-date">02/2024</span>
+                </div>
+              </li>
+              <li class="cert-item">
+                <div class="cert-info">
+                  <svg width="14" height="14" viewBox="0 0 16 16" fill="none" aria-hidden="true"><path d="M4 7l3 3 5-6" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+                  <div class="cert-text">
+                    <span class="cert-name">İleri Teknolojilerde Siber Güvenlik</span>
+                  </div>
+                </div>
+                <div class="cert-meta">
+                  <span class="cert-org">HAVELSAN</span>
+                  <span class="cert-date">02/2024</span>
+                </div>
+              </li>
+              <li class="cert-item">
+                <div class="cert-info">
+                  <svg width="14" height="14" viewBox="0 0 16 16" fill="none" aria-hidden="true"><path d="M4 7l3 3 5-6" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+                  <div class="cert-text">
+                    <span class="cert-name">Flutter Sertifikası</span>
+                    <span class="cert-credential">ID: 06kBSz29B1A</span>
+                  </div>
+                </div>
+                <div class="cert-meta">
+                  <span class="cert-org">BTK Akademi</span>
+                  <span class="cert-date">05/2023</span>
+                </div>
+              </li>
+              <li class="cert-item">
+                <div class="cert-info">
+                  <svg width="14" height="14" viewBox="0 0 16 16" fill="none" aria-hidden="true"><path d="M4 7l3 3 5-6" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+                  <div class="cert-text">
+                    <span class="cert-name">Geleceğin Hackerleri</span>
+                  </div>
+                </div>
+                <div class="cert-meta">
+                  <span class="cert-org">BTK Akademi</span>
+                  <span class="cert-date">08/2022</span>
+                </div>
+              </li>
+              <li class="cert-item">
+                <div class="cert-info">
+                  <svg width="14" height="14" viewBox="0 0 16 16" fill="none" aria-hidden="true"><path d="M4 7l3 3 5-6" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+                  <div class="cert-text">
+                    <span class="cert-name">Eclipse Java Eğitimi</span>
+                  </div>
+                </div>
+                <div class="cert-meta">
+                  <span class="cert-org">BTK Akademi</span>
+                  <span class="cert-date">08/2022</span>
+                </div>
+              </li>
+            </ul>
+          </div>
+
         </section>
 
         <!-- ═══ PROJELER ═══ -->
@@ -205,14 +342,14 @@
           <h2 class="pane-title">Projeler</h2>
           <div class="project-grid">
 
-            <article class="project-card">
+            <article class="project-card card-purple">
               <div class="project-header">
                 <span class="project-number">01</span>
                 <span class="project-status status-done">tamamlandı</span>
               </div>
               <h3>Öğrenci Bilgi Sistemi (OBS)</h3>
-              <p>Kurumsal düzeyde, kapsamlı veritabanı ve backend mimarisi içeren bir yazılım projesi. 
-                Öğrenci, akademisyen ve idari personel rollerine göre yetkilendirme, veri güvenliği ve 
+              <p>Kurumsal düzeyde, kapsamlı veritabanı ve backend mimarisi içeren bir yazılım projesi.
+                Öğrenci, akademisyen ve idari personel rollerine göre yetkilendirme, veri güvenliği ve
                 bilgi yönetimi süreçlerini kapsıyor. 6 kişilik bir ekiple geliştirilerek tamamlandı.</p>
               <div class="project-tags">
                 <span class="tech-tag">Veritabanı</span>
@@ -228,15 +365,15 @@
               </div>
             </article>
 
-            <article class="project-card">
+            <article class="project-card card-blue">
               <div class="project-header">
                 <span class="project-number">02</span>
                 <span class="project-status status-done">tamamlandı</span>
               </div>
               <h3>Facial Image Warping</h3>
-              <p>MediaPipe FaceMesh kullanılarak yüz üzerinde 468 noktalı landmark tespiti yapan ve bu 
-                verilerle dijital warping işlemleri gerçekleştiren FastAPI tabanlı bir web uygulaması. 
-                Arayüz Figma ile tasarlandı; sonuçlar MSE, PSNR ve SSIM metrikleriyle analiz edilerek 
+              <p>MediaPipe FaceMesh kullanılarak yüz üzerinde 468 noktalı landmark tespiti yapan ve bu
+                verilerle dijital warping işlemleri gerçekleştiren FastAPI tabanlı bir web uygulaması.
+                Arayüz Figma ile tasarlandı; sonuçlar MSE, PSNR ve SSIM metrikleriyle analiz edilerek
                 proje başarıyla tamamlandı.</p>
               <div class="project-tags">
                 <span class="tech-tag">FastAPI</span>
@@ -252,14 +389,14 @@
               </div>
             </article>
 
-            <article class="project-card">
+            <article class="project-card card-emerald">
               <div class="project-header">
                 <span class="project-number">03</span>
                 <span class="project-status status-done">tamamlandı</span>
               </div>
               <h3>Bank Queue Management System</h3>
-              <p>Gerçek zamanlı sistem takibi ve dinamik veri yönetimine dayalı bir kuyruk yönetim yazılımı. 
-                Kullanıcı trafiğini optimize eden algoritmalarla web tabanlı bir arayüz geliştirildi; 
+              <p>Gerçek zamanlı sistem takibi ve dinamik veri yönetimine dayalı bir kuyruk yönetim yazılımı.
+                Kullanıcı trafiğini optimize eden algoritmalarla web tabanlı bir arayüz geliştirildi;
                 eşzamanlı veri işleme, frontend tasarımı ve kullanıcı akışı geliştirme yetkinliklerini kapsıyor.</p>
               <div class="project-tags">
                 <span class="tech-tag">Web</span>
@@ -275,14 +412,14 @@
               </div>
             </article>
 
-            <article class="project-card">
+            <article class="project-card card-amber">
               <div class="project-header">
                 <span class="project-number">04</span>
                 <span class="project-status status-done">tamamlandı</span>
               </div>
               <h3>Automated Feedback &amp; Assessment System</h3>
-              <p>6 kişilik bir ekiple geliştirilen, eğitim süreçlerini optimize etmeyi amaçlayan web tabanlı 
-                bir otomasyon sistemi. SDLC prensiplerine uygun olarak veri analizi, otomatik değerlendirme 
+              <p>6 kişilik bir ekiple geliştirilen, eğitim süreçlerini optimize etmeyi amaçlayan web tabanlı
+                bir otomasyon sistemi. SDLC prensiplerine uygun olarak veri analizi, otomatik değerlendirme
                 algoritmaları ve gerçek zamanlı geri bildirim mekanizmaları üzerinde aktif rol alındı.</p>
               <div class="project-tags">
                 <span class="tech-tag">Web</span>
@@ -301,127 +438,6 @@
           </div>
         </section>
 
-        <!-- ═══ SERTİFİKALAR ═══ -->
-        <section id="sertifikalar" class="pane" role="tabpanel">
-          <p class="pane-eyebrow">// sertifikalar.cert</p>
-          <h2 class="pane-title">Sertifikalar</h2>
-          <ul class="cert-list">
-
-            <li class="cert-item">
-              <div class="cert-info">
-                <svg width="14" height="14" viewBox="0 0 16 16" fill="none" aria-hidden="true"><path d="M4 7l3 3 5-6" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
-                <div class="cert-text">
-                  <span class="cert-name">Dijital Oyunlarda Kullanılan Yapay Zeka Algoritmaları</span>
-                  <span class="cert-credential">ID: df3dc295-cdb6-4b00-90aa-ee1c694ef082</span>
-                  <div class="cert-skills">
-                    <span class="cert-skill-tag">Unity</span>
-                    <span class="cert-skill-tag">Yapay Zeka</span>
-                  </div>
-                </div>
-              </div>
-              <div class="cert-meta">
-                <span class="cert-org">BTK Akademi</span>
-                <span class="cert-date">02/2025</span>
-              </div>
-            </li>
-
-            <li class="cert-item">
-              <div class="cert-info">
-                <svg width="14" height="14" viewBox="0 0 16 16" fill="none" aria-hidden="true"><path d="M4 7l3 3 5-6" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
-                <div class="cert-text">
-                  <span class="cert-name">Sayısal Çip Tasarımına Giriş</span>
-                  <span class="cert-credential">ID: 5d895df1-9bd0-4e14-b4d4-0a43d766efa3</span>
-                </div>
-              </div>
-              <div class="cert-meta">
-                <span class="cert-org">BTK Akademi</span>
-                <span class="cert-date">02/2025</span>
-              </div>
-            </li>
-
-            <li class="cert-item">
-              <div class="cert-info">
-                <svg width="14" height="14" viewBox="0 0 16 16" fill="none" aria-hidden="true"><path d="M4 7l3 3 5-6" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
-                <div class="cert-text">
-                  <span class="cert-name">Unity ile Oyun Geliştirme</span>
-                  <span class="cert-credential">ID: 06kBSz29B1A</span>
-                </div>
-              </div>
-              <div class="cert-meta">
-                <span class="cert-org">BTK Akademi</span>
-                <span class="cert-date">08/2024</span>
-              </div>
-            </li>
-
-            <li class="cert-item">
-              <div class="cert-info">
-                <svg width="14" height="14" viewBox="0 0 16 16" fill="none" aria-hidden="true"><path d="M4 7l3 3 5-6" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
-                <div class="cert-text">
-                  <span class="cert-name">Süreç İyileştirme ve Problem Çözme Teknikleri</span>
-                </div>
-              </div>
-              <div class="cert-meta">
-                <span class="cert-org">ASELSAN</span>
-                <span class="cert-date">02/2024</span>
-              </div>
-            </li>
-
-            <li class="cert-item">
-              <div class="cert-info">
-                <svg width="14" height="14" viewBox="0 0 16 16" fill="none" aria-hidden="true"><path d="M4 7l3 3 5-6" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
-                <div class="cert-text">
-                  <span class="cert-name">İleri Teknolojilerde Siber Güvenlik</span>
-                </div>
-              </div>
-              <div class="cert-meta">
-                <span class="cert-org">HAVELSAN</span>
-                <span class="cert-date">02/2024</span>
-              </div>
-            </li>
-
-            <li class="cert-item">
-              <div class="cert-info">
-                <svg width="14" height="14" viewBox="0 0 16 16" fill="none" aria-hidden="true"><path d="M4 7l3 3 5-6" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
-                <div class="cert-text">
-                  <span class="cert-name">Flutter Sertifikası</span>
-                  <span class="cert-credential">ID: 06kBSz29B1A</span>
-                </div>
-              </div>
-              <div class="cert-meta">
-                <span class="cert-org">BTK Akademi</span>
-                <span class="cert-date">05/2023</span>
-              </div>
-            </li>
-
-            <li class="cert-item">
-              <div class="cert-info">
-                <svg width="14" height="14" viewBox="0 0 16 16" fill="none" aria-hidden="true"><path d="M4 7l3 3 5-6" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
-                <div class="cert-text">
-                  <span class="cert-name">Geleceğin Hackerleri</span>
-                </div>
-              </div>
-              <div class="cert-meta">
-                <span class="cert-org">BTK Akademi</span>
-                <span class="cert-date">08/2022</span>
-              </div>
-            </li>
-
-            <li class="cert-item">
-              <div class="cert-info">
-                <svg width="14" height="14" viewBox="0 0 16 16" fill="none" aria-hidden="true"><path d="M4 7l3 3 5-6" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
-                <div class="cert-text">
-                  <span class="cert-name">Eclipse Java Eğitimi</span>
-                </div>
-              </div>
-              <div class="cert-meta">
-                <span class="cert-org">BTK Akademi</span>
-                <span class="cert-date">08/2022</span>
-              </div>
-            </li>
-
-          </ul>
-        </section>
-
         <!-- ═══ OYUNLAR ═══ -->
         <section id="oyunlar" class="pane" role="tabpanel">
           <p class="pane-eyebrow">// oyunlar.mp4</p>
@@ -429,24 +445,19 @@
 
           <div class="game-grid">
 
-            <article class="game-card">
+            <article class="game-card card-rose">
               <div class="video-wrap">
-                <iframe
-                  src="https://www.youtube.com/embed/BURAYA_VIDEO_ID"
-                  title="Flower Shop Simulator — oynanış videosu"
-                  loading="lazy"
-                  allowfullscreen>
-                </iframe>
+                <iframe src="https://www.youtube.com/embed/BURAYA_VIDEO_ID" title="Flower Shop Simulator — oynanış videosu" loading="lazy" allowfullscreen></iframe>
                 <div class="video-overlay" aria-hidden="true">
                   <svg width="48" height="48" viewBox="0 0 48 48" fill="none"><circle cx="24" cy="24" r="23" stroke="white" stroke-width="2" opacity="0.8"/><path d="M20 16l14 8-14 8V16z" fill="white" opacity="0.9"/></svg>
                 </div>
               </div>
               <div class="game-info">
                 <h3>Flower Shop Simulator</h3>
-                <p>Oyun geliştirme ve grafik tasarım becerilerini birleştiren bir proje; oyuncuların kendi 
-                  çiçek dükkanlarını yönettiği bir simülasyon oyunu. Dükkan içi envanter yönetimi, müşteri 
-                  siparişlerinin zamanında hazırlanması ve estetik çiçek aranjmanlarının tasarlanması gibi 
-                  oyun içi mekaniklerin yanı sıra, oyunun görsel dünyasını oluşturan özgün dijital sanat 
+                <p>Oyun geliştirme ve grafik tasarım becerilerini birleştiren bir proje; oyuncuların kendi
+                  çiçek dükkanlarını yönettiği bir simülasyon oyunu. Dükkan içi envanter yönetimi, müşteri
+                  siparişlerinin zamanında hazırlanması ve estetik çiçek aranjmanlarının tasarlanması gibi
+                  oyun içi mekaniklerin yanı sıra, oyunun görsel dünyasını oluşturan özgün dijital sanat
                   varlıklarının üretimini de kapsıyor.</p>
                 <div class="game-tags">
                   <span class="engine-tag">Unity</span>
@@ -458,22 +469,17 @@
               </div>
             </article>
 
-            <article class="game-card">
+            <article class="game-card card-indigo">
               <div class="video-wrap">
-                <iframe
-                  src="https://www.youtube.com/embed/BURAYA_VIDEO_ID"
-                  title="Tower Defense Game — oynanış videosu"
-                  loading="lazy"
-                  allowfullscreen>
-                </iframe>
+                <iframe src="https://www.youtube.com/embed/BURAYA_VIDEO_ID" title="Tower Defense Game — oynanış videosu" loading="lazy" allowfullscreen></iframe>
                 <div class="video-overlay" aria-hidden="true">
                   <svg width="48" height="48" viewBox="0 0 48 48" fill="none"><circle cx="24" cy="24" r="23" stroke="white" stroke-width="2" opacity="0.8"/><path d="M20 16l14 8-14 8V16z" fill="white" opacity="0.9"/></svg>
                 </div>
               </div>
               <div class="game-info">
                 <h3>Tower Defense Game</h3>
-                <p>Stratejik kaynak yönetimi ve savunma optimizasyonuna odaklanan bir simülasyon projesi. 
-                  GDD (Game Design Document) hazırlandı; algoritma tasarımı ve OOP prensipleriyle senaryolar 
+                <p>Stratejik kaynak yönetimi ve savunma optimizasyonuna odaklanan bir simülasyon projesi.
+                  GDD (Game Design Document) hazırlandı; algoritma tasarımı ve OOP prensipleriyle senaryolar
                   modellendi, dijital varlık tasarım süreçlerinde aktif rol alındı.</p>
                 <div class="game-tags">
                   <span class="engine-tag">Unity</span>
@@ -482,6 +488,46 @@
                   <span class="role-tag">Kodlama</span>
                   <span class="role-tag">GDD</span>
                   <span class="role-tag">Dijital Sanat</span>
+                </div>
+              </div>
+            </article>
+
+            <article class="game-card card-emerald">
+              <div class="video-wrap">
+                <iframe src="https://www.youtube.com/embed/BURAYA_VIDEO_ID" title="Arcade Runner — oynanış videosu" loading="lazy" allowfullscreen></iframe>
+                <div class="video-overlay" aria-hidden="true">
+                  <svg width="48" height="48" viewBox="0 0 48 48" fill="none"><circle cx="24" cy="24" r="23" stroke="white" stroke-width="2" opacity="0.8"/><path d="M20 16l14 8-14 8V16z" fill="white" opacity="0.9"/></svg>
+                </div>
+              </div>
+              <div class="game-info">
+                <h3>Arcade Runner</h3>
+                <p>Unity ile geliştirilmiş 2D/2.5D arcade oyunu. Klasik arcade aksiyon oyunu; hızlı refleks
+                  ve skor rekabetine dayalı mekanikler içeriyor.</p>
+                <div class="game-tags">
+                  <span class="engine-tag">Unity</span>
+                  <span class="engine-tag">C#</span>
+                  <span class="role-tag">Kodlama</span>
+                  <span class="role-tag">Tasarım</span>
+                </div>
+              </div>
+            </article>
+
+            <article class="game-card card-amber">
+              <div class="video-wrap">
+                <iframe src="https://www.youtube.com/embed/BURAYA_VIDEO_ID" title="Box Puzzle — oynanış videosu" loading="lazy" allowfullscreen></iframe>
+                <div class="video-overlay" aria-hidden="true">
+                  <svg width="48" height="48" viewBox="0 0 48 48" fill="none"><circle cx="24" cy="24" r="23" stroke="white" stroke-width="2" opacity="0.8"/><path d="M20 16l14 8-14 8V16z" fill="white" opacity="0.9"/></svg>
+                </div>
+              </div>
+              <div class="game-info">
+                <h3>Box Puzzle</h3>
+                <p>Unity ile geliştirilmiş 2D bulmaca oyunu. Kutu itme/yerleştirme mekaniğine dayalı,
+                  artan zorluk seviyeli bir bulmaca oyunu.</p>
+                <div class="game-tags">
+                  <span class="engine-tag">Unity</span>
+                  <span class="engine-tag">C#</span>
+                  <span class="role-tag">Kodlama</span>
+                  <span class="role-tag">Bulmaca Tasarımı</span>
                 </div>
               </div>
             </article>
@@ -528,9 +574,13 @@
             <svg width="12" height="12" viewBox="0 0 16 16" fill="none" aria-hidden="true"><circle cx="5" cy="4" r="2" stroke="currentColor" stroke-width="1.2"/><circle cx="11" cy="12" r="2" stroke="currentColor" stroke-width="1.2"/><path d="M5 6v2c0 2.2 1.8 4 4 4h2" stroke="currentColor" stroke-width="1.2"/></svg>
             main
           </span>
+          <span class="status-item">azrashn/portfolyo</span>
         </div>
         <div class="status-right">
+          <span class="status-item" id="statusFile">hakkimda.md</span>
+          <span class="status-separator">·</span>
           <span class="status-item" id="statusLang">Markdown</span>
+          <span class="status-separator">·</span>
           <span class="status-item">UTF-8</span>
         </div>
       </footer>
