@@ -74,6 +74,28 @@
     }
   });
 
+  // ── Tab keyboard shortcuts (Ctrl+Tab / Ctrl+Shift+Tab) ──
+  const tabTargets = ['hakkimda', 'projeler', 'sertifikalar', 'oyunlar', 'iletisim'];
+
+  document.addEventListener('keydown', (e) => {
+    if (!e.ctrlKey || e.key !== 'Tab') return;
+    e.preventDefault();
+
+    const currentPane = document.querySelector('.pane.active');
+    if (!currentPane) return;
+
+    const currentIndex = tabTargets.indexOf(currentPane.id);
+    let nextIndex;
+
+    if (e.shiftKey) {
+      nextIndex = currentIndex <= 0 ? tabTargets.length - 1 : currentIndex - 1;
+    } else {
+      nextIndex = currentIndex >= tabTargets.length - 1 ? 0 : currentIndex + 1;
+    }
+
+    activate(tabTargets[nextIndex]);
+  });
+
   // ── Mobile sidebar ──
   let overlay = null;
 
@@ -118,7 +140,7 @@
 
   // ── Hero typing effect ──
   const typedEl = document.getElementById('typed');
-  const text = 'Kod yazarım, oyun kurarım.';
+  const text = 'Yazılım Mühendisliği Öğrencisi & Oyun Geliştirici';
   let charIndex = 0;
 
   function typeWriter() {
@@ -126,8 +148,7 @@
     if (charIndex < text.length) {
       typedEl.textContent += text.charAt(charIndex);
       charIndex++;
-      // Slightly randomized delay for a natural feel
-      const delay = 60 + Math.random() * 50;
+      const delay = 55 + Math.random() * 35;
       setTimeout(typeWriter, delay);
     }
   }
