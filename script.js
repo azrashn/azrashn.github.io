@@ -192,181 +192,48 @@
   setTimeout(typeLoop, 500);
 
   // ═══════════════════════════════════════════
-  // INTERACTIVE ROUTE — SVG path illumination
+  // INTERACTIVE JOURNEY TIMELINE
   // ═══════════════════════════════════════════
-  const routeContainer = document.getElementById('routeContainer');
-  const routePathBg = document.getElementById('routePathBg');
-  const routePathActive = document.getElementById('routePathActive');
-  const routeStops = document.querySelectorAll('.route-stop');
-  const routeLabels = document.querySelectorAll('.route-stop-label');
+  const journeyStops = document.querySelectorAll('.journey-stop');
+  let activeStop = null;
 
-  if (routePathActive && routePathBg && routeContainer) {
-    const totalLength = routePathActive.getTotalLength();
+  journeyStops.forEach(stop => {
+    // Mouse enter — activate
+    stop.addEventListener('mouseenter', () => {
+      if (activeStop && activeStop !== stop) {
+        activeStop.classList.remove('active');
+      }
+      stop.classList.add('active');
+      activeStop = stop;
+    });
 
-    // Initialize: hide active path completely
-    routePathActive.style.strokeDasharray = totalLength;
-    routePathActive.style.strokeDashoffset = totalLength;
+    // Click — toggle (for mobile & accessibility)
+    stop.addEventListener('click', () => {
+      if (activeStop === stop && stop.classList.contains('active')) {
+        stop.classList.remove('active');
+        activeStop = null;
+      } else {
+        if (activeStop) activeStop.classList.remove('active');
+        stop.classList.add('active');
+        activeStop = stop;
+      }
+    });
+  });
 
-    let currentProgress = 0; // 0 to 1
-    let tooltipEl = null;
-    let hasCompletedOnce = false;
-
-    // Create tooltip element
-    tooltipEl = document.createElement('div');
-    tooltipEl.className = 'route-tooltip';
-    routeContainer.appendChild(tooltipEl);
-
-    // Get closest point on path for a given mouse position
-    function getProgressFromMouse(clientX) {
-      const svgRect = routeContainer.getBoundingClientRect();
-      const relX = clientX - svgRect.left;
-      const ratio = Math.max(0, Math.min(1, relX / svgRect.width));
-      return ratio;
+  // Close active card when clicking outside
+  document.addEventListener('click', (e) => {
+    if (activeStop && !e.target.closest('.journey-stop')) {
+      activeStop.classList.remove('active');
+      activeStop = null;
     }
+  });
 
-    function updateRoute(progress) {
-      currentProgress = progress;
-      const offset = totalLength * (1 - progress);
-      routePathActive.style.strokeDashoffset = offset;
-
-      // Light up stops that have been passed
-      const svgRect = routeContainer.getBoundingClientRect();
-
-      routeStops.forEach((stop, i) => {
-        // Get stop position as ratio of SVG width
-        const cx = parseFloat(stop.getAttribute('cx'));
-        const svgWidth = 800; // viewBox width
-        const stopRatio = cx / svgWidth;
-
-        if (progress >= stopRatio) {
-          stop.classList.add('lit');
-          if (routeLabels[i]) routeLabels[i].classList.add('lit');
-        } else {
-          stop.classList.remove('lit');
-          if (routeLabels[i]) routeLabels[i].classList.remove('lit');
-        }
-      });
-
-      // Show tooltip for nearest stop
-      let nearestStop = null;
-      let nearestDist = Infinity;
-
-      routeStops.forEach(stop => {
-        const cx = parseFloat(stop.getAttribute('cx'));
-        const stopRatio = cx / 800;
-        const dist = Math.abs(progress - stopRatio);
-        if (dist < 0.05 && dist < nearestDist) {
-          nearestDist = dist;
-          nearestStop = stop;
-        }
-      });
-
-      if (nearestStop && tooltipEl) {
-        const label = nearestStop.dataset.label;
-        tooltipEl.textContent = label;
-        tooltipEl.classList.add('visible');
-
-        // Position tooltip
-        const cx = parseFloat(nearestStop.getAttribute('cx'));
-        const cy = parseFloat(nearestStop.getAttribute('cy'));
-        const xPercent = (cx / 800) * 100;
-        const svgH = routeContainer.querySelector('.route-svg').getBoundingClientRect().height;
-        const yRatio = cy / 120;
-
-        tooltipEl.style.left = xPercent + '%';
-        tooltipEl.style.top = (yRatio * svgH + 16) + 'px';
-        tooltipEl.style.transform = 'translateX(-50%)';
-      } else if (tooltipEl) {
-        tooltipEl.classList.remove('visible');
-      }
-
-      // Check if reached the end
-      if (progress > 0.95 && !hasCompletedOnce) {
-        hasCompletedOnce = true;
-        spawnParticles();
-      }
+  // Close on Escape
+  document.addEventListener('keydown', (e) => {
+    if (e.key === 'Escape' && activeStop) {
+      activeStop.classList.remove('active');
+      activeStop = null;
     }
-
-    // Mouse events
-    routeContainer.addEventListener('mousemove', (e) => {
-      const progress = getProgressFromMouse(e.clientX);
-      updateRoute(progress);
-    });
-
-    routeContainer.addEventListener('mouseleave', () => {
-      if (tooltipEl) tooltipEl.classList.remove('visible');
-    });
-
-    // Touch events
-    routeContainer.addEventListener('touchmove', (e) => {
-      e.preventDefault();
-      const touch = e.touches[0];
-      const progress = getProgressFromMouse(touch.clientX);
-      updateRoute(progress);
-    }, { passive: false });
-
-    routeContainer.addEventListener('touchend', () => {
-      if (tooltipEl) tooltipEl.classList.remove('visible');
-    });
-
-    // ── Particle burst at route end ──
-    function spawnParticles() {
-      const lastStop = routeStops[routeStops.length - 1];
-      if (!lastStop) return;
-
-      const svgRect = routeContainer.getBoundingClientRect();
-      const cx = parseFloat(lastStop.getAttribute('cx'));
-      const cy = parseFloat(lastStop.getAttribute('cy'));
-
-      // Convert SVG coordinates to container pixels
-      const xPx = (cx / 800) * svgRect.width;
-      const yPx = (cy / 120) * svgRect.height;
-
-      const colors = [
-        '#a855f7', '#f43f5e', '#58a6ff', '#3fb950',
-        '#f59e0b', '#6366f1', '#e6edf3'
-      ];
-
-      for (let i = 0; i < 35; i++) {
-        const particle = document.createElement('div');
-        particle.className = 'route-particle';
-
-        // Random direction and distance
-        const angle = Math.random() * Math.PI * 2;
-        const dist = 30 + Math.random() * 60;
-        const px = Math.cos(angle) * dist;
-        const py = Math.sin(angle) * dist;
-
-        particle.style.left = xPx + 'px';
-        particle.style.top = yPx + 'px';
-        particle.style.setProperty('--px', px + 'px');
-        particle.style.setProperty('--py', py + 'px');
-        particle.style.background = colors[Math.floor(Math.random() * colors.length)];
-        particle.style.width = (2 + Math.random() * 4) + 'px';
-        particle.style.height = particle.style.width;
-        particle.style.animationDuration = (0.5 + Math.random() * 0.5) + 's';
-
-        routeContainer.appendChild(particle);
-
-        // Cleanup after animation
-        particle.addEventListener('animationend', () => {
-          particle.remove();
-        });
-      }
-    }
-
-    // Reset route on click (allow re-exploration)
-    routeContainer.addEventListener('click', () => {
-      if (hasCompletedOnce) {
-        hasCompletedOnce = false;
-        routePathActive.style.strokeDashoffset = totalLength;
-        routeStops.forEach((s, i) => {
-          s.classList.remove('lit');
-          if (routeLabels[i]) routeLabels[i].classList.remove('lit');
-        });
-        currentProgress = 0;
-      }
-    });
-  }
+  });
 
 })();

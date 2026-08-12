@@ -1,37 +1,37 @@
 /* ═══════════════════════════════════════════
-   Design System — azrashn portfolyo v3
-   Figma-inspired palette + categorical colors
+   Design System — azrashn portfolyo v4
+   Midnight Obsidian Theme — Ice Blue + Pure White
    ═══════════════════════════════════════════ */
 
 :root {
-  /* ── Figma Palette ── */
-  --bg:          #0d1117;
-  --bg-panel:    #161b22;
-  --bg-surface:  #1c2128;
-  --bg-card:     #21262d;
-  --border:      #30363d;
-  --border-hover:#484f58;
-  --text:        #e6edf3;
-  --text-dim:    #8b949e;
-  --text-muted:  #6e7681;
+  /* ── Midnight Obsidian Palette ── */
+  --bg:          #080c10;
+  --bg-panel:    #0c1117;
+  --bg-surface:  #111820;
+  --bg-card:     #161e28;
+  --border:      #1e2a36;
+  --border-hover:#2d3f50;
+  --text:        #f0f4f8;
+  --text-dim:    #94a3b8;
+  --text-muted:  #546478;
 
   /* ── Accent & Categorical ── */
-  --accent:      #a855f7;
-  --accent-dim:  #7c3aed;
-  --accent-soft: rgba(168, 85, 247, 0.10);
-  --accent-glow: rgba(168, 85, 247, 0.22);
-  --green:       #3fb950;
-  --green-soft:  rgba(63, 185, 80, 0.10);
-  --blue:        #58a6ff;
-  --blue-soft:   rgba(88, 166, 255, 0.10);
-  --rose:        #f43f5e;
-  --rose-soft:   rgba(244, 63, 94, 0.10);
-  --indigo:      #6366f1;
-  --indigo-soft: rgba(99, 102, 241, 0.10);
-  --amber:       #f59e0b;
-  --amber-soft:  rgba(245, 158, 11, 0.10);
-  --emerald:     #10b981;
-  --emerald-soft:rgba(16, 185, 129, 0.10);
+  --accent:      #7dd3fc;
+  --accent-dim:  #38bdf8;
+  --accent-soft: rgba(125, 211, 252, 0.08);
+  --accent-glow: rgba(125, 211, 252, 0.18);
+  --green:       #4ade80;
+  --green-soft:  rgba(74, 222, 128, 0.08);
+  --blue:        #60a5fa;
+  --blue-soft:   rgba(96, 165, 250, 0.08);
+  --rose:        #fb7185;
+  --rose-soft:   rgba(251, 113, 133, 0.08);
+  --indigo:      #818cf8;
+  --indigo-soft: rgba(129, 140, 248, 0.08);
+  --amber:       #fbbf24;
+  --amber-soft:  rgba(251, 191, 36, 0.08);
+  --emerald:     #34d399;
+  --emerald-soft:rgba(52, 211, 153, 0.08);
 
   /* ── Typography ── */
   --mono: 'JetBrains Mono', 'Fira Code', Consolas, monospace;
@@ -248,6 +248,7 @@ body {
   right: 0;
   height: 2px;
   background: var(--accent);
+  box-shadow: 0 0 8px var(--accent-glow);
 }
 
 /* Panes */
@@ -272,134 +273,293 @@ body {
 }
 
 /* ═══════════════════════════════════════════
-   INTERACTIVE ROUTE
+   INTERACTIVE JOURNEY TIMELINE
    ═══════════════════════════════════════════ */
-.route-section {
-  margin-bottom: 36px;
+.journey-section {
+  margin-bottom: 40px;
   position: relative;
 }
 
-.route-container {
+.journey-subtitle {
+  font-family: var(--mono);
+  font-size: 12px;
+  color: var(--text-muted);
+  margin-bottom: 28px;
+  opacity: 0.7;
+}
+
+.journey-track {
+  display: flex;
+  align-items: flex-start;
+  gap: 0;
   position: relative;
-  width: 100%;
-  overflow: visible;
-  cursor: crosshair;
-  user-select: none;
-  -webkit-user-select: none;
+  padding: 10px 0 20px;
 }
 
-.route-svg {
-  width: 100%;
-  height: auto;
-  display: block;
-}
-
-.route-path-bg {
-  stroke: var(--border);
-  stroke-width: 2.5;
-  fill: none;
-  stroke-linecap: round;
-}
-
-.route-path-active {
-  stroke: var(--accent);
-  stroke-width: 2.5;
-  fill: none;
-  stroke-linecap: round;
-  filter: drop-shadow(0 0 6px var(--accent-glow));
-  transition: none;
-}
-
-.route-stop {
-  fill: var(--bg);
-  stroke: var(--border);
-  stroke-width: 2;
+/* Each stop container */
+.journey-stop {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  position: relative;
   cursor: pointer;
-  transition: fill var(--speed-fast), stroke var(--speed-fast), r var(--speed-fast);
+  z-index: 1;
 }
 
-.route-stop.lit {
-  fill: var(--accent);
-  stroke: var(--accent);
-  filter: drop-shadow(0 0 6px var(--accent-glow));
-}
-
-.route-stop-label {
-  font-family: var(--mono);
-  font-size: 9px;
-  fill: var(--text-muted);
-  text-anchor: middle;
-  pointer-events: none;
-  transition: fill var(--speed-fast);
-}
-
-.route-stop-label.lit {
-  fill: var(--text);
-}
-
-.route-tooltip {
+/* Connector line between stops */
+.journey-connector {
   position: absolute;
-  background: var(--bg-card);
-  border: 1px solid var(--border);
-  border-radius: 6px;
-  padding: 8px 12px;
+  top: 30px;
+  left: -50%;
+  right: 50%;
+  height: 3px;
+  background: var(--border);
+  z-index: 0;
+  transition: background 0.4s var(--ease);
+}
+
+.journey-stop:first-child .journey-connector {
+  display: none;
+}
+
+.journey-stop.active .journey-connector,
+.journey-stop:hover .journey-connector {
+  background: var(--accent);
+  box-shadow: 0 0 12px var(--accent-glow);
+}
+
+/* The node (circle) */
+.journey-node {
+  position: relative;
+  width: 60px;
+  height: 60px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 2;
+}
+
+.journey-node-ring {
+  position: absolute;
+  inset: 0;
+  border-radius: 50%;
+  border: 2px solid var(--border);
+  transition: border-color 0.3s var(--ease), transform 0.3s var(--ease), box-shadow 0.3s var(--ease);
+}
+
+.journey-node-dot {
+  width: 20px;
+  height: 20px;
+  border-radius: 50%;
+  background: var(--bg-surface);
+  border: 2px solid var(--text-muted);
+  transition: background 0.3s var(--ease), border-color 0.3s var(--ease), transform 0.3s var(--ease), box-shadow 0.3s var(--ease);
+  z-index: 1;
+}
+
+.journey-node-year {
+  position: absolute;
+  bottom: -22px;
   font-family: var(--mono);
-  font-size: 11.5px;
-  color: var(--text);
+  font-size: 10px;
+  color: var(--text-muted);
   white-space: nowrap;
-  pointer-events: none;
+  transition: color 0.3s var(--ease);
+}
+
+/* Stop label below year */
+.journey-node-label {
+  margin-top: 26px;
+  font-family: var(--mono);
+  font-size: 11px;
+  color: var(--text-muted);
+  text-align: center;
+  transition: color 0.3s var(--ease);
+  white-space: nowrap;
+}
+
+/* ── Color variants on hover/active ── */
+
+/* Accent (default) */
+.journey-stop[data-color="accent"]:hover .journey-node-ring,
+.journey-stop[data-color="accent"].active .journey-node-ring {
+  border-color: var(--accent);
+  transform: scale(1.15);
+  box-shadow: 0 0 20px rgba(125, 211, 252, 0.3), 0 0 40px rgba(125, 211, 252, 0.1);
+}
+.journey-stop[data-color="accent"]:hover .journey-node-dot,
+.journey-stop[data-color="accent"].active .journey-node-dot {
+  background: var(--accent);
+  border-color: var(--accent);
+  transform: scale(1.2);
+  box-shadow: 0 0 16px rgba(125, 211, 252, 0.5);
+}
+
+/* Blue */
+.journey-stop[data-color="blue"]:hover .journey-node-ring,
+.journey-stop[data-color="blue"].active .journey-node-ring {
+  border-color: var(--blue);
+  transform: scale(1.15);
+  box-shadow: 0 0 20px rgba(96, 165, 250, 0.3), 0 0 40px rgba(96, 165, 250, 0.1);
+}
+.journey-stop[data-color="blue"]:hover .journey-node-dot,
+.journey-stop[data-color="blue"].active .journey-node-dot {
+  background: var(--blue);
+  border-color: var(--blue);
+  transform: scale(1.2);
+  box-shadow: 0 0 16px rgba(96, 165, 250, 0.5);
+}
+
+/* Amber */
+.journey-stop[data-color="amber"]:hover .journey-node-ring,
+.journey-stop[data-color="amber"].active .journey-node-ring {
+  border-color: var(--amber);
+  transform: scale(1.15);
+  box-shadow: 0 0 20px rgba(251, 191, 36, 0.3), 0 0 40px rgba(251, 191, 36, 0.1);
+}
+.journey-stop[data-color="amber"]:hover .journey-node-dot,
+.journey-stop[data-color="amber"].active .journey-node-dot {
+  background: var(--amber);
+  border-color: var(--amber);
+  transform: scale(1.2);
+  box-shadow: 0 0 16px rgba(251, 191, 36, 0.5);
+}
+
+/* Emerald */
+.journey-stop[data-color="emerald"]:hover .journey-node-ring,
+.journey-stop[data-color="emerald"].active .journey-node-ring {
+  border-color: var(--emerald);
+  transform: scale(1.15);
+  box-shadow: 0 0 20px rgba(52, 211, 153, 0.3), 0 0 40px rgba(52, 211, 153, 0.1);
+}
+.journey-stop[data-color="emerald"]:hover .journey-node-dot,
+.journey-stop[data-color="emerald"].active .journey-node-dot {
+  background: var(--emerald);
+  border-color: var(--emerald);
+  transform: scale(1.2);
+  box-shadow: 0 0 16px rgba(52, 211, 153, 0.5);
+}
+
+/* Rose */
+.journey-stop[data-color="rose"]:hover .journey-node-ring,
+.journey-stop[data-color="rose"].active .journey-node-ring {
+  border-color: var(--rose);
+  transform: scale(1.15);
+  box-shadow: 0 0 20px rgba(251, 113, 133, 0.3), 0 0 40px rgba(251, 113, 133, 0.1);
+}
+.journey-stop[data-color="rose"]:hover .journey-node-dot,
+.journey-stop[data-color="rose"].active .journey-node-dot {
+  background: var(--rose);
+  border-color: var(--rose);
+  transform: scale(1.2);
+  box-shadow: 0 0 16px rgba(251, 113, 133, 0.5);
+}
+
+/* Hover: label and year text become white */
+.journey-stop:hover .journey-node-label,
+.journey-stop.active .journey-node-label,
+.journey-stop:hover .journey-node-year,
+.journey-stop.active .journey-node-year {
+  color: var(--text);
+}
+
+/* ── Journey Detail Card ── */
+.journey-card {
+  position: absolute;
+  top: calc(100% + 12px);
+  left: 50%;
+  transform: translateX(-50%) translateY(8px);
+  width: 260px;
+  background: var(--bg-card);
+  border: 1px solid var(--border-hover);
+  border-radius: 12px;
+  padding: 18px 16px 16px;
   opacity: 0;
-  transform: translateY(4px);
-  transition: opacity var(--speed-fast), transform var(--speed-fast);
-  z-index: 10;
-  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.3);
+  visibility: hidden;
+  pointer-events: none;
+  transition: opacity 0.3s var(--ease), transform 0.3s var(--ease), visibility 0.3s;
+  z-index: 50;
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.5), 0 0 0 1px rgba(125, 211, 252, 0.05);
 }
 
-.route-tooltip.visible {
+.journey-stop:hover .journey-card,
+.journey-stop.active .journey-card {
   opacity: 1;
-  transform: translateY(0);
+  visibility: visible;
+  transform: translateX(-50%) translateY(0);
+  pointer-events: auto;
 }
 
-.route-tooltip::before {
+/* Card top accent stripe */
+.journey-card-accent {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 3px;
+  border-radius: 12px 12px 0 0;
+  background: var(--accent);
+}
+
+.journey-stop[data-color="accent"] .journey-card-accent { background: var(--accent); }
+.journey-stop[data-color="blue"] .journey-card-accent { background: var(--blue); }
+.journey-stop[data-color="amber"] .journey-card-accent { background: var(--amber); }
+.journey-stop[data-color="emerald"] .journey-card-accent { background: var(--emerald); }
+.journey-stop[data-color="rose"] .journey-card-accent { background: var(--rose); }
+
+.journey-card h4 {
+  font-size: 14px;
+  font-weight: 600;
+  color: var(--text);
+  margin-bottom: 4px;
+  line-height: 1.3;
+}
+
+.journey-card-role {
+  font-family: var(--mono);
+  font-size: 11px;
+  color: var(--accent);
+  margin-bottom: 8px;
+}
+
+.journey-card-desc {
+  font-size: 12.5px;
+  color: var(--text-dim);
+  line-height: 1.6;
+}
+
+/* Card arrow pointing up */
+.journey-card::before {
+  content: '';
+  position: absolute;
+  top: -7px;
+  left: 50%;
+  transform: translateX(-50%);
+  border-left: 7px solid transparent;
+  border-right: 7px solid transparent;
+  border-bottom: 7px solid var(--border-hover);
+}
+
+.journey-card::after {
   content: '';
   position: absolute;
   top: -5px;
   left: 50%;
   transform: translateX(-50%);
-  border-left: 5px solid transparent;
-  border-right: 5px solid transparent;
-  border-bottom: 5px solid var(--border);
+  border-left: 6px solid transparent;
+  border-right: 6px solid transparent;
+  border-bottom: 6px solid var(--bg-card);
 }
 
-/* Particle burst */
-.route-particle {
-  position: absolute;
-  width: 4px;
-  height: 4px;
-  border-radius: 50%;
-  background: var(--accent);
-  pointer-events: none;
-  animation: particleBurst 0.8s ease-out forwards;
+/* Pulse animation for active nodes */
+@keyframes journeyPulse {
+  0%, 100% { box-shadow: 0 0 0 0 rgba(125, 211, 252, 0.4); }
+  50%      { box-shadow: 0 0 0 10px rgba(125, 211, 252, 0); }
 }
 
-@keyframes particleBurst {
-  0% {
-    opacity: 1;
-    transform: translate(0, 0) scale(1);
-  }
-  100% {
-    opacity: 0;
-    transform: translate(var(--px), var(--py)) scale(0);
-  }
-}
-
-.route-hint {
-  font-family: var(--mono);
-  font-size: 10.5px;
-  color: var(--text-muted);
-  margin-top: 10px;
-  text-align: center;
-  opacity: 0.6;
+.journey-stop.active .journey-node-dot {
+  animation: journeyPulse 2s ease-in-out infinite;
 }
 
 /* ═══════════════════════════════════════════
@@ -409,7 +569,7 @@ body {
 
 .hero-eyebrow {
   font-family: var(--mono);
-  color: var(--amber);
+  color: var(--accent);
   font-size: 12.5px;
   margin-bottom: 10px;
   letter-spacing: 0.03em;
@@ -500,17 +660,17 @@ body {
 /* Timeline categorical colors */
 .timeline-purple { border-left-color: var(--accent); }
 .timeline-purple:hover {
-  box-shadow: 0 0 0 1px rgba(168, 85, 247, 0.2), 0 4px 16px rgba(168, 85, 247, 0.1);
+  box-shadow: 0 0 0 1px rgba(125, 211, 252, 0.15), 0 4px 16px rgba(125, 211, 252, 0.08);
 }
 
 .timeline-blue { border-left-color: var(--blue); }
 .timeline-blue:hover {
-  box-shadow: 0 0 0 1px rgba(88, 166, 255, 0.2), 0 4px 16px rgba(88, 166, 255, 0.1);
+  box-shadow: 0 0 0 1px rgba(96, 165, 250, 0.15), 0 4px 16px rgba(96, 165, 250, 0.08);
 }
 
 .timeline-amber { border-left-color: var(--amber); }
 .timeline-amber:hover {
-  box-shadow: 0 0 0 1px rgba(245, 158, 11, 0.2), 0 4px 16px rgba(245, 158, 11, 0.1);
+  box-shadow: 0 0 0 1px rgba(251, 191, 36, 0.15), 0 4px 16px rgba(251, 191, 36, 0.08);
 }
 
 .timeline-card-header {
@@ -569,7 +729,7 @@ body {
 
 .info-card:hover {
   border-color: var(--border-hover);
-  box-shadow: 0 2px 12px rgba(0, 0, 0, 0.25);
+  box-shadow: 0 2px 12px rgba(0, 0, 0, 0.35);
 }
 
 .info-card h3 {
@@ -721,7 +881,7 @@ body {
    ═══════════════════════════════════════════ */
 .pane-eyebrow {
   font-family: var(--mono);
-  color: var(--amber);
+  color: var(--accent);
   font-size: 12px;
   margin-bottom: 6px;
   letter-spacing: 0.03em;
@@ -765,44 +925,44 @@ body {
 /* Default hover */
 .project-card:hover {
   transform: translateY(-3px);
-  border-color: rgba(168, 85, 247, 0.35);
-  box-shadow: 0 0 0 1px rgba(168, 85, 247, 0.33), 0 8px 32px rgba(168, 85, 247, 0.18);
+  border-color: rgba(125, 211, 252, 0.3);
+  box-shadow: 0 0 0 1px rgba(125, 211, 252, 0.2), 0 8px 32px rgba(125, 211, 252, 0.1);
 }
 
 /* ── Categorical project hovers ── */
 .card-purple:hover {
-  border-color: rgba(168, 85, 247, 0.4);
-  box-shadow: 0 0 0 1px rgba(168, 85, 247, 0.33), 0 8px 32px rgba(168, 85, 247, 0.18);
+  border-color: rgba(125, 211, 252, 0.35);
+  box-shadow: 0 0 0 1px rgba(125, 211, 252, 0.2), 0 8px 32px rgba(125, 211, 252, 0.1);
 }
 
 .card-blue:hover {
-  border-color: rgba(88, 166, 255, 0.4);
-  box-shadow: 0 0 0 1px rgba(88, 166, 255, 0.33), 0 8px 32px rgba(88, 166, 255, 0.18);
+  border-color: rgba(96, 165, 250, 0.35);
+  box-shadow: 0 0 0 1px rgba(96, 165, 250, 0.2), 0 8px 32px rgba(96, 165, 250, 0.1);
 }
 
 .card-emerald:hover {
-  border-color: rgba(16, 185, 129, 0.4);
-  box-shadow: 0 0 0 1px rgba(16, 185, 129, 0.33), 0 8px 32px rgba(16, 185, 129, 0.18);
+  border-color: rgba(52, 211, 153, 0.35);
+  box-shadow: 0 0 0 1px rgba(52, 211, 153, 0.2), 0 8px 32px rgba(52, 211, 153, 0.1);
 }
 
 .card-amber:hover {
-  border-color: rgba(245, 158, 11, 0.4);
-  box-shadow: 0 0 0 1px rgba(245, 158, 11, 0.33), 0 8px 32px rgba(245, 158, 11, 0.18);
+  border-color: rgba(251, 191, 36, 0.35);
+  box-shadow: 0 0 0 1px rgba(251, 191, 36, 0.2), 0 8px 32px rgba(251, 191, 36, 0.1);
 }
 
 .card-rose:hover {
-  border-color: rgba(244, 63, 94, 0.4);
-  box-shadow: 0 0 0 1px rgba(244, 63, 94, 0.33), 0 8px 32px rgba(244, 63, 94, 0.18);
+  border-color: rgba(251, 113, 133, 0.35);
+  box-shadow: 0 0 0 1px rgba(251, 113, 133, 0.2), 0 8px 32px rgba(251, 113, 133, 0.1);
 }
 
 .card-indigo:hover {
-  border-color: rgba(99, 102, 241, 0.4);
-  box-shadow: 0 0 0 1px rgba(99, 102, 241, 0.33), 0 8px 32px rgba(99, 102, 241, 0.18);
+  border-color: rgba(129, 140, 248, 0.35);
+  box-shadow: 0 0 0 1px rgba(129, 140, 248, 0.2), 0 8px 32px rgba(129, 140, 248, 0.1);
 }
 
 .card-green:hover {
-  border-color: rgba(63, 185, 80, 0.4);
-  box-shadow: 0 0 0 1px rgba(63, 185, 80, 0.33), 0 8px 32px rgba(63, 185, 80, 0.18);
+  border-color: rgba(74, 222, 128, 0.35);
+  box-shadow: 0 0 0 1px rgba(74, 222, 128, 0.2), 0 8px 32px rgba(74, 222, 128, 0.1);
 }
 
 .project-header {
@@ -834,7 +994,7 @@ body {
 }
 .status-done {
   color: var(--text-dim);
-  background: rgba(139, 148, 158, 0.08);
+  background: rgba(148, 163, 184, 0.06);
 }
 
 .project-card h3 {
@@ -906,7 +1066,7 @@ body {
   position: relative;
   width: 100%;
   aspect-ratio: 16/9;
-  background: #0a0e14;
+  background: #040608;
   overflow: hidden;
 }
 .video-wrap iframe, .video-wrap video {
@@ -979,7 +1139,7 @@ body {
   font-size: 10.5px;
   padding: 2px 8px;
   border-radius: 99px;
-  border: 1px solid rgba(245, 158, 11, 0.20);
+  border: 1px solid rgba(251, 191, 36, 0.15);
   color: var(--amber);
   background: var(--amber-soft);
   white-space: nowrap;
@@ -1130,7 +1290,61 @@ body {
     gap: 2px;
   }
 
-  .route-hint { font-size: 9.5px; }
+  /* Journey timeline responsive */
+  .journey-track {
+    flex-direction: column;
+    align-items: stretch;
+    gap: 4px;
+    padding: 0;
+  }
+
+  .journey-stop {
+    flex-direction: row;
+    align-items: center;
+    gap: 14px;
+    padding: 8px 0;
+  }
+
+  .journey-connector {
+    display: none !important;
+  }
+
+  .journey-node {
+    width: 44px;
+    height: 44px;
+    flex-shrink: 0;
+  }
+
+  .journey-node-year {
+    display: none;
+  }
+
+  .journey-node-label {
+    margin-top: 0;
+    font-size: 13px;
+    text-align: left;
+  }
+
+  .journey-card {
+    position: fixed;
+    top: auto;
+    bottom: 20px;
+    left: 20px;
+    right: 20px;
+    width: auto;
+    transform: translateX(0) translateY(20px);
+    z-index: 300;
+  }
+
+  .journey-stop:hover .journey-card,
+  .journey-stop.active .journey-card {
+    transform: translateX(0) translateY(0);
+  }
+
+  .journey-card::before,
+  .journey-card::after {
+    display: none;
+  }
 
   .status-bar { font-size: 10px; padding: 3px 12px; }
 }
@@ -1149,7 +1363,8 @@ body {
   html { scroll-behavior: auto; }
   .project-card, .game-card, .info-card, .timeline-card { transition: none; }
   .sidebar { transition: none; }
-  .route-particle { animation: none; }
+  .journey-node-ring, .journey-node-dot, .journey-card { transition: none; }
+  .journey-stop.active .journey-node-dot { animation: none; }
 }
 
 /* ═══════════════════════════════════════════

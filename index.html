@@ -94,32 +94,93 @@
         <!-- ═══ HAKKIMDA ═══ -->
         <section id="hakkimda" class="pane active" role="tabpanel">
 
-          <!-- İnteraktif Kişisel Rota -->
-          <div class="route-section" id="routeSection">
-            <div class="route-container" id="routeContainer">
-              <svg class="route-svg" viewBox="0 0 800 120" preserveAspectRatio="xMidYMid meet" aria-label="Kişisel kariyer rotası">
-                <!-- Background path -->
-                <path id="routePathBg" class="route-path-bg"
-                  d="M 40 80 C 120 20, 200 20, 240 60 S 360 110, 420 60 S 520 10, 580 60 S 680 110, 760 50" />
-                <!-- Active (lit) path -->
-                <path id="routePathActive" class="route-path-active"
-                  d="M 40 80 C 120 20, 200 20, 240 60 S 360 110, 420 60 S 520 10, 580 60 S 680 110, 760 50" />
-                <!-- Stop points -->
-                <circle class="route-stop" data-stop="0" data-label="Ankara Bilim Üniversitesi" cx="40" cy="80" r="6" />
-                <circle class="route-stop" data-stop="1" data-label="Ryse Soft — Stajyer" cx="240" cy="60" r="6" />
-                <circle class="route-stop" data-stop="2" data-label="Unity & C#" cx="420" cy="60" r="6" />
-                <circle class="route-stop" data-stop="3" data-label="Kariyer Topluluğu Başkanı" cx="580" cy="60" r="6" />
-                <circle class="route-stop" data-stop="4" data-label="Freelance Grafik Tasarım" cx="760" cy="50" r="6" />
-                <!-- Stop labels (below dots) -->
-                <text class="route-stop-label" x="40" y="102">Üniversite</text>
-                <text class="route-stop-label" x="240" y="82">Ryse Soft</text>
-                <text class="route-stop-label" x="420" y="82">Unity & C#</text>
-                <text class="route-stop-label" x="580" y="82">Kariyer Top.</text>
-                <text class="route-stop-label" x="760" y="72">Freelance</text>
-              </svg>
-              <!-- Tooltips rendered by JS -->
+          <!-- İnteraktif Kariyer Yolculuğu -->
+          <div class="journey-section" id="journeySection">
+            <p class="section-label">// kariyer yolculuğum</p>
+            <p class="journey-subtitle">Durağa tıkla veya fareyi üzerine getir</p>
+            <div class="journey-track">
+
+              <div class="journey-stop" data-color="accent" id="stop0">
+                <div class="journey-connector"></div>
+                <div class="journey-node">
+                  <div class="journey-node-ring"></div>
+                  <div class="journey-node-dot"></div>
+                  <span class="journey-node-year">2022</span>
+                </div>
+                <span class="journey-node-label">Üniversite</span>
+                <div class="journey-card">
+                  <div class="journey-card-accent"></div>
+                  <h4>Ankara Bilim Üniversitesi</h4>
+                  <p class="journey-card-role">Yazılım Mühendisliği — Son sınıf</p>
+                  <p class="journey-card-desc">OOP, C#, Python, veri yapıları ve algoritma derslerinde güçlü bir teknik altyapı edindim.</p>
+                </div>
+              </div>
+
+              <div class="journey-stop" data-color="blue" id="stop1">
+                <div class="journey-connector"></div>
+                <div class="journey-node">
+                  <div class="journey-node-ring"></div>
+                  <div class="journey-node-dot"></div>
+                  <span class="journey-node-year">2023</span>
+                </div>
+                <span class="journey-node-label">Kariyer Top.</span>
+                <div class="journey-card">
+                  <div class="journey-card-accent"></div>
+                  <h4>Kariyer Topluluğu Başkanı</h4>
+                  <p class="journey-card-role">Yönetim Kurulu Başkanı — 10/2023 – 10/2024</p>
+                  <p class="journey-card-desc">Liderlik ve organizasyon yönetimi deneyimi kazandım. Kariyer etkinlikleri planlayıp iş birlikleri kurdum.</p>
+                </div>
+              </div>
+
+              <div class="journey-stop" data-color="amber" id="stop2">
+                <div class="journey-connector"></div>
+                <div class="journey-node">
+                  <div class="journey-node-ring"></div>
+                  <div class="journey-node-dot"></div>
+                  <span class="journey-node-year">2022–24</span>
+                </div>
+                <span class="journey-node-label">Freelance</span>
+                <div class="journey-card">
+                  <div class="journey-card-accent"></div>
+                  <h4>Freelance Grafik Tasarım</h4>
+                  <p class="journey-card-role">Grafik Tasarımcı — 2022 – 2024</p>
+                  <p class="journey-card-desc">Markalaşma, dijital medya, sosyal medya projeleri; poster, kartvizit, dergi tasarımları yürüttüm.</p>
+                </div>
+              </div>
+
+              <div class="journey-stop" data-color="emerald" id="stop3">
+                <div class="journey-connector"></div>
+                <div class="journey-node">
+                  <div class="journey-node-ring"></div>
+                  <div class="journey-node-dot"></div>
+                  <span class="journey-node-year">2024</span>
+                </div>
+                <span class="journey-node-label">Unity & C#</span>
+                <div class="journey-card">
+                  <div class="journey-card-accent"></div>
+                  <h4>Unity & C# Uzmanlığı</h4>
+                  <p class="journey-card-role">Oyun Geliştirme — Devam ediyor</p>
+                  <p class="journey-card-desc">Unity game engine ile 2D/3D oyun geliştirme, OOP tasarım kalıpları ve performans optimizasyonu.</p>
+                </div>
+              </div>
+
+              <div class="journey-stop" data-color="rose" id="stop4">
+                <div class="journey-connector"></div>
+                <div class="journey-node">
+                  <div class="journey-node-ring"></div>
+                  <div class="journey-node-dot"></div>
+                  <span class="journey-node-year">2025</span>
+                </div>
+                <span class="journey-node-label">Ryse Soft</span>
+                <div class="journey-card">
+                  <div class="journey-card-accent"></div>
+                  <h4>Ryse Soft — Stajyer</h4>
+                  <p class="journey-card-role">Oyun Geliştirme Stajyeri — 07/2025 – 09/2025</p>
+                  <p class="journey-card-desc">C# ve Unity ile yeni oyun özellikleri geliştirdim, mevcut sistemleri iyileştirdim ve test süreçlerine katkı sağladım.</p>
+                </div>
+              </div>
+
             </div>
-            <p class="route-hint">rotayı keşfetmek için fareyi üzerinde gezdirin</p>
           </div>
 
           <div class="hero">
@@ -447,7 +508,7 @@
 
             <article class="game-card card-rose">
               <div class="video-wrap">
-                <iframe src="https://www.youtube.com/embed/BURAYA_VIDEO_ID" title="Flower Shop Simulator — oynanış videosu" loading="lazy" allowfullscreen></iframe>
+                <iframe src="https://www.youtube.com/embed/H_Tf_DoGxmE" title="Flower Shop Simulator — oynanış videosu" loading="lazy" allowfullscreen></iframe>
                 <div class="video-overlay" aria-hidden="true">
                   <svg width="48" height="48" viewBox="0 0 48 48" fill="none"><circle cx="24" cy="24" r="23" stroke="white" stroke-width="2" opacity="0.8"/><path d="M20 16l14 8-14 8V16z" fill="white" opacity="0.9"/></svg>
                 </div>
@@ -471,7 +532,7 @@
 
             <article class="game-card card-indigo">
               <div class="video-wrap">
-                <iframe src="https://www.youtube.com/embed/BURAYA_VIDEO_ID" title="Tower Defense Game — oynanış videosu" loading="lazy" allowfullscreen></iframe>
+                <iframe src="https://www.youtube.com/embed/-j7fNJ6eQR8" title="Tower Defense Game — oynanış videosu" loading="lazy" allowfullscreen></iframe>
                 <div class="video-overlay" aria-hidden="true">
                   <svg width="48" height="48" viewBox="0 0 48 48" fill="none"><circle cx="24" cy="24" r="23" stroke="white" stroke-width="2" opacity="0.8"/><path d="M20 16l14 8-14 8V16z" fill="white" opacity="0.9"/></svg>
                 </div>
@@ -494,7 +555,7 @@
 
             <article class="game-card card-emerald">
               <div class="video-wrap">
-                <iframe src="https://www.youtube.com/embed/BURAYA_VIDEO_ID" title="Arcade Runner — oynanış videosu" loading="lazy" allowfullscreen></iframe>
+                <iframe src="https://www.youtube.com/embed/7vYZXNZPqxk" title="Arcade Runner — oynanış videosu" loading="lazy" allowfullscreen></iframe>
                 <div class="video-overlay" aria-hidden="true">
                   <svg width="48" height="48" viewBox="0 0 48 48" fill="none"><circle cx="24" cy="24" r="23" stroke="white" stroke-width="2" opacity="0.8"/><path d="M20 16l14 8-14 8V16z" fill="white" opacity="0.9"/></svg>
                 </div>
@@ -514,20 +575,20 @@
 
             <article class="game-card card-amber">
               <div class="video-wrap">
-                <iframe src="https://www.youtube.com/embed/BURAYA_VIDEO_ID" title="Box Puzzle — oynanış videosu" loading="lazy" allowfullscreen></iframe>
+                <iframe src="https://www.youtube.com/embed/YrPBa5R9L2I" title="Tower Block — oynanış videosu" loading="lazy" allowfullscreen></iframe>
                 <div class="video-overlay" aria-hidden="true">
                   <svg width="48" height="48" viewBox="0 0 48 48" fill="none"><circle cx="24" cy="24" r="23" stroke="white" stroke-width="2" opacity="0.8"/><path d="M20 16l14 8-14 8V16z" fill="white" opacity="0.9"/></svg>
                 </div>
               </div>
               <div class="game-info">
-                <h3>Box Puzzle</h3>
-                <p>Unity ile geliştirilmiş 2D bulmaca oyunu. Kutu itme/yerleştirme mekaniğine dayalı,
-                  artan zorluk seviyeli bir bulmaca oyunu.</p>
+                <h3>Tower Block</h3>
+                <p>Unity ile geliştirilmiş kule inşa etme oyunu. Blokları doğru zamanda bırakarak
+                  en yüksek kuleyi inşa etmeye dayalı refleks ve strateji oyunu.</p>
                 <div class="game-tags">
                   <span class="engine-tag">Unity</span>
                   <span class="engine-tag">C#</span>
                   <span class="role-tag">Kodlama</span>
-                  <span class="role-tag">Bulmaca Tasarımı</span>
+                  <span class="role-tag">Oyun Tasarımı</span>
                 </div>
               </div>
             </article>
