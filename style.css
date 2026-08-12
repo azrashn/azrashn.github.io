@@ -305,6 +305,28 @@ body {
   background: var(--accent-soft);
 }
 
+.btn-cv {
+  font-family: var(--mono);
+  font-size: 13px;
+  padding: 12px 28px;
+  border-radius: 8px;
+  background: transparent;
+  border: 1px solid rgba(251, 191, 36, 0.3);
+  color: var(--amber);
+  text-decoration: none;
+  font-weight: 500;
+  transition: color var(--speed-fast), border-color var(--speed-fast), background var(--speed-fast), box-shadow var(--speed-fast);
+  letter-spacing: 0.01em;
+  display: inline-flex;
+  align-items: center;
+}
+.btn-cv:hover {
+  color: var(--gold);
+  border-color: rgba(251, 191, 36, 0.6);
+  background: rgba(251, 191, 36, 0.05);
+  box-shadow: 0 4px 20px rgba(251, 191, 36, 0.15);
+}
+
 .scroll-indicator {
   position: absolute;
   bottom: 32px;
@@ -411,7 +433,7 @@ body {
   align-items: flex-start;
   gap: 0;
   position: relative;
-  padding: 10px 0 20px;
+  padding: 180px 0 20px;
   margin-bottom: 56px;
 }
 
@@ -536,7 +558,7 @@ body {
 /* Journey Detail Card */
 .journey-card {
   position: absolute;
-  top: calc(100% + 12px);
+  bottom: calc(100% + 24px);
   left: 50%;
   transform: translateX(-50%) translateY(8px);
   width: 260px;
@@ -562,11 +584,11 @@ body {
 
 .journey-card-accent {
   position: absolute;
-  top: 0;
+  bottom: 0;
   left: 0;
   right: 0;
   height: 3px;
-  border-radius: 14px 14px 0 0;
+  border-radius: 0 0 14px 14px;
   background: var(--accent);
 }
 
@@ -585,22 +607,59 @@ body {
 .journey-card::before {
   content: '';
   position: absolute;
-  top: -7px;
+  bottom: -7px;
   left: 50%;
   transform: translateX(-50%);
   border-left: 7px solid transparent;
   border-right: 7px solid transparent;
-  border-bottom: 7px solid var(--border-hover);
+  border-top: 7px solid var(--border-hover);
 }
 .journey-card::after {
   content: '';
   position: absolute;
-  top: -5px;
+  bottom: -5px;
   left: 50%;
   transform: translateX(-50%);
   border-left: 6px solid transparent;
   border-right: 6px solid transparent;
-  border-bottom: 6px solid var(--bg-card);
+  border-top: 6px solid var(--bg-card);
+}
+
+/* Future stops (2027) */
+.journey-stop[data-future="true"] .journey-node-dot {
+  background: transparent;
+  border-style: dashed;
+  opacity: 0.5;
+}
+.journey-stop[data-future="true"] .journey-node-ring {
+  border-style: dashed;
+  opacity: 0.3;
+}
+.journey-stop[data-future="true"] .journey-connector {
+  background: transparent;
+  border-top: 2px dashed var(--border);
+  height: 0;
+  top: 31px;
+  box-shadow: none;
+}
+.journey-stop[data-future="true"]:hover .journey-node-dot,
+.journey-stop[data-future="true"].active .journey-node-dot {
+  opacity: 1;
+  background: var(--bg-surface);
+}
+.journey-stop[data-future="true"]:hover .journey-node-ring,
+.journey-stop[data-future="true"].active .journey-node-ring {
+  opacity: 0.8;
+}
+.journey-stop[data-color="indigo"][data-future="true"].active .journey-connector,
+.journey-stop[data-color="indigo"][data-future="true"]:hover .journey-connector {
+  border-color: var(--indigo);
+  box-shadow: none;
+}
+.journey-stop[data-color="gold"][data-future="true"].active .journey-connector,
+.journey-stop[data-color="gold"][data-future="true"]:hover .journey-connector {
+  border-color: var(--gold);
+  box-shadow: none;
 }
 
 @keyframes journeyPulse {
