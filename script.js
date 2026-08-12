@@ -184,3 +184,44 @@
   });
 
 })();
+
+
+// --- VIDEO MODAL LOGIC ---
+document.addEventListener('DOMContentLoaded', () => {
+  const videoBtns = document.querySelectorAll('.video-btn');
+  const videoModal = document.getElementById('videoModal');
+  const videoModalClose = document.querySelector('.video-modal-close');
+  const videoModalBackdrop = document.querySelector('.video-modal-backdrop');
+  const modalIframe = document.getElementById('modalIframe');
+
+  if (!videoModal || !modalIframe) return;
+
+  function openVideoModal(videoId) {
+    modalIframe.src = `https://www.youtube.com/embed/${videoId}?autoplay=1`;
+    videoModal.classList.add('active');
+  }
+
+  function closeVideoModal() {
+    videoModal.classList.remove('active');
+    modalIframe.src = '';
+  }
+
+  videoBtns.forEach(btn => {
+    btn.addEventListener('click', (e) => {
+      e.preventDefault();
+      const videoId = btn.getAttribute('data-video');
+      if (videoId) {
+        openVideoModal(videoId);
+      }
+    });
+  });
+
+  videoModalClose.addEventListener('click', closeVideoModal);
+  videoModalBackdrop.addEventListener('click', closeVideoModal);
+
+  document.addEventListener('keydown', (e) => {
+    if (e.key === 'Escape' && videoModal.classList.contains('active')) {
+      closeVideoModal();
+    }
+  });
+});
