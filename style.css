@@ -341,6 +341,13 @@ body {
   text-transform: uppercase;
   opacity: 0.5;
   animation: scrollBounce 2s ease-in-out infinite;
+  text-decoration: none;
+  transition: opacity var(--speed-fast), color var(--speed-fast);
+}
+
+.scroll-indicator:hover {
+  opacity: 1;
+  color: var(--accent);
 }
 
 @keyframes scrollBounce {
@@ -1099,7 +1106,7 @@ a.contact-card:hover .contact-card-value { color: var(--accent); }
     font-size: 14px;
   }
 
-  .hero-section { padding: 100px 24px 60px; }
+  .hero-section { padding: 100px 24px 120px; }
   .hero-name { font-size: clamp(38px, 10vw, 64px); }
   .hero-cta { flex-direction: column; align-items: center; }
 
