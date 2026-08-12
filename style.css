@@ -1323,3 +1323,9 @@ button:focus-visible {
   object-fit: contain;
   display: block;
 }
+
+.video-container iframe {
+  width: 100%;
+  height: 100%;
+  display: block;
+}
