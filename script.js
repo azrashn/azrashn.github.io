@@ -225,3 +225,42 @@ document.addEventListener('DOMContentLoaded', () => {
     }
   });
 });
+
+// --- DETAILS MODAL LOGIC ---
+document.addEventListener('DOMContentLoaded', () => {
+  const detailsBtns = document.querySelectorAll('.details-btn');
+  
+  detailsBtns.forEach(btn => {
+    btn.addEventListener('click', (e) => {
+      e.preventDefault();
+      const modalId = btn.getAttribute('data-modal');
+      if (modalId) {
+        const modal = document.getElementById(modalId);
+        if (modal) {
+          modal.classList.add('active');
+        }
+      }
+    });
+  });
+
+  const detailModals = document.querySelectorAll('.details-modal');
+  detailModals.forEach(modal => {
+    const closeBtn = modal.querySelector('.details-modal-close');
+    const backdrop = modal.querySelector('.details-modal-backdrop');
+
+    const closeModal = () => modal.classList.remove('active');
+
+    if (closeBtn) closeBtn.addEventListener('click', closeModal);
+    if (backdrop) backdrop.addEventListener('click', closeModal);
+  });
+
+  document.addEventListener('keydown', (e) => {
+    if (e.key === 'Escape') {
+      detailModals.forEach(modal => {
+        if (modal.classList.contains('active')) {
+          modal.classList.remove('active');
+        }
+      });
+    }
+  });
+});
