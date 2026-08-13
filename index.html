@@ -322,18 +322,22 @@
             <span class="project-number">02</span>
             <span class="project-status status-done">tamamlandı</span>
           </div>
-          <h3>Facial Image Warping</h3>
-          <p>MediaPipe FaceMesh kullanılarak yüz üzerinde 468 noktalı landmark tespiti yapan ve bu
-            verilerle dijital warping işlemleri gerçekleştiren FastAPI tabanlı bir web uygulaması.
-            Arayüz Figma ile tasarlandı; sonuçlar MSE, PSNR ve SSIM metrikleriyle analiz edilerek
-            proje başarıyla tamamlandı.</p>
+          <h3>Gerçek Zamanlı Yüz İşleme & Deepfake AR Sistemi</h3>
+          <p>6 kişilik geliştirici ekibiyle birlikte, kameradan alınan canlı görüntüler üzerinde fotogerçekçi yüz manipülasyonu ve Deepfake tabanlı AR filtreleri uygulayan yüksek performanslı bir sistem mimarisi geliştirdik. MediaPipe Face Mesh, Delaunay Üçgenlemesi ve ileri seviye görüntü işleme algoritmalarından (FFT, EMA) yararlandık.</p>
           <div class="project-tags">
-            <span class="tech-tag">FastAPI</span>
-            <span class="tech-tag">Python</span>
+            <span class="tech-tag">Python & OpenCV</span>
             <span class="tech-tag">MediaPipe</span>
-            <span class="tech-tag">Figma</span>
+            <span class="tech-tag">WebSocket</span>
+            <span class="tech-tag">REST API</span>
           </div>
           <div class="project-links">
+            <button class="project-link details-btn" data-modal="facialDetailsModal" aria-label="Detayları İncele">
+              <svg width="14" height="14" viewBox="0 0 16 16" fill="currentColor" aria-hidden="true">
+                <path fill-rule="evenodd" d="M2 2.5A2.5 2.5 0 014.5 0h8.75a.75.75 0 01.75.75v12.5a.75.75 0 01-.75.75h-2.5a.75.75 0 110-1.5h1.75v-2h-8a1 1 0 00-.714 1.7.75.75 0 01-1.072 1.05A2.495 2.495 0 012 11.5v-9zm10.5-1h-8a1 1 0 00-1 1v6.708A2.492 2.492 0 014.5 9h8V1.5z"/>
+                <path fill-rule="evenodd" d="M5 3.25a.75.75 0 01.75-.75h4.5a.75.75 0 010 1.5h-4.5A.75.75 0 015 3.25zm0 3a.75.75 0 01.75-.75h4.5a.75.75 0 010 1.5h-4.5A.75.75 0 015 6.25z"/>
+              </svg>
+              detayları incele
+            </button>
             <button class="project-link video-btn" data-video="Z6gkOGdcudw" aria-label="Videoyu İzle">
               <svg width="14" height="14" viewBox="0 0 16 16" fill="currentColor" aria-hidden="true">
                 <path
@@ -773,6 +777,29 @@
           <li><strong>Dinamik Şubelendirme ve Transaction Yönetimi:</strong> Yüzlerce öğrencinin tek seferde derse kaydedildiği "Toplu İşlemler" modülünde, kapasiteye göre açılması gereken şube sayısını hesaplayan ve öğrencileri homojen dağıtan altyapıyı kurduk. Veri bütünlüğü için tüm işlemleri Prisma Transaction yapılarıyla güvence altına aldık.</li>
           <li><strong>Büyük Veri ve Transkript Entegrasyonu:</strong> Sistemin tam veritabanı entegrasyonuna geçişini sağladık. Toplu ders kayıtlarında TRANSKRIPT geçmişini analiz ederek öğrencinin geçme/kalma durumuna göre akıllı filtreleme yapan iş mantığını (Business Logic) kurguladık.</li>
           <li><strong>Güvenlik ve Hata Yönetimi:</strong> API uç noktalarında yetkisiz erişimleri (403 Forbidden) önlemek adına Role-Based Access Control (RBAC) yapılarını düzenledik. Veritabanı seviyesinde IP_BLACKLIST ve Brute-Force koruması ile güvenli bir mimari sunduk.</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+
+  <!-- Facial Image Warping Details Modal -->
+  <div id="facialDetailsModal" class="details-modal">
+    <div class="details-modal-backdrop"></div>
+    <div class="details-modal-content glass-card">
+      <button class="details-modal-close" aria-label="Kapat">
+        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <path d="M18 6L6 18M6 6l12 12" />
+        </svg>
+      </button>
+      <div class="details-content">
+        <h3>Gerçek Zamanlı Yüz İşleme & Deepfake AR Sistemi</h3>
+        <ul class="details-list">
+          <li><strong>Gerçek Zamanlı Deepfake ve AR Altyapısı:</strong> Kameradan alınan canlı görüntüler üzerinde fotogerçekçi yüz manipülasyonu ve Deepfake tabanlı AR (Artırılmış Gerçeklik) filtreleri uygulayan yüksek performanslı bir sistem mimarisi tasarladık.</li>
+          <li><strong>Geometrik Warping ve Delaunay Üçgenlemesi:</strong> 2D varlıkların (sakal, bıyık vb.) yüze kusursuz giydirilmesi için MediaPipe Face Mesh (468 nokta) ve Delaunay Üçgenlemesi (Piecewise Affine Transform) kullanarak dinamik yüz deformasyonu (warping) algoritmaları geliştirdik. Ağız/dudak hareketlerine tam uyumlu, iç boşluk (exclusion) hesaplamaları yaptık.</li>
+          <li><strong>Algoritmik Stabilizasyon (EMA):</strong> Canlı video akışındaki yüz referans noktalarında (landmark) oluşan mikro titremeleri (jitter) engellemek adına Üstel Hareketli Ortalama (EMA) filtreleri koda entegre ederek, gecikmesiz ve pürüzsüz bir yüz takibi sağladık.</li>
+          <li><strong>3D Perspektif ve Uzamsal Hesaplama:</strong> AR objelerinin (gözlük vb.) kafa dönüşlerinde (yaw/pitch) perspektiften kaynaklı küçülme hatalarını çözmek için, Z eksenini (derinlik) kapsayan 3D Öklid Uzaklığı hesaplamalarını sisteme dahil ettik.</li>
+          <li><strong>Dinamik Renk Eşleştirme ve Harmanlama:</strong> Kullanıcının doğal kıl/cilt rengini anlık olarak analiz edip maskelere uygulayan (Dynamic Color Tinting) ve kenar yumuşatma (Gaussian Feathering) ile objeleri ciltle bütünleştiren Alpha Blending algoritmaları yazdık.</li>
+          <li><strong>Frekans Etki Alanı Analizi (FFT):</strong> Görüntülerin Faz (Phase) ve Genlik (Magnitude) bileşenlerini ayrıştırarak frekans tabanlı filtreleme yapmak için sisteme Hızlı Fourier Dönüşümü (FFT) modülü ekledik.</li>
         </ul>
       </div>
     </div>
