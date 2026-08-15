@@ -62,13 +62,7 @@
     });
   });
 
-  // Close on Escape
-  document.addEventListener('keydown', (e) => {
-    if (e.key === 'Escape') {
-      if (navHamburger) navHamburger.classList.remove('open');
-      if (navLinksContainer) navLinksContainer.classList.remove('open');
-    }
-  });
+  // Global Escape Key Listener implemented below
 
   // ═══════════════════════════════════════════
   // SCROLL REVEAL — fade-in elements on scroll
@@ -198,11 +192,13 @@ document.addEventListener('DOMContentLoaded', () => {
   function openVideoModal(videoId) {
     modalIframe.src = `https://www.youtube.com/embed/${videoId}?autoplay=1`;
     videoModal.classList.add('active');
+    document.body.style.overflow = 'hidden';
   }
 
   function closeVideoModal() {
     videoModal.classList.remove('active');
     modalIframe.src = '';
+    document.body.style.overflow = '';
   }
 
   videoBtns.forEach(btn => {
@@ -218,37 +214,35 @@ document.addEventListener('DOMContentLoaded', () => {
   videoModalClose.addEventListener('click', closeVideoModal);
   videoModalBackdrop.addEventListener('click', closeVideoModal);
 
-  document.addEventListener('keydown', (e) => {
-    if (e.key === 'Escape' && videoModal.classList.contains('active')) {
-      closeVideoModal();
-    }
-  });
+  // Escape listener handled globally
   
   // ═══════════════════════════════════════════
   // GLOBAL - Interactive Spotlight
   // ═══════════════════════════════════════════
   const globalSpotlight = document.getElementById('globalSpotlight');
   if (globalSpotlight) {
-    const updateSpotlight = (clientX, clientY) => {
-      // Fixed position element can just use clientX and clientY
-      globalSpotlight.style.setProperty('--mouse-x', `${clientX}px`);
-      globalSpotlight.style.setProperty('--mouse-y', `${clientY}px`);
+    let mouseX = window.innerWidth / 2;
+    let mouseY = window.innerHeight / 2;
+    let isTicking = false;
+
+    const updateSpotlight = () => {
+      globalSpotlight.style.setProperty('--mouse-x', `${mouseX}px`);
+      globalSpotlight.style.setProperty('--mouse-y', `${mouseY}px`);
+      isTicking = false;
     };
 
-    document.addEventListener('mousemove', (e) => updateSpotlight(e.clientX, e.clientY));
-    
-    // Mobil desteği için Touch event'leri
-    document.addEventListener('touchmove', (e) => {
-      if (e.touches.length > 0) {
-        updateSpotlight(e.touches[0].clientX, e.touches[0].clientY);
+    const onPointerMove = (e) => {
+      mouseX = e.clientX || (e.touches && e.touches[0].clientX);
+      mouseY = e.clientY || (e.touches && e.touches[0].clientY);
+      
+      if (!isTicking) {
+        requestAnimationFrame(updateSpotlight);
+        isTicking = true;
       }
-    }, { passive: true });
+    };
 
-    document.addEventListener('touchstart', (e) => {
-      if (e.touches.length > 0) {
-        updateSpotlight(e.touches[0].clientX, e.touches[0].clientY);
-      }
-    }, { passive: true });
+    document.addEventListener('mousemove', onPointerMove, { passive: true });
+    document.addEventListener('touchmove', onPointerMove, { passive: true });
   }
 })();
 
@@ -264,6 +258,7 @@ document.addEventListener('DOMContentLoaded', () => {
         const modal = document.getElementById(modalId);
         if (modal) {
           modal.classList.add('active');
+          document.body.style.overflow = 'hidden';
         }
       }
     });
@@ -274,19 +269,40 @@ document.addEventListener('DOMContentLoaded', () => {
     const closeBtn = modal.querySelector('.details-modal-close');
     const backdrop = modal.querySelector('.details-modal-backdrop');
 
-    const closeModal = () => modal.classList.remove('active');
+    const closeModal = () => {
+      modal.classList.remove('active');
+      document.body.style.overflow = '';
+    };
 
     if (closeBtn) closeBtn.addEventListener('click', closeModal);
     if (backdrop) backdrop.addEventListener('click', closeModal);
   });
 
+  // Global Event Listeners
   document.addEventListener('keydown', (e) => {
     if (e.key === 'Escape') {
-      detailModals.forEach(modal => {
-        if (modal.classList.contains('active')) {
-          modal.classList.remove('active');
-        }
-      });
+      const activeVideoModal = document.querySelector('.video-modal.active');
+      const activeDetailModal = document.querySelector('.details-modal.active');
+      
+      if (activeVideoModal) {
+        activeVideoModal.classList.remove('active');
+        const modalIframe = document.getElementById('modalIframe');
+        if (modalIframe) modalIframe.src = '';
+        document.body.style.overflow = '';
+        return;
+      }
+      if (activeDetailModal) {
+        activeDetailModal.classList.remove('active');
+        document.body.style.overflow = '';
+        return; 
+      }
+      
+      const navHamburger = document.getElementById('navHamburger');
+      const navLinksContainer = document.getElementById('navLinks');
+      if (navHamburger && navHamburger.classList.contains('open')) {
+        navHamburger.classList.remove('open');
+        if (navLinksContainer) navLinksContainer.classList.remove('open');
+      }
     }
   });
 });

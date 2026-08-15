@@ -407,6 +407,8 @@ body {
   letter-spacing: 0.01em;
   display: inline-flex;
   align-items: center;
+  justify-content: center;
+  gap: 8px;
 }
 
 .btn-cv:hover {
@@ -553,41 +555,25 @@ body {
     box-shadow var(--speed-normal);
 }
 
-.glass-card:hover {
-  border-color: rgba(125, 211, 252, 0.15);
-  box-shadow: 0 8px 40px rgba(0, 0, 0, 0.4), 0 0 0 1px rgba(125, 211, 252, 0.06);
+@media (hover: hover) and (pointer: fine) {
+  .glass-card:hover {
+    border-color: rgba(125, 211, 252, 0.15);
+    box-shadow: 0 8px 40px rgba(0, 0, 0, 0.4), 0 0 0 1px rgba(125, 211, 252, 0.06);
+  }
+
+  .glass-card[data-accent]:hover {
+    border-color: rgba(var(--card-glow-color), 0.25);
+    box-shadow: 0 8px 40px rgba(var(--card-glow-color), 0.06);
+  }
 }
 
 /* Accent color variants for glass cards */
-.glass-card[data-accent="accent"]:hover {
-  border-color: rgba(125, 211, 252, 0.25);
-  box-shadow: 0 8px 40px rgba(125, 211, 252, 0.06);
-}
-
-.glass-card[data-accent="blue"]:hover {
-  border-color: rgba(96, 165, 250, 0.25);
-  box-shadow: 0 8px 40px rgba(96, 165, 250, 0.06);
-}
-
-.glass-card[data-accent="emerald"]:hover {
-  border-color: rgba(52, 211, 153, 0.25);
-  box-shadow: 0 8px 40px rgba(52, 211, 153, 0.06);
-}
-
-.glass-card[data-accent="amber"]:hover {
-  border-color: rgba(251, 191, 36, 0.25);
-  box-shadow: 0 8px 40px rgba(251, 191, 36, 0.06);
-}
-
-.glass-card[data-accent="rose"]:hover {
-  border-color: rgba(251, 113, 133, 0.25);
-  box-shadow: 0 8px 40px rgba(251, 113, 133, 0.06);
-}
-
-.glass-card[data-accent="indigo"]:hover {
-  border-color: rgba(129, 140, 248, 0.25);
-  box-shadow: 0 8px 40px rgba(129, 140, 248, 0.06);
-}
+.glass-card[data-accent="accent"] { --card-glow-color: 125, 211, 252; }
+.glass-card[data-accent="blue"] { --card-glow-color: 96, 165, 250; }
+.glass-card[data-accent="emerald"] { --card-glow-color: 52, 211, 153; }
+.glass-card[data-accent="amber"] { --card-glow-color: 251, 191, 36; }
+.glass-card[data-accent="rose"] { --card-glow-color: 251, 113, 133; }
+.glass-card[data-accent="indigo"] { --card-glow-color: 129, 140, 248; }
 
 /* ═══════════════════════════════════════════
    JOURNEY TIMELINE
@@ -985,8 +971,10 @@ body {
   border-left-color: var(--amber);
 }
 
-.exp-card:hover {
-  transform: translateY(-3px);
+@media (hover: hover) and (pointer: fine) {
+  .exp-card:hover {
+    transform: translateY(-3px);
+  }
 }
 
 .exp-card-header {
@@ -1038,8 +1026,10 @@ body {
   flex-direction: column;
 }
 
-.project-card:hover {
-  transform: translateY(-4px);
+@media (hover: hover) and (pointer: fine) {
+  .project-card:hover {
+    transform: translateY(-4px);
+  }
 }
 
 .project-header {
@@ -1135,6 +1125,18 @@ body {
   color: var(--accent);
 }
 
+.project-link:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.project-link:disabled:hover {
+  color: var(--text-dim);
+  background: transparent;
+  border-color: rgba(255, 255, 255, 0.1);
+  transform: none;
+}
+
 /* ═══════════════════════════════════════════
    GAMES
    ═══════════════════════════════════════════ */
@@ -1151,8 +1153,10 @@ body {
   flex-direction: column;
 }
 
-.game-card:hover {
-  transform: translateY(-4px) scale(1.005);
+@media (hover: hover) and (pointer: fine) {
+  .game-card:hover {
+    transform: translateY(-4px) scale(1.005);
+  }
 }
 
 .video-wrap {
@@ -1535,7 +1539,7 @@ a.contact-card:hover .contact-card-value {
   }
 
   .hero-section {
-    padding: 100px 24px 120px;
+    padding: 80px 20px 60px;
   }
 
   .hero-name {
@@ -1636,17 +1640,27 @@ a.contact-card:hover .contact-card-value {
     right: auto;
     width: 100%;
     margin-left: 58px;
-    margin-top: -8px;
-    margin-bottom: 8px;
+    margin-top: 0;
+    margin-bottom: 0;
     transform: none !important;
     z-index: 10;
-    display: none;
+    max-height: 0;
+    opacity: 0;
+    padding-top: 0;
+    padding-bottom: 0;
+    border: none;
+    overflow: hidden;
+    transition: max-height 0.4s ease, opacity 0.4s ease, margin 0.4s ease, padding 0.4s ease;
   }
 
   .journey-stop:hover .journey-card,
   .journey-stop.active .journey-card {
-    display: block;
-    transform: none !important;
+    max-height: 400px;
+    opacity: 1;
+    margin-top: 8px;
+    margin-bottom: 16px;
+    padding: 16px;
+    border: 1px solid var(--border-hover);
   }
 
   .journey-card::before,
@@ -1718,8 +1732,9 @@ a.contact-card:hover .contact-card-value {
    ═══════════════════════════════════════════ */
 a:focus-visible,
 button:focus-visible {
-  outline: 2px solid var(--accent);
-  outline-offset: 2px;
+  outline: none;
+  box-shadow: 0 0 0 3px var(--bg), 0 0 0 5px var(--accent);
+  border-radius: inherit;
 }
 
 /* ═══════════════════════════════════════════
