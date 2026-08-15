@@ -100,11 +100,9 @@
   // ═══════════════════════════════════════════
   const typedEl = document.getElementById('typed');
   const phrases = [
-    'Oyun Geliştirici',
-    'Yazılım Mühendisi',
-    'Unity Enthusiast',
-    'Problem Çözücü',
-    'Arayüz Tasarımcısı'
+    'Yazılım Mühendisliği Öğrencisi',
+    'Grafik Tasarım Öğrencisi',
+    'Oyun Geliştirici (Unity)'
   ];
   let phraseIndex = 0;
   let charIndex = 0;
