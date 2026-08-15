@@ -189,16 +189,34 @@ document.addEventListener('DOMContentLoaded', () => {
 
   if (!videoModal || !modalIframe) return;
 
+  let activeVideoId = null;
+  let videoStartTime = 0;
+
   function openVideoModal(videoId) {
     modalIframe.src = `https://www.youtube.com/embed/${videoId}?autoplay=1`;
     videoModal.classList.add('active');
     document.body.style.overflow = 'hidden';
+
+    activeVideoId = videoId;
+    videoStartTime = Date.now();
+    if (typeof window.gtag === 'function') {
+      window.gtag('event', 'video_view_start', { video_id: videoId });
+    }
   }
 
   function closeVideoModal() {
     videoModal.classList.remove('active');
     modalIframe.src = '';
     document.body.style.overflow = '';
+
+    if (activeVideoId && videoStartTime > 0) {
+      const duration = Math.round((Date.now() - videoStartTime) / 1000);
+      if (typeof window.gtag === 'function') {
+        window.gtag('event', 'video_view_duration', { video_id: activeVideoId, duration_seconds: duration });
+      }
+      activeVideoId = null;
+      videoStartTime = 0;
+    }
   }
 
   videoBtns.forEach(btn => {
@@ -249,6 +267,8 @@ document.addEventListener('DOMContentLoaded', () => {
 // --- DETAILS MODAL LOGIC ---
 document.addEventListener('DOMContentLoaded', () => {
   const detailsBtns = document.querySelectorAll('.details-btn');
+  let activeDetailId = null;
+  let detailStartTime = 0;
   
   detailsBtns.forEach(btn => {
     btn.addEventListener('click', (e) => {
@@ -259,6 +279,12 @@ document.addEventListener('DOMContentLoaded', () => {
         if (modal) {
           modal.classList.add('active');
           document.body.style.overflow = 'hidden';
+
+          activeDetailId = modalId;
+          detailStartTime = Date.now();
+          if (typeof window.gtag === 'function') {
+            window.gtag('event', 'project_details_view_start', { project_id: modalId });
+          }
         }
       }
     });
@@ -272,6 +298,15 @@ document.addEventListener('DOMContentLoaded', () => {
     const closeModal = () => {
       modal.classList.remove('active');
       document.body.style.overflow = '';
+
+      if (activeDetailId === modal.id && detailStartTime > 0) {
+        const duration = Math.round((Date.now() - detailStartTime) / 1000);
+        if (typeof window.gtag === 'function') {
+          window.gtag('event', 'project_details_view_duration', { project_id: modal.id, duration_seconds: duration });
+        }
+        activeDetailId = null;
+        detailStartTime = 0;
+      }
     };
 
     if (closeBtn) closeBtn.addEventListener('click', closeModal);
@@ -289,11 +324,21 @@ document.addEventListener('DOMContentLoaded', () => {
         const modalIframe = document.getElementById('modalIframe');
         if (modalIframe) modalIframe.src = '';
         document.body.style.overflow = '';
+        
+        // Custom event dispatch to trigger the closeVideoModal logic if needed
+        // But since we can't easily access the scoped variables from here, we will just fire a general escape event
+        if (typeof window.gtag === 'function') {
+           window.gtag('event', 'modal_closed_via_escape');
+        }
         return;
       }
       if (activeDetailModal) {
         activeDetailModal.classList.remove('active');
         document.body.style.overflow = '';
+        
+        if (typeof window.gtag === 'function') {
+           window.gtag('event', 'modal_closed_via_escape');
+        }
         return; 
       }
       
