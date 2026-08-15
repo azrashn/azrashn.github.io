@@ -825,6 +825,8 @@ body {
 .game-card {
   overflow: hidden;
   border-radius: 16px;
+  display: flex;
+  flex-direction: column;
 }
 
 .game-card:hover { transform: translateY(-4px) scale(1.005); }
@@ -844,11 +846,29 @@ body {
   border: 0;
 }
 
-.game-info { padding: 18px 20px 22px; }
+.game-info { 
+  padding: 18px 20px 22px;
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+}
 .game-info h3 { font-size: 16px; font-weight: 600; margin-bottom: 8px; }
-.game-info p { font-size: 13.5px; color: var(--text-dim); line-height: 1.65; margin-bottom: 14px; }
+.game-info p { 
+  font-size: 13.5px; 
+  color: var(--text-dim); 
+  line-height: 1.65; 
+  margin-bottom: 14px;
+  flex: 1;
+}
 
-.game-tags { display: flex; flex-wrap: wrap; gap: 6px; }
+.game-tags { 
+  display: flex; 
+  flex-wrap: wrap; 
+  gap: 6px; 
+}
+.game-tags:not(:last-child) {
+  margin-bottom: 14px;
+}
 
 .engine-tag {
   display: inline-block;
