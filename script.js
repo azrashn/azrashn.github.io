@@ -224,28 +224,26 @@ document.addEventListener('DOMContentLoaded', () => {
   });
   
   // ═══════════════════════════════════════════
-  // HERO - Interactive Mouse Spotlight
+  // GLOBAL - Interactive Spotlight
   // ═══════════════════════════════════════════
-  const heroSection = document.getElementById('hero');
-  if (heroSection) {
+  const globalSpotlight = document.getElementById('globalSpotlight');
+  if (globalSpotlight) {
     const updateSpotlight = (clientX, clientY) => {
-      const rect = heroSection.getBoundingClientRect();
-      const x = clientX - rect.left;
-      const y = clientY - rect.top;
-      heroSection.style.setProperty('--mouse-x', `${x}px`);
-      heroSection.style.setProperty('--mouse-y', `${y}px`);
+      // Fixed position element can just use clientX and clientY
+      globalSpotlight.style.setProperty('--mouse-x', `${clientX}px`);
+      globalSpotlight.style.setProperty('--mouse-y', `${clientY}px`);
     };
 
-    heroSection.addEventListener('mousemove', (e) => updateSpotlight(e.clientX, e.clientY));
+    document.addEventListener('mousemove', (e) => updateSpotlight(e.clientX, e.clientY));
     
     // Mobil desteği için Touch event'leri
-    heroSection.addEventListener('touchmove', (e) => {
+    document.addEventListener('touchmove', (e) => {
       if (e.touches.length > 0) {
         updateSpotlight(e.touches[0].clientX, e.touches[0].clientY);
       }
     }, { passive: true });
 
-    heroSection.addEventListener('touchstart', (e) => {
+    document.addEventListener('touchstart', (e) => {
       if (e.touches.length > 0) {
         updateSpotlight(e.touches[0].clientX, e.touches[0].clientY);
       }

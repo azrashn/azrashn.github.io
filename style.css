@@ -240,18 +240,17 @@ body {
   /* Gizlendi: Yeni interaktif mouse glow kullanılıyor */
 }
 
-.hero-section::before {
-  content: '';
-  position: absolute;
+.global-spotlight {
+  position: fixed;
   top: 0;
   left: 0;
-  right: 0;
-  bottom: 0;
+  width: 100vw;
+  height: 100vh;
   background: radial-gradient(800px circle at var(--mouse-x, 50%) var(--mouse-y, 50%),
       rgba(125, 211, 252, 0.12),
       transparent 40%);
   pointer-events: none;
-  z-index: 0;
+  z-index: 9999;
 }
 
 .hero-content {
@@ -454,6 +453,25 @@ body {
   inset: 0;
   background: linear-gradient(180deg, rgba(12, 17, 23, 0.5) 0%, transparent 30%, transparent 70%, rgba(12, 17, 23, 0.5) 100%);
   pointer-events: none;
+}
+
+#kariyer {
+  background: radial-gradient(circle at 0% 50%, rgba(129, 140, 248, 0.05) 0%, transparent 50%),
+              radial-gradient(circle at 100% 100%, rgba(56, 189, 248, 0.03) 0%, transparent 40%);
+}
+
+#projeler {
+  background: radial-gradient(circle at 100% 30%, rgba(52, 211, 153, 0.04) 0%, transparent 50%),
+              radial-gradient(circle at 0% 80%, rgba(96, 165, 250, 0.04) 0%, transparent 40%);
+}
+
+#oyunlar {
+  background: radial-gradient(circle at 50% 100%, rgba(251, 191, 36, 0.03) 0%, transparent 60%);
+}
+
+#iletisim {
+  background: radial-gradient(circle at 0% 100%, rgba(251, 113, 133, 0.05) 0%, transparent 50%),
+              radial-gradient(circle at 100% 0%, rgba(245, 197, 66, 0.03) 0%, transparent 40%);
 }
 
 .section-inner {
