@@ -474,16 +474,22 @@
           </div>
           <div class="game-info">
             <h3>Tower Defense Game</h3>
-            <p>Stratejik kaynak yönetimi ve savunma optimizasyonuna odaklanan bir simülasyon projesi.
-              GDD (Game Design Document) hazırlandı; algoritma tasarımı ve OOP prensipleriyle senaryolar
-              modellendi, dijital varlık tasarım süreçlerinde aktif rol alındı.</p>
+            <p>C++ ve Raylib kütüphanesi kullanılarak geliştirilen orta çağ fantezi temalı 2D kule savunma oyunu. Gelişmiş yol bulma (pathfinding), dinamik dalga sistemi ve stratejik üs mekanikleri içerir.</p>
             <div class="game-tags">
-              <span class="engine-tag">Unity</span>
-              <span class="engine-tag">C#</span>
+              <span class="engine-tag">Raylib</span>
+              <span class="engine-tag">C++</span>
               <span class="engine-tag">OOP</span>
               <span class="role-tag">Kodlama</span>
-              <span class="role-tag">GDD</span>
-              <span class="role-tag">Dijital Sanat</span>
+              <span class="role-tag">Algoritma</span>
+            </div>
+            <div class="project-links">
+              <button class="project-link details-btn" data-modal="towerDetailsModal" aria-label="Detayları İncele">
+                <svg width="14" height="14" viewBox="0 0 16 16" fill="currentColor" aria-hidden="true">
+                  <path fill-rule="evenodd" d="M2 2.5A2.5 2.5 0 014.5 0h8.75a.75.75 0 01.75.75v12.5a.75.75 0 01-.75.75h-2.5a.75.75 0 110-1.5h1.75v-2h-8a1 1 0 00-.714 1.7.75.75 0 01-1.072 1.05A2.495 2.495 0 012 11.5v-9zm10.5-1h-8a1 1 0 00-1 1v6.708A2.492 2.492 0 014.5 9h8V1.5z"/>
+                  <path fill-rule="evenodd" d="M5 3.25a.75.75 0 01.75-.75h4.5a.75.75 0 010 1.5h-4.5A.75.75 0 015 3.25zm0 3a.75.75 0 01.75-.75h4.5a.75.75 0 010 1.5h-4.5A.75.75 0 015 6.25z"/>
+                </svg>
+                detayları incele
+              </button>
             </div>
           </div>
         </article>
@@ -494,14 +500,22 @@
               loading="lazy" allowfullscreen></iframe>
           </div>
           <div class="game-info">
-            <h3>Arcade Runner</h3>
-            <p>Unity ile geliştirilmiş 2D/2.5D arcade oyunu. Klasik arcade aksiyon oyunu; hızlı refleks
-              ve skor rekabetine dayalı mekanikler içeriyor.</p>
+            <h3>Shooter Game</h3>
+            <p>Unity ve C# kullanılarak geliştirilen arena tipi hayatta kalma oyunu. NavMesh tabanlı akıllı düşman yapay zekası, prosedürel üretim (spawning) ve dinamik zorluk algoritmaları içerir.</p>
             <div class="game-tags">
               <span class="engine-tag">Unity</span>
               <span class="engine-tag">C#</span>
               <span class="role-tag">Kodlama</span>
-              <span class="role-tag">Tasarım</span>
+              <span class="role-tag">Yapay Zeka</span>
+            </div>
+            <div class="project-links">
+              <button class="project-link details-btn" data-modal="shooterDetailsModal" aria-label="Detayları İncele">
+                <svg width="14" height="14" viewBox="0 0 16 16" fill="currentColor" aria-hidden="true">
+                  <path fill-rule="evenodd" d="M2 2.5A2.5 2.5 0 014.5 0h8.75a.75.75 0 01.75.75v12.5a.75.75 0 01-.75.75h-2.5a.75.75 0 110-1.5h1.75v-2h-8a1 1 0 00-.714 1.7.75.75 0 01-1.072 1.05A2.495 2.495 0 012 11.5v-9zm10.5-1h-8a1 1 0 00-1 1v6.708A2.492 2.492 0 014.5 9h8V1.5z"/>
+                  <path fill-rule="evenodd" d="M5 3.25a.75.75 0 01.75-.75h4.5a.75.75 0 010 1.5h-4.5A.75.75 0 015 3.25zm0 3a.75.75 0 01.75-.75h4.5a.75.75 0 010 1.5h-4.5A.75.75 0 015 6.25z"/>
+                </svg>
+                detayları incele
+              </button>
             </div>
           </div>
         </article>
@@ -872,6 +886,48 @@
           <li><strong>Agile Geliştirme Kültürü:</strong> Altı kişilik yazılım ekibiyle, Agile/Scrum prensipleri
             benimsenerek yapay zeka modelleri, güvenli arka yüz mimarisi ve kullanıcı dostu arayüzleri başarıyla hayata
             geçirildi.</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+
+  <!-- Tower Defense Details Modal -->
+  <div id="towerDetailsModal" class="details-modal">
+    <div class="details-modal-backdrop"></div>
+    <div class="details-modal-content glass-card">
+      <button class="details-modal-close" aria-label="Kapat">
+        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <path d="M18 6L6 18M6 6l12 12" />
+        </svg>
+      </button>
+      <div class="details-content">
+        <h3>Tower Defense Game</h3>
+        <ul class="details-list">
+          <li><strong>Gelişmiş 2D Rendering:</strong> 2D derinlik algısını sağlayan "Y-Sorting" algoritması ve çok yönlü boss sprite'ları için dinamik animasyon render sistemi tasarlandı.</li>
+          <li><strong>Yapay Zeka ve Pathfinding:</strong> Harita matrisi (grid) üzerinden çalışan optimize edilmiş mantıksal yol bulma (pathfinding) mekanikleri geliştirildi.</li>
+          <li><strong>Stratejik Oynanış Mekanikleri:</strong> Geleneksel can barı yerine savunmayı daha stratejik hale getiren 3 aşamalı (3-Target) kademeli üs sistemi, kaynak yönetimi ve dinamik dalga (wave) sistemi kodlandı.</li>
+          <li><strong>Yazılım Mimarisi ve Ekip Çalışması:</strong> 4 kişilik geliştirici ekibiyle, oyun durumları (State Machine) arasındaki geçişlerde müzik ve ses çakışmalarını önleyen merkezi bir AudioManager sınıfı inşa edildi.</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+
+  <!-- Shooter Game Details Modal -->
+  <div id="shooterDetailsModal" class="details-modal">
+    <div class="details-modal-backdrop"></div>
+    <div class="details-modal-content glass-card">
+      <button class="details-modal-close" aria-label="Kapat">
+        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <path d="M18 6L6 18M6 6l12 12" />
+        </svg>
+      </button>
+      <div class="details-content">
+        <h3>Shooter Game</h3>
+        <ul class="details-list">
+          <li><strong>Yapay Zeka ve Yol Bulma:</strong> NavMesh ve çalışma zamanı hedef çözümleme (Tag/Transform) kullanarak oyuncuyu dinamik olarak takip eden ve menzil kontrolüyle saldırı gerçekleştiren düşman AI mimarisi geliştirildi.</li>
+          <li><strong>Algoritmik Zorluk Ölçeklendirmesi:</strong> Düşmanın her yeniden doğuşunda hasar çarpanını eksponansiyel olarak artıran ($2^n$) oyun mekaniği kodlandı.</li>
+          <li><strong>Prosedürel Doğma ve Yaşam Döngüsü:</strong> Sahne sınırları (AABB Collider) içinde rastgele koordinat üreten ve nesne yaşam döngüsünü (Instantiate/Destroy) yöneten modüler EnemySpawner sistemi kuruldu.</li>
+          <li><strong>UI/UX Entegrasyonu:</strong> TextMeshPro (TMP) ve Slider bileşenleri kullanılarak oyuncu ve düşman için gerçek zamanlı sağlık takip arayüzü uygulandı.</li>
         </ul>
       </div>
     </div>
