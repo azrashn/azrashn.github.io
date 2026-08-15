@@ -125,6 +125,11 @@ body {
   filter: brightness(1.2);
 }
 
+.nav-logo:active {
+  transform: scale(0.98);
+  filter: brightness(0.9);
+}
+
 .logo-img {
   height: 95px;
   width: auto;
@@ -163,6 +168,11 @@ body {
   color: var(--text);
   background: rgba(125, 211, 252, 0.08);
   transform: translateX(4px);
+}
+
+.nav-link:active {
+  transform: translateX(4px) scale(0.95);
+  background: rgba(125, 211, 252, 0.12);
 }
 
 .nav-link.active {
