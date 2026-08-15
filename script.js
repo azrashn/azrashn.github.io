@@ -222,7 +222,36 @@ document.addEventListener('DOMContentLoaded', () => {
       closeVideoModal();
     }
   });
-});
+  
+  // ═══════════════════════════════════════════
+  // HERO - Interactive Mouse Spotlight
+  // ═══════════════════════════════════════════
+  const heroSection = document.getElementById('hero');
+  if (heroSection) {
+    const updateSpotlight = (clientX, clientY) => {
+      const rect = heroSection.getBoundingClientRect();
+      const x = clientX - rect.left;
+      const y = clientY - rect.top;
+      heroSection.style.setProperty('--mouse-x', `${x}px`);
+      heroSection.style.setProperty('--mouse-y', `${y}px`);
+    };
+
+    heroSection.addEventListener('mousemove', (e) => updateSpotlight(e.clientX, e.clientY));
+    
+    // Mobil desteği için Touch event'leri
+    heroSection.addEventListener('touchmove', (e) => {
+      if (e.touches.length > 0) {
+        updateSpotlight(e.touches[0].clientX, e.touches[0].clientY);
+      }
+    }, { passive: true });
+
+    heroSection.addEventListener('touchstart', (e) => {
+      if (e.touches.length > 0) {
+        updateSpotlight(e.touches[0].clientX, e.touches[0].clientY);
+      }
+    }, { passive: true });
+  }
+})();
 
 // --- DETAILS MODAL LOGIC ---
 document.addEventListener('DOMContentLoaded', () => {

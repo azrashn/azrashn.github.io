@@ -126,18 +126,22 @@ body {
   text-decoration: none;
   padding: 6px 14px;
   border-radius: 6px;
-  transition: color var(--speed-fast), background var(--speed-fast);
+  transition: all var(--speed-normal) var(--ease);
   letter-spacing: 0.01em;
+  display: inline-block;
 }
 
 .nav-link:hover {
   color: var(--text);
-  background: rgba(125, 211, 252, 0.05);
+  background: rgba(125, 211, 252, 0.08);
+  transform: translateX(4px);
 }
 
 .nav-link.active {
   color: var(--accent);
   background: var(--accent-soft);
+  box-shadow: 0 0 12px var(--accent-glow);
+  border: 1px solid rgba(125, 211, 252, 0.2);
 }
 
 .nav-hamburger {
@@ -179,18 +183,33 @@ body {
   position: relative;
   overflow: hidden;
   padding: 120px var(--section-px) 80px;
+  background: radial-gradient(at 0% 0%, rgba(129, 140, 248, 0.15) 0%, transparent 50%),
+              radial-gradient(at 100% 100%, rgba(217, 70, 239, 0.15) 0%, transparent 50%), /* Pink/Fuchsia */
+              radial-gradient(at 100% 0%, rgba(251, 113, 133, 0.15) 0%, transparent 50%),  /* Rose/Pink */
+              radial-gradient(at 0% 100%, rgba(236, 72, 153, 0.15) 0%, transparent 50%),  /* Pink */
+              var(--bg);
 }
 
 .hero-bg-glow {
+  display: none; /* Gizlendi: Yeni interaktif mouse glow kullanılıyor */
+}
+
+.hero-section::before {
+  content: '';
   position: absolute;
-  top: -20%;
-  left: -10%;
-  width: 700px;
-  height: 700px;
-  background: radial-gradient(circle, rgba(125, 211, 252, 0.06) 0%, transparent 70%);
-  border-radius: 50%;
+  top: 0; left: 0; right: 0; bottom: 0;
+  background: radial-gradient(
+      800px circle at var(--mouse-x, 50%) var(--mouse-y, 50%), 
+      rgba(125, 211, 252, 0.12),
+      transparent 40%
+  );
   pointer-events: none;
-  animation: heroGlowFloat 8s ease-in-out infinite alternate;
+  z-index: 0;
+}
+
+.hero-content {
+  position: relative;
+  z-index: 1;
 }
 
 @keyframes heroGlowFloat {
