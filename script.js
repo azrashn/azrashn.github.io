@@ -538,6 +538,11 @@ document.addEventListener('DOMContentLoaded', () => {
     });
 
     function updateEyes() {
+      if (mascotState === 'hurt') {
+        isTracking = false;
+        return;
+      }
+
       document.querySelectorAll('.mascot-eye').forEach(eye => {
         const rect = eye.getBoundingClientRect();
         // Calculate separate center for each eye
@@ -564,12 +569,40 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // ── Hover → wave ──
     mascotContainer.addEventListener('mouseenter', () => {
-      triggerWave();
+      if (mascotState !== 'hurt') {
+        triggerWave();
+      }
     });
 
-    // ── Click → wave ──
+    // ── Click → Hurt ──
+    let hurtTimeout = null;
+    let nextHurtType = 1; // 1, 2, 3 cycle
+
     mascotContainer.addEventListener('click', () => {
-      triggerWave();
+      if (mascotState === 'hurt') return;
+
+      // Clean up previous animations
+      if (waveTimeout) clearTimeout(waveTimeout);
+      mascotContainer.classList.remove('waving');
+
+      mascotState = 'hurt';
+      
+      // Select sequential hurt type (1 -> 2 -> 3 -> 1)
+      const hurtClass = `hurt-${nextHurtType}`;
+      nextHurtType = nextHurtType >= 3 ? 1 : nextHurtType + 1;
+      
+      mascotContainer.classList.add(hurtClass);
+
+      if (hurtTimeout) clearTimeout(hurtTimeout);
+      hurtTimeout = setTimeout(() => {
+        mascotContainer.classList.remove(hurtClass);
+        // Return to appropriate state
+        if (activeSection) {
+          mascotState = 'pointing';
+        } else {
+          mascotState = 'idle';
+        }
+      }, 1500);
     });
 
     // ── IntersectionObserver for Projeler & Oyunlar ──

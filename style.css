@@ -2199,23 +2199,85 @@ button:focus-visible {
   display: block;
 }
 
-/* ── Mouth Pose System ── */
-.mouth-idle {
-  display: block;
-}
+/* ── Eye Pose System ── */
+.eye-normal { display: block; }
+.eye-hurt-1, .eye-hurt-2, .eye-hurt-3 { display: none; }
 
-.mouth-open {
-  display: none;
-}
+.mascot-container.hurt-1 .eye-normal,
+.mascot-container.hurt-2 .eye-normal,
+.mascot-container.hurt-3 .eye-normal { display: none; }
+
+.mascot-container.hurt-1 .eye-hurt-1 { display: block; }
+.mascot-container.hurt-2 .eye-hurt-2 { display: block; }
+.mascot-container.hurt-3 .eye-hurt-3 { display: block; }
+
+/* ── Mouth Pose System ── */
+.mouth-idle { display: block; }
+.mouth-open { display: none; }
+.mouth-hurt-1, .mouth-hurt-2, .mouth-hurt-3 { display: none; }
 
 .mascot-container.pointing .mouth-idle,
-.mascot-container.waving .mouth-idle {
-  display: none;
+.mascot-container.waving .mouth-idle { display: none; }
+.mascot-container.pointing .mouth-open,
+.mascot-container.waving .mouth-open { display: block; }
+
+/* Hide normal mouths when hurt */
+.mascot-container.hurt-1 .mouth-idle,
+.mascot-container.hurt-1 .mouth-open,
+.mascot-container.hurt-2 .mouth-idle,
+.mascot-container.hurt-2 .mouth-open,
+.mascot-container.hurt-3 .mouth-idle,
+.mascot-container.hurt-3 .mouth-open { display: none !important; }
+
+/* Show hurt mouths */
+.mascot-container.hurt-1 .mouth-hurt-1 { display: block; }
+.mascot-container.hurt-2 .mouth-hurt-2 { display: block; }
+.mascot-container.hurt-3 .mouth-hurt-3 { display: block; }
+
+/* ── Hurt Visual Effects ── */
+.hurt-fx { display: none; }
+.mascot-container.hurt-1 .hurt-fx-1 { display: block; animation: fxPop 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275); }
+.mascot-container.hurt-2 .hurt-fx-2 { display: block; animation: fxSpin 2s linear infinite; transform-origin: 170px 100px; }
+
+@keyframes fxPop {
+  0% { transform: scale(0.5); opacity: 0; }
+  100% { transform: scale(1); opacity: 1; }
+}
+@keyframes fxSpin {
+  100% { transform: rotate(360deg); }
 }
 
-.mascot-container.pointing .mouth-open,
-.mascot-container.waving .mouth-open {
-  display: block;
+/* ── Hurt Body Animations ── */
+@keyframes hurtShake {
+  0%, 100% { transform: translateX(0); }
+  25% { transform: translateX(-8px) rotate(-3deg); }
+  50% { transform: translateX(8px) rotate(3deg); }
+  75% { transform: translateX(-8px) rotate(-3deg); }
+}
+.mascot-container.hurt-1 .mascot-svg {
+  animation: hurtShake 0.3s ease-in-out infinite;
+}
+
+@keyframes hurtWobble {
+  0%, 100% { transform: rotate(0); }
+  25% { transform: rotate(-15deg); }
+  75% { transform: rotate(15deg); }
+}
+.mascot-container.hurt-2 .mascot-svg {
+  transform-origin: bottom center;
+  animation: hurtWobble 1.5s ease-in-out infinite;
+}
+
+@keyframes hurtSquish {
+  0% { transform: scale(1, 1); }
+  20% { transform: scale(1.15, 0.8) translateY(20px); }
+  40% { transform: scale(0.9, 1.05) translateY(-5px); }
+  60% { transform: scale(1.05, 0.95) translateY(5px); }
+  100% { transform: scale(1, 1); }
+}
+.mascot-container.hurt-3 .mascot-svg {
+  transform-origin: bottom center;
+  animation: hurtSquish 1.5s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
 /* ── Wave Animation (left arm, on hover/click) ── */

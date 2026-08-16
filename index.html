@@ -1175,8 +1175,8 @@
 
       <!-- ── Eyes (Kawaii style) ── -->
       <g id="mascot-eyes">
-        <!-- Left Eye -->
-        <g id="eye-left" class="mascot-eye">
+        <!-- Normal Eyes -->
+        <g id="eye-left" class="mascot-eye eye-pose eye-normal">
           <!-- Eye white -->
           <ellipse cx="143" cy="158" rx="22" ry="24" fill="#ffffff" />
           <!-- Pupil group for tracking -->
@@ -1194,7 +1194,7 @@
           </g>
         </g>
         <!-- Right Eye -->
-        <g id="eye-right" class="mascot-eye">
+        <g id="eye-right" class="mascot-eye eye-pose eye-normal">
           <ellipse cx="197" cy="158" rx="22" ry="24" fill="#ffffff" />
           <!-- Pupil group for tracking -->
           <g class="pupil-group" style="transition: transform 0.1s ease-out;">
@@ -1204,6 +1204,32 @@
             <ellipse cx="204" cy="167" rx="3.5" ry="4" fill="rgba(255,255,255,0.6)" />
             <circle cx="191" cy="145" r="2" fill="rgba(255,255,255,0.7)" />
           </g>
+        </g>
+        
+        <!-- Hurt 1: > < -->
+        <g class="eye-pose eye-hurt-1">
+          <path d="M 130,150 L 150,160 L 130,170" stroke="#1d2b36" stroke-width="6" stroke-linecap="round" stroke-linejoin="round" fill="none"/>
+          <path d="M 210,150 L 190,160 L 210,170" stroke="#1d2b36" stroke-width="6" stroke-linecap="round" stroke-linejoin="round" fill="none"/>
+        </g>
+        
+        <!-- Hurt 2: Concentric rings (Dizzy) -->
+        <g class="eye-pose eye-hurt-2">
+          <circle cx="143" cy="158" r="18" stroke="#1d2b36" stroke-width="4" fill="none" stroke-dasharray="8 4"/>
+          <circle cx="143" cy="158" r="10" stroke="#1d2b36" stroke-width="4" fill="none"/>
+          <circle cx="143" cy="158" r="2" fill="#1d2b36"/>
+          <circle cx="197" cy="158" r="18" stroke="#1d2b36" stroke-width="4" fill="none" stroke-dasharray="8 4"/>
+          <circle cx="197" cy="158" r="10" stroke="#1d2b36" stroke-width="4" fill="none"/>
+          <circle cx="197" cy="158" r="2" fill="#1d2b36"/>
+        </g>
+        
+        <!-- Hurt 3: Crying -->
+        <g class="eye-pose eye-hurt-3">
+          <!-- Closed sad eyes (arched up) -->
+          <path d="M 125,165 Q 143,145 161,165" stroke="#1d2b36" stroke-width="6" stroke-linecap="round" fill="none"/>
+          <path d="M 179,165 Q 197,145 215,165" stroke="#1d2b36" stroke-width="6" stroke-linecap="round" fill="none"/>
+          <!-- Tears -->
+          <path d="M 130,165 C 130,190 156,190 156,165 Z" fill="#7cc8f5" opacity="0.8"/>
+          <path d="M 184,165 C 184,190 210,190 210,165 Z" fill="#7cc8f5" opacity="0.8"/>
         </g>
       </g>
 
@@ -1230,6 +1256,15 @@
           <!-- Tongue hint -->
           <ellipse cx="170" cy="200" rx="7" ry="4" fill="#d84565" opacity="0.7" />
         </g>
+        
+        <!-- Hurt 1: Shouting -->
+        <path class="mouth-pose mouth-hurt-1" d="M 155,195 Q 170,180 185,195 Q 185,220 170,220 Q 155,220 155,195 Z" fill="#c04060"/>
+        
+        <!-- Hurt 2: Wavy -->
+        <path class="mouth-pose mouth-hurt-2" d="M 155,195 Q 162,185 170,195 T 185,195" stroke="#1d2b36" stroke-width="4" fill="none" stroke-linecap="round"/>
+        
+        <!-- Hurt 3: Trembling sad -->
+        <path class="mouth-pose mouth-hurt-3" d="M 160,205 Q 170,190 180,205" stroke="#1d2b36" stroke-width="4" fill="none" stroke-linecap="round"/>
       </g>
 
       <!-- ── Left Arm (Rendered on top of head/body for proper z-index) ── -->
@@ -1244,40 +1279,54 @@
         <ellipse cx="88" cy="332" rx="7" ry="5" fill="#6dbde8" />
       </g>
 
-      <!-- POINTING (extended left) -->
+      <!-- POINTING (Ball hand - Angled outwards) -->
       <g id="mascot-arm-left-pointing" class="arm-pose arm-pointing">
         <path d="
           M 118,248
-          C 108,245 85,235 65,222
-          Q 50,213 38,208
-        " stroke="url(#armGrad)" stroke-width="28" stroke-linecap="round" fill="none" />
-        <path d="
-          M 38,208
-          C 28,203 18,198 8,195
-        " stroke="url(#armGrad)" stroke-width="24" stroke-linecap="round" fill="none" />
-        <g id="mascot-hand-pointing">
-          <ellipse cx="8" cy="195" rx="18" ry="15" fill="#7cc8f5" transform="rotate(-12, 8, 195)" />
-          <path d="
-            M -5,190
-            C -18,185 -30,180 -40,177
-          " stroke="#7cc8f5" stroke-width="11" stroke-linecap="round" fill="none" />
-          <ellipse cx="-42" cy="176" rx="6" ry="5.5" fill="#6dbde8" transform="rotate(-10, -42, 176)" />
-          <ellipse cx="8" cy="205" rx="8" ry="6" fill="#6dbde8" transform="rotate(15, 8, 205)" />
-          <ellipse cx="14" cy="200" rx="7" ry="5.5" fill="#6dbde8" transform="rotate(20, 14, 200)" />
-          <ellipse cx="0" cy="183" rx="7" ry="5" fill="#6dbde8" transform="rotate(-25, 0, 183)" />
-        </g>
+          C 90,240 60,215 35,180
+        " stroke="url(#armGrad)" stroke-width="26" stroke-linecap="round" fill="none" />
+        <ellipse cx="35" cy="180" rx="14" ry="13" fill="#7cc8f5" />
+        <ellipse cx="35" cy="176" rx="7" ry="5" fill="#6dbde8" />
       </g>
 
-      <!-- WAVING (bent upwards) -->
+      <!-- WAVING (Ball hand) -->
       <g id="mascot-arm-left-waving" class="arm-pose arm-waving">
         <path d="
           M 118,248
           C 90,250 60,240 50,200
           C 45,180 50,155 55,140
         " stroke="url(#armGrad)" stroke-width="26" stroke-linecap="round" fill="none" />
-        <ellipse cx="55" cy="140" rx="16" ry="18" fill="#7cc8f5" transform="rotate(15, 55, 140)" />
-        <ellipse cx="45" cy="130" rx="6" ry="8" fill="#6dbde8" transform="rotate(-15, 45, 130)" />
-        <ellipse cx="65" cy="130" rx="6" ry="8" fill="#6dbde8" transform="rotate(15, 65, 130)" />
+        <ellipse cx="55" cy="140" rx="14" ry="13" fill="#7cc8f5" />
+        <ellipse cx="55" cy="136" rx="7" ry="5" fill="#6dbde8" />
+      </g>
+
+      <!-- ── Visual Effects ── -->
+      <!-- Hurt 1: Ah! & Hit Stars + Bandage + Swelling -->
+      <g class="hurt-fx hurt-fx-1">
+        <!-- Red Swelling (Hit Spot) -->
+        <ellipse cx="200" cy="115" rx="25" ry="20" fill="#ff4d4d" opacity="0.5" filter="url(#eyeGlow)"/>
+        
+        <!-- Red Bandage Cross -->
+        <g transform="translate(140, 110)">
+          <rect x="-16" y="-6" width="32" height="12" rx="5" fill="#f04040" transform="rotate(45)"/>
+          <rect x="-16" y="-6" width="32" height="12" rx="5" fill="#f04040" transform="rotate(-45)"/>
+          <circle cx="-7" cy="-7" r="1.5" fill="#ffffff" opacity="0.7"/>
+          <circle cx="7" cy="7" r="1.5" fill="#ffffff" opacity="0.7"/>
+          <circle cx="-7" cy="7" r="1.5" fill="#ffffff" opacity="0.7"/>
+          <circle cx="7" cy="-7" r="1.5" fill="#ffffff" opacity="0.7"/>
+        </g>
+
+        <!-- "Ah!" Text -->
+        <text x="180" y="70" font-family="system-ui, sans-serif" font-size="34" font-weight="900" fill="#ff4d4d" transform="rotate(15, 180, 70)">Ah!</text>
+        
+        <!-- Hit Sparks -->
+        <path d="M 200,105 L 220,80 M 180,95 L 165,70 M 215,120 L 245,110" stroke="#ff4d4d" stroke-width="4" stroke-linecap="round"/>
+      </g>
+
+      <!-- Hurt 2: Dizzy stars -->
+      <g class="hurt-fx hurt-fx-2">
+        <path d="M 100,70 l 5,15 15,5 -15,5 -5,15 -5,-15 -15,-5 15,-5 Z" fill="#ffd700" opacity="0.8"/>
+        <path d="M 240,90 l 3,10 10,3 -10,3 -3,10 -3,-10 -10,-3 10,-3 Z" fill="#ffd700" opacity="0.8" transform="rotate(20, 240, 90)"/>
       </g>
     </svg>
   </div>
