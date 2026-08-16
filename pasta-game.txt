@@ -1,0 +1,45 @@
+🍝 Torre di Pasta - Level Tasarımı (GDD Taslağı)
+Aşama 0: UI ve Geri Sayım (Countdown State)
+Oyun doğrudan başlamaz. "Başla" butonuna basıldığında ekranda şık, İtalyan restoranlarına uygun 
+(örneğin Pacifico veya Playfair Display tarzı) bir fontla devasa bir "3... 2... 1... MANGIA! 
+(Başla)" geri sayımı belirir. Fizik motoru ancak "Başla" yazısı ekrandan kaybolduğunda tetiklenir.
+
+>> Level 1: Al Dente (Temel Denge)
+
+Skor Aralığı: 0 - 30
+
+Mekanik: Şu anki mevcut durum. Sadece kuleyi dengede tutmayı öğrenme aşaması.
+
+Uyarı Yazısı: Yok (Sadece 3-2-1 Başla)
+
+>> Level 2: Rüzgarlı Teras (Sinüzoidal Rüzgar)
+
+Skor Aralığı: 30 - 70
+
+Geçiş (Transition): Skor 30 olduğunda kule anlık olarak havada asılı kalır 
+(oyun 1.5 saniyeliğine duraklatılır). Ekranda "Level 2: Rüzgarlı Teras! Dikkatli Ol!" yazar.
+
+Mekanik: Arka plandaki parmesan/toz efektleri sağa veya sola doğru hızla kaymaya başlar. 
+Fizik motoruna görünmez bir "rüzgar kuvveti" eklenir. Rüzgar kuleyi yavaşça sağa ve sola itmeye 
+başlar, tıklamalarınla bu ekstra kuvvete direnmen gerekir.
+
+>> Level 3: Mama Mia! (Gökten Yağan Köfteler)
+
+Skor Aralığı: 70 - 120
+
+Geçiş: Skor 70 olduğunda tekrar 1.5 saniyelik duraklama. Ekranda kırmızı uyarı tonuyla 
+"Level 3: Köfte Yağmuru!" belirir.
+
+Mekanik: Rüzgar devam ederken, yukarıdan rastgele aralıklarla köfteler düşmeye başlar. 
+Köftelerden biri kuleye çarparsa, kuleye o yönden anlık bir fiziksel darbe (impulse) uygular. 
+Çarpışmayı önceden görüp zıt yöne tıklayarak kendini hazırlamalısın.
+
+>> Level 4: Şefin Şaheseri (Dinamik Kule Büyümesi)
+
+Skor Aralığı: 120 ve Üzeri
+
+Geçiş: Ekranda "Level 4: Şefin Şaheseri! Ağırlık Merkezi Kayıyor!" yazar.
+
+Mekanik: Kulenin üstüne görsel olarak ekstra makarnalar/malzemeler eklenir (kule uzar). 
+Fiziksel olarak kulenin ağırlık merkezi yukarı kaydığı için, artık tıklamaların eskisi kadar etki 
+etmez (baseForce düşer). Çok daha hızlı refleksler göstermen gerekir.
