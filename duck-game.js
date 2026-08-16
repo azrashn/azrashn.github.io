@@ -9,19 +9,19 @@
   // --- EGG TRIGGER LOGIC ---
   let eggClicks = 0;
   let isResetting = false;
-  
+
   // Wait for DOM to be fully loaded
   document.addEventListener('DOMContentLoaded', () => {
     const eggImg = document.getElementById('eggTriggerImg');
     const gameModal = document.getElementById('pastaGameModal');
     const eggWrapper = document.getElementById('eggTrigger');
-    
+
     if (!eggImg || !eggWrapper) return;
 
     eggWrapper.addEventListener('click', () => {
       if (isResetting) return;
       eggClicks++;
-      
+
       // Shake effect
       eggWrapper.classList.add('shake');
       setTimeout(() => eggWrapper.classList.remove('shake'), 200);
@@ -46,9 +46,9 @@
     const canvas = document.getElementById('pastaGameCanvas');
     if (!canvas || !gameModal) return;
     const ctx = canvas.getContext('2d');
-    
+
     const closeBtn = document.getElementById('pastaGameCloseBtn');
-    
+
     // Close button logic
     if (closeBtn) {
       closeBtn.addEventListener('click', () => {
@@ -76,15 +76,21 @@
     window.addEventListener('resize', resizeCanvas);
 
     // ── GAME STATE ──
-    let isPlaying = false;
+    let gameState = 'IDLE'; // 'IDLE', 'READY', 'PLAYING', 'GAME_OVER'
     let score = 0;
     let lastTime = 0;
     let scoreTimer = 0;
     let best = parseInt(localStorage.getItem('pastaBalanceBest') || '0', 10);
-    
-    let wobbleAngle = 0;
-    let wobbleVelocity = 0;
-    let difficultyMultiplier = 1; // Increases over time
+
+    // Inverted Pendulum Physics Variables
+    let angle = 0;
+    let angularVelocity = 0;
+    let angularAcceleration = 0;
+
+    // GÜNCELLENEN DEĞERLER (Daha yavaş düşüş, daha yüksek sürtünme)
+    const gravity = 0.001;
+    const damping = 0.95;
+    let difficultyMultiplier = 1;
 
     const scoreEl = document.getElementById('pastaScoreVal');
     const bestEl = document.getElementById('pastaBestVal');
@@ -92,7 +98,7 @@
     const titleEl = document.getElementById('pastaGameTitle');
     const descEl = document.getElementById('pastaGameDesc');
     const startBtn = document.getElementById('pastaGameStartBtn');
-    
+
     if (bestEl) bestEl.textContent = best;
 
     // Background rendering (dark gradient with subtle warm light)
@@ -166,51 +172,81 @@
     }
 
     function startGame() {
-      isPlaying = true;
+      // 1. TAM SIFIRLAMA (STATE RESET)
+      gameState = 'READY';
       score = 0;
-      wobbleAngle = 0;
-      wobbleVelocity = (Math.random() > 0.5 ? 1 : -1); // Initial push
+      angle = 0;
+      angularVelocity = 0;
+      angularAcceleration = 0;
       difficultyMultiplier = 1;
       scoreTimer = 0;
+
       if (scoreEl) scoreEl.textContent = score;
       if (actionsOverlay) actionsOverlay.style.display = 'none';
-      
+
       const speechBubble = document.getElementById('speechBubble');
       if (speechBubble) {
-        speechBubble.innerHTML = '<span>Dengele! Ekrana tıklayarak kuleyi zıt yöne it! 👉</span>' + 
+        speechBubble.innerHTML = '<span>Hazırlan...</span>' +
           '<svg class="swirl-tail" viewBox="0 0 30 24" fill="none"><path d="M15 0 C18 8, 25 10, 20 16 C18 20, 12 22, 15 24" stroke="rgba(212, 168, 67, 0.3)" stroke-width="1.5" stroke-linecap="round"/><path d="M12 4 C10 12, 5 14, 10 18" stroke="rgba(212, 168, 67, 0.2)" stroke-width="1" stroke-linecap="round"/></svg>';
       }
+
+      // 2. HAZIRLIK SÜRESİ (GRACE PERIOD)
+      applyTowerWobble(); // Kuleyi dik konuma sıfırla
+      updateBalanceMeter();
+
+      // DeltaTime sıçramasını önlemek için lastTime'ı şimdiden sıfırla
+      lastTime = performance.now();
+
+      setTimeout(() => {
+        if (!gameModal.classList.contains('active')) return; // Modal kapandıysa başlama
+        if (gameState !== 'READY') return;
+
+        gameState = 'PLAYING';
+        angle = (Math.random() > 0.5 ? 0.01 : -0.01); // Başlangıç açısı
+
+        // METİN GÜNCELLENDİ (İçgüdüsel kontrole uygun)
+        if (speechBubble) {
+          speechBubble.innerHTML = '<span>Dengele! Kuleyi tutmak istediğin yöne tıkla! 👉</span>' +
+            '<svg class="swirl-tail" viewBox="0 0 30 24" fill="none"><path d="M15 0 C18 8, 25 10, 20 16 C18 20, 12 22, 15 24" stroke="rgba(212, 168, 67, 0.3)" stroke-width="1.5" stroke-linecap="round"/><path d="M12 4 C10 12, 5 14, 10 18" stroke="rgba(212, 168, 67, 0.2)" stroke-width="1" stroke-linecap="round"/></svg>';
+        }
+      }, 1500); // 1.5 saniye hazırlık süresi
     }
 
     function gameOver() {
-      isPlaying = false;
+      gameState = 'GAME_OVER';
+
       if (score > best) {
         best = score;
         localStorage.setItem('pastaBalanceBest', best);
         if (bestEl) bestEl.textContent = best;
       }
-      
+
       if (actionsOverlay) {
         titleEl.textContent = 'Eyvah, Kule Yıkıldı! 💥';
         descEl.textContent = `Skorun: ${score}. Gizli malzemeyi düşürdün!`;
         startBtn.textContent = 'Tekrar Dene';
         actionsOverlay.style.display = 'flex';
       }
-      
+
       const speechBubble = document.getElementById('speechBubble');
       if (speechBubble) {
-        speechBubble.innerHTML = '<span>Mamma mia! Kule devrildi... 🥺</span>' + 
+        speechBubble.innerHTML = '<span>Mamma mia! Kule devrildi... 🥺</span>' +
           '<svg class="swirl-tail" viewBox="0 0 30 24" fill="none"><path d="M15 0 C18 8, 25 10, 20 16 C18 20, 12 22, 15 24" stroke="rgba(212, 168, 67, 0.3)" stroke-width="1.5" stroke-linecap="round"/><path d="M12 4 C10 12, 5 14, 10 18" stroke="rgba(212, 168, 67, 0.2)" stroke-width="1" stroke-linecap="round"/></svg>';
       }
     }
 
     function showStartScreen() {
-      isPlaying = false;
-      wobbleAngle = 0;
+      gameState = 'IDLE';
+      angle = 0;
+      angularVelocity = 0;
+      angularAcceleration = 0;
       applyTowerWobble();
+      updateBalanceMeter();
+
       if (actionsOverlay) {
         titleEl.textContent = 'Torre di Pasta 🍝';
-        descEl.textContent = 'Kule devrilirken sağa veya sola tıklayarak zıt yöne it ve dengele!';
+        // METİN GÜNCELLENDİ
+        descEl.textContent = 'Kule devrilirken onu tutmak istediğin yöne (sağa veya sola) tıklayarak dengele!';
         startBtn.textContent = 'Başla';
         actionsOverlay.style.display = 'flex';
       }
@@ -222,27 +258,29 @@
 
     // ── GAME LOGIC ──
     function updateGameLogic(dt) {
-      if (!isPlaying) return;
+      if (gameState !== 'PLAYING') return;
 
-      // Increase difficulty slowly
-      difficultyMultiplier += dt * 0.0001;
-      
-      // Add continuous unstable force (gravity-like effect making it want to fall)
-      // The further it leans, the stronger the pull
-      const gravityForce = (wobbleAngle * 0.05) * difficultyMultiplier;
-      wobbleVelocity += gravityForce;
-      
-      // Random wind gusts
-      if (Math.random() < 0.05) {
-        wobbleVelocity += (Math.random() - 0.5) * 2 * difficultyMultiplier;
-      }
+      // 1. DeltaTime'ı FPS'e (frame) göre normalize et (60 FPS = 1 birim zaman)
+      let timeStep = dt / 16.666;
 
-      // Apply physics
-      wobbleAngle += wobbleVelocity;
-      wobbleVelocity *= 0.95; // Friction
+      // Zorluğu biraz daha yavaş artırmak stabilite için daha iyidir
+      difficultyMultiplier += dt * 0.00001;
 
-      // Check game over (if leans too much)
-      if (Math.abs(wobbleAngle) > 40) { // 40 degrees is the limit
+      // 2. İvmeyi yerçekimine göre hesapla (Ters Sarkaç Fiziği)
+      let effectiveGravity = gravity * difficultyMultiplier;
+      angularAcceleration = effectiveGravity * Math.sin(angle);
+
+      // 3. Hıza ivmeyi ekle
+      angularVelocity += angularAcceleration * timeStep;
+
+      // 4. Hıza sürtünme uygula (Damping'i frame hızından bağımsız hale getiriyoruz)
+      angularVelocity *= Math.pow(damping, timeStep);
+
+      // 5. Açıyı güncelle
+      angle += angularVelocity * timeStep;
+
+      // Bitiş koşulu: Yıkılma sınırı (1.0 radyan ~ 57 derece)
+      if (Math.abs(angle) > 1.0) {
         gameOver();
       }
 
@@ -251,7 +289,7 @@
       if (scoreTimer > 1000) {
         score++;
         if (scoreEl) scoreEl.textContent = score;
-        scoreTimer = 0;
+        scoreTimer -= 1000;
       }
     }
 
@@ -259,16 +297,15 @@
     function applyTowerWobble() {
       const tower = document.getElementById('pastaTower');
       if (tower) {
-        // Only override the CSS animation if we are playing or game over state
         tower.style.animation = 'none';
-        tower.style.transform = `translateX(-50%) rotate(${wobbleAngle}deg)`;
+        // 6. Kulenin CSS transform özelliğini güncelle
+        tower.style.transform = "translateX(-50%) rotate(" + (angle * 180 / Math.PI) + "deg)";
       }
     }
 
     // Balance meter animation
     function updateBalanceMeter() {
-      // normalize angle to 0-1 range (where 0.5 is perfectly balanced, limit is +/- 40)
-      const normalizedAngle = (wobbleAngle + 40) / 80; 
+      const normalizedAngle = (angle + 1.0) / 2.0;
       const leftFill = document.querySelector('.meter-fill-left');
       const rightFill = document.querySelector('.meter-fill-right');
 
@@ -284,25 +321,28 @@
     const panel = document.getElementById('gamePanel');
     if (panel) {
       panel.addEventListener('mousedown', (e) => {
-        if (!isPlaying) return;
-        
+        if (gameState !== 'PLAYING') return;
+
         // Don't register clicks on UI elements
         if (e.target.closest('.pasta-game-actions') || e.target.closest('.chef-mascot') || e.target.closest('.pasta-game-close')) return;
-        
+
         const rect = panel.getBoundingClientRect();
         const clickX = e.clientX - rect.left;
         const panelCenter = rect.width / 2;
 
-        // If clicked left side -> push right (positive velocity)
-        // If clicked right side -> push left (negative velocity)
-        const pushStrength = 4;
-        
-        if (clickX < panelCenter) {
-          // Clicked Left -> Push Right
-          wobbleVelocity += pushStrength;
+        const normalizedX = (clickX - panelCenter) / panelCenter;
+
+        // KUVVET GÜNCELLENDİ
+        const baseForce = 0.005;
+        const edgeBonus = 0.005;
+
+        const appliedForce = baseForce + (edgeBonus * Math.abs(normalizedX));
+
+        // MANTIK GÜNCELLENDİ (Sağa tıkla -> Sağa çek)
+        if (clickX > panelCenter) {
+          angularVelocity += appliedForce;
         } else {
-          // Clicked Right -> Push Left
-          wobbleVelocity -= pushStrength;
+          angularVelocity -= appliedForce;
         }
 
         // Visual feedback on click
@@ -317,20 +357,27 @@
     // ── Main render loop ──
     let animFrame;
     function render(time) {
-      const dt = time - lastTime;
+      // 1. Delta time hesaplama
+      let dt = time - lastTime;
       lastTime = time;
+
+      // Delta time'ı sınırla (Sıçramaları önlemek için)
+      if (dt > 100) dt = 100;
 
       if (gameModal.classList.contains('active')) {
         drawBackground();
         drawDustParticles(time);
-        
-        if (isPlaying) {
+
+        if (gameState === 'PLAYING') {
           updateGameLogic(dt);
         }
-        
+
         applyTowerWobble();
         updateBalanceMeter();
+      } else {
+        lastTime = time;
       }
+
       animFrame = requestAnimationFrame(render);
     }
 
