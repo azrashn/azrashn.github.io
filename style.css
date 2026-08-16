@@ -88,6 +88,51 @@
   filter: invert(1);
 }
 
+/* Light mode — project card buttons */
+[data-theme="light"] .video-btn,
+[data-theme="light"] .details-btn {
+  background: rgba(0, 0, 0, 0.05);
+  color: var(--text);
+  border-color: var(--border);
+}
+[data-theme="light"] .video-btn:hover,
+[data-theme="light"] .details-btn:hover {
+  background: rgba(0, 0, 0, 0.1);
+  border-color: var(--border-hover);
+  color: var(--accent-dim);
+}
+
+/* Light mode — project link (source code links) */
+[data-theme="light"] .project-link {
+  color: var(--text-dim);
+}
+[data-theme="light"] .project-link:hover {
+  color: var(--accent-dim);
+}
+
+/* Light mode — details modal fixes */
+[data-theme="light"] .details-content h3 {
+  color: var(--text);
+}
+[data-theme="light"] .details-modal-close {
+  background: rgba(0, 0, 0, 0.05);
+  border-color: var(--border);
+  color: var(--text);
+}
+[data-theme="light"] .details-modal-close:hover {
+  background: rgba(0, 0, 0, 0.1);
+  color: var(--text);
+}
+
+/* Light mode — video modal close */
+[data-theme="light"] .video-modal-close {
+  background: rgba(255, 255, 255, 0.8);
+  color: #0f172a;
+}
+[data-theme="light"] .video-modal-close:hover {
+  background: rgba(255, 255, 255, 0.95);
+}
+
 /* ── Reset ── */
 *,
 *::before,
