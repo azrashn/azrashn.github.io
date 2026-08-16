@@ -27,16 +27,16 @@
       setTimeout(() => eggWrapper.classList.remove('shake'), 200);
 
       if (eggClicks === 1) {
-        eggImg.src = 'crack.png';
+        eggImg.src = 'assets/crack.png';
       } else if (eggClicks === 2) {
-        eggImg.src = 'opened.png';
+        eggImg.src = 'assets/opened.png';
       } else if (eggClicks >= 3) {
         openGameModal();
         // Reset egg for next time after a short delay
         isResetting = true;
         setTimeout(() => {
           eggClicks = 0;
-          eggImg.src = 'start.png';
+          eggImg.src = 'assets/start.png';
           isResetting = false;
         }, 1000);
       }
