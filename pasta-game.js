@@ -1,6 +1,5 @@
 /**
- * Torre di Pasta Balance - Easter Egg Game
- * Sitenin sol altındaki yumurtaya 3 kez tıklandığında açılır.
+ * Torre di Pasta Balance - V2.2 (Time-Based Survival & Wind Nerf)
  */
 
 (function () {
@@ -10,51 +9,43 @@
   let eggClicks = 0;
   let isResetting = false;
 
-  // Wait for DOM to be fully loaded
   document.addEventListener('DOMContentLoaded', () => {
     const eggImg = document.getElementById('eggTriggerImg');
     const gameModal = document.getElementById('pastaGameModal');
     const eggWrapper = document.getElementById('eggTrigger');
 
-    if (!eggImg || !eggWrapper) return;
+    if (eggImg && eggWrapper) {
+      eggWrapper.addEventListener('click', () => {
+        if (isResetting) return;
+        eggClicks++;
+        eggWrapper.classList.add('shake');
+        setTimeout(() => eggWrapper.classList.remove('shake'), 200);
 
-    eggWrapper.addEventListener('click', () => {
-      if (isResetting) return;
-      eggClicks++;
-
-      // Shake effect
-      eggWrapper.classList.add('shake');
-      setTimeout(() => eggWrapper.classList.remove('shake'), 200);
-
-      if (eggClicks === 1) {
-        eggImg.src = 'assets/crack.png';
-      } else if (eggClicks === 2) {
-        eggImg.src = 'assets/opened.png';
-      } else if (eggClicks >= 3) {
-        openGameModal();
-        // Reset egg for next time after a short delay
-        isResetting = true;
-        setTimeout(() => {
-          eggClicks = 0;
-          eggImg.src = 'assets/start.png';
-          isResetting = false;
-        }, 1000);
-      }
-    });
+        if (eggClicks === 1) eggImg.src = 'assets/crack.png';
+        else if (eggClicks === 2) eggImg.src = 'assets/opened.png';
+        else if (eggClicks >= 3) {
+          openGameModal();
+          isResetting = true;
+          setTimeout(() => {
+            eggClicks = 0;
+            eggImg.src = 'assets/start.png';
+            isResetting = false;
+          }, 1000);
+        }
+      });
+    }
 
     // --- GAME ENGINE ---
     const canvas = document.getElementById('pastaGameCanvas');
     if (!canvas || !gameModal) return;
     const ctx = canvas.getContext('2d');
-
     const closeBtn = document.getElementById('pastaGameCloseBtn');
 
-    // Close button logic
     if (closeBtn) {
       closeBtn.addEventListener('click', () => {
         gameModal.classList.remove('active');
         document.body.style.overflow = '';
-        gameOver(); // Stop game if closed
+        gameOver();
       });
     }
 
@@ -65,45 +56,51 @@
       showStartScreen();
     }
 
-    // Resize canvas
     function resizeCanvas() {
       const panel = document.getElementById('gamePanel');
       if (!panel) return;
       canvas.width = panel.clientWidth;
       canvas.height = panel.clientHeight;
     }
-
     window.addEventListener('resize', resizeCanvas);
 
-    // ── GAME STATE ──
-    let gameState = 'IDLE'; // 'IDLE', 'READY', 'PLAYING', 'GAME_OVER'
-    let score = 0;
-    let lastTime = 0;
-    let scoreTimer = 0;
-    let best = parseInt(localStorage.getItem('pastaBalanceBest') || '0', 10);
+    // ── GAME STATE & LEVEL MANAGER ──
+    let gameState = 'IDLE';
+    let currentLevel = 1;
+    let survivalTime = 0; // Skor yerine saniye bazlı hayatta kalma süresi
+    let lastTime = null;
+    let timeTimer = 0;
+    let bestTime = parseInt(localStorage.getItem('pastaBalanceBestTime') || '0', 10);
 
-    // Inverted Pendulum Physics Variables
+    // Fizik ve Rüzgar (Wind)
     let angle = 0;
     let angularVelocity = 0;
     let angularAcceleration = 0;
-
-    // GÜNCELLENEN DEĞERLER (Daha yavaş düşüş, daha yüksek sürtünme)
     const gravity = 0.001;
     const damping = 0.95;
     let difficultyMultiplier = 1;
+    let windForce = 0;
 
-    const scoreEl = document.getElementById('pastaScoreVal');
-    const bestEl = document.getElementById('pastaBestVal');
+    // DOM Elements (Skor yazılarını Süre'ye çeviriyoruz)
+    const scoreEl = document.getElementById('scoreVal') || document.getElementById('pastaScoreVal');
+    const bestEl = document.getElementById('bestVal') || document.getElementById('pastaBestVal');
     const actionsOverlay = document.getElementById('pastaGameActions');
     const titleEl = document.getElementById('pastaGameTitle');
     const descEl = document.getElementById('pastaGameDesc');
     const startBtn = document.getElementById('pastaGameStartBtn');
 
-    if (bestEl) bestEl.textContent = best;
+    // UI Etiketlerini Dinamik Olarak Güncelleme ("Skor" -> "Süre")
+    const hudLabels = document.querySelectorAll('.hud-label');
+    if (hudLabels.length >= 2) {
+      hudLabels[0].textContent = "Süre";
+      hudLabels[1].textContent = "En İyi";
+    }
 
-    // Background rendering (dark gradient with subtle warm light)
+    if (bestEl) bestEl.textContent = bestTime + "s";
+    if (scoreEl) scoreEl.textContent = survivalTime + "s";
+
+    // --- RENDER FUNCTIONS ---
     function drawBackground() {
-      // Deep dark gradient
       const grd = ctx.createLinearGradient(0, 0, 0, canvas.height);
       grd.addColorStop(0, '#0c0e18');
       grd.addColorStop(0.4, '#10131e');
@@ -111,7 +108,6 @@
       ctx.fillStyle = grd;
       ctx.fillRect(0, 0, canvas.width, canvas.height);
 
-      // Warm light cone from top center
       const lightGrd = ctx.createRadialGradient(
         canvas.width / 2, -50, 10,
         canvas.width / 2, 150, 400
@@ -121,26 +117,8 @@
       lightGrd.addColorStop(1, 'transparent');
       ctx.fillStyle = lightGrd;
       ctx.fillRect(0, 0, canvas.width, canvas.height);
-
-      // Subtle circuit board pattern
-      ctx.strokeStyle = 'rgba(212, 168, 67, 0.02)';
-      ctx.lineWidth = 0.5;
-      const gridSize = 40;
-      for (let x = 0; x < canvas.width; x += gridSize) {
-        ctx.beginPath();
-        ctx.moveTo(x, 0);
-        ctx.lineTo(x, canvas.height - 140);
-        ctx.stroke();
-      }
-      for (let y = 0; y < canvas.height - 140; y += gridSize) {
-        ctx.beginPath();
-        ctx.moveTo(0, y);
-        ctx.lineTo(canvas.width, y);
-        ctx.stroke();
-      }
     }
 
-    // Floating golden dust particles
     const dustParticles = [];
     for (let i = 0; i < 20; i++) {
       dustParticles.push({
@@ -156,7 +134,8 @@
     function drawDustParticles(time) {
       dustParticles.forEach(p => {
         p.y -= p.speed;
-        p.x += Math.sin(time * 0.001 + p.wobble) * 0.3;
+        let visualWind = (currentLevel >= 2) ? Math.sin(time * 0.001) * 1.5 : 0;
+        p.x += Math.sin(time * 0.001 + p.wobble) * 0.3 + visualWind;
         p.opacity = 0.1 + Math.sin(time * 0.002 + p.wobble) * 0.1;
 
         if (p.y < 0) {
@@ -171,67 +150,99 @@
       });
     }
 
-    function startGame() {
-      // 1. TAM SIFIRLAMA (STATE RESET)
-      gameState = 'READY';
-      score = 0;
+    // ── CORE SYSTEMS: COUNTDOWN & LEVEL TRANSITION ──
+    function startCountdown() {
+      gameState = 'COUNTDOWN';
+      survivalTime = 0;
+      currentLevel = 1;
       angle = 0;
       angularVelocity = 0;
       angularAcceleration = 0;
       difficultyMultiplier = 1;
-      scoreTimer = 0;
+      timeTimer = 0;
+      windForce = 0;
 
-      if (scoreEl) scoreEl.textContent = score;
-      if (actionsOverlay) actionsOverlay.style.display = 'none';
-
-      const speechBubble = document.getElementById('speechBubble');
-      if (speechBubble) {
-        speechBubble.innerHTML = '<span>Hazırlan...</span>' +
-          '<svg class="swirl-tail" viewBox="0 0 30 24" fill="none"><path d="M15 0 C18 8, 25 10, 20 16 C18 20, 12 22, 15 24" stroke="rgba(212, 168, 67, 0.3)" stroke-width="1.5" stroke-linecap="round"/><path d="M12 4 C10 12, 5 14, 10 18" stroke="rgba(212, 168, 67, 0.2)" stroke-width="1" stroke-linecap="round"/></svg>';
-      }
-
-      // 2. HAZIRLIK SÜRESİ (GRACE PERIOD)
-      applyTowerWobble(); // Kuleyi dik konuma sıfırla
+      if (scoreEl) scoreEl.textContent = "0s";
+      applyTowerWobble();
       updateBalanceMeter();
 
-      // DeltaTime sıçramasını önlemek için lastTime'ı şimdiden sıfırla
-      lastTime = performance.now();
+      if (actionsOverlay) {
+        actionsOverlay.style.display = 'flex';
+        if (startBtn) startBtn.style.display = 'none';
+      }
+
+      let count = 3;
+      if (titleEl) {
+        titleEl.textContent = count;
+        titleEl.style.fontSize = "72px";
+      }
+      if (descEl) descEl.textContent = "Hazırlan...";
+
+      const countdownInterval = setInterval(() => {
+        count--;
+        if (count > 0) {
+          if (titleEl) titleEl.textContent = count;
+        } else if (count === 0) {
+          if (titleEl) titleEl.textContent = "MANGIA!";
+        } else {
+          clearInterval(countdownInterval);
+          if (actionsOverlay) actionsOverlay.style.display = 'none';
+          if (titleEl) titleEl.style.fontSize = "42px";
+
+          gameState = 'PLAYING';
+          lastTime = null;
+          angle = (Math.random() > 0.5 ? 0.01 : -0.01);
+        }
+      }, 1000);
+    }
+
+    function checkLevelProgress() {
+      // 10. Saniyede Level 2 (Rüzgar)
+      if (currentLevel === 1 && survivalTime === 10) {
+        startLevelTransition(2, "Rüzgarlı Teras! Dikkatli Ol 💨");
+      }
+      // 25. Saniyede Level 3 (Köfte Yağmuru)
+      if (currentLevel === 2 && survivalTime === 25) {
+        startLevelTransition(3, "Mamma Mia! Köfte Yağmuru Başlıyor ☄️");
+      }
+    }
+
+    function startLevelTransition(level, message) {
+      gameState = 'LEVEL_TRANSITION';
+      currentLevel = level;
+
+      if (actionsOverlay) {
+        if (titleEl) titleEl.textContent = `LEVEL ${level}`;
+        if (descEl) descEl.textContent = message;
+        if (startBtn) startBtn.style.display = 'none';
+        actionsOverlay.style.display = 'flex';
+      }
 
       setTimeout(() => {
-        if (!gameModal.classList.contains('active')) return; // Modal kapandıysa başlama
-        if (gameState !== 'READY') return;
-
+        if (gameState !== 'LEVEL_TRANSITION') return;
+        if (actionsOverlay) actionsOverlay.style.display = 'none';
+        lastTime = null;
         gameState = 'PLAYING';
-        angle = (Math.random() > 0.5 ? 0.01 : -0.01); // Başlangıç açısı
-
-        // METİN GÜNCELLENDİ (İçgüdüsel kontrole uygun)
-        if (speechBubble) {
-          speechBubble.innerHTML = '<span>Dengele! Kuleyi tutmak istediğin yöne tıkla! 👉</span>' +
-            '<svg class="swirl-tail" viewBox="0 0 30 24" fill="none"><path d="M15 0 C18 8, 25 10, 20 16 C18 20, 12 22, 15 24" stroke="rgba(212, 168, 67, 0.3)" stroke-width="1.5" stroke-linecap="round"/><path d="M12 4 C10 12, 5 14, 10 18" stroke="rgba(212, 168, 67, 0.2)" stroke-width="1" stroke-linecap="round"/></svg>';
-        }
-      }, 1500); // 1.5 saniye hazırlık süresi
+      }, 2000);
     }
 
     function gameOver() {
       gameState = 'GAME_OVER';
 
-      if (score > best) {
-        best = score;
-        localStorage.setItem('pastaBalanceBest', best);
-        if (bestEl) bestEl.textContent = best;
+      if (survivalTime > bestTime) {
+        bestTime = survivalTime;
+        localStorage.setItem('pastaBalanceBestTime', bestTime);
+        if (bestEl) bestEl.textContent = bestTime + "s";
       }
 
       if (actionsOverlay) {
-        titleEl.textContent = 'Eyvah, Kule Yıkıldı! 💥';
-        descEl.textContent = `Skorun: ${score}. Gizli malzemeyi düşürdün!`;
-        startBtn.textContent = 'Tekrar Dene';
+        if (titleEl) titleEl.textContent = 'Eyvah, Kule Yıkıldı! 💥';
+        if (descEl) descEl.textContent = `Dayanılan Süre: ${survivalTime} Saniye`;
+        if (startBtn) {
+          startBtn.textContent = 'Tekrar Dene';
+          startBtn.style.display = 'block';
+        }
         actionsOverlay.style.display = 'flex';
-      }
-
-      const speechBubble = document.getElementById('speechBubble');
-      if (speechBubble) {
-        speechBubble.innerHTML = '<span>Mamma mia! Kule devrildi... 🥺</span>' +
-          '<svg class="swirl-tail" viewBox="0 0 30 24" fill="none"><path d="M15 0 C18 8, 25 10, 20 16 C18 20, 12 22, 15 24" stroke="rgba(212, 168, 67, 0.3)" stroke-width="1.5" stroke-linecap="round"/><path d="M12 4 C10 12, 5 14, 10 18" stroke="rgba(212, 168, 67, 0.2)" stroke-width="1" stroke-linecap="round"/></svg>';
       }
     }
 
@@ -239,71 +250,66 @@
       gameState = 'IDLE';
       angle = 0;
       angularVelocity = 0;
-      angularAcceleration = 0;
       applyTowerWobble();
       updateBalanceMeter();
 
       if (actionsOverlay) {
-        titleEl.textContent = 'Torre di Pasta 🍝';
-        // METİN GÜNCELLENDİ
-        descEl.textContent = 'Kule devrilirken onu tutmak istediğin yöne (sağa veya sola) tıklayarak dengele!';
-        startBtn.textContent = 'Başla';
+        if (titleEl) titleEl.textContent = 'Torre di Pasta 🍝';
+        if (descEl) descEl.textContent = 'Kule devrilirken onu tutmak istediğin yöne tıklayarak dengele!';
+        if (startBtn) {
+          startBtn.textContent = 'Başla';
+          startBtn.style.display = 'block';
+        }
         actionsOverlay.style.display = 'flex';
       }
     }
 
     if (startBtn) {
-      startBtn.addEventListener('click', startGame);
+      startBtn.addEventListener('click', startCountdown);
     }
 
     // ── GAME LOGIC ──
     function updateGameLogic(dt) {
       if (gameState !== 'PLAYING') return;
 
-      // 1. DeltaTime'ı FPS'e (frame) göre normalize et (60 FPS = 1 birim zaman)
       let timeStep = dt / 16.666;
-
-      // Zorluğu biraz daha yavaş artırmak stabilite için daha iyidir
       difficultyMultiplier += dt * 0.00001;
 
-      // 2. İvmeyi yerçekimine göre hesapla (Ters Sarkaç Fiziği)
       let effectiveGravity = gravity * difficultyMultiplier;
       angularAcceleration = effectiveGravity * Math.sin(angle);
 
-      // 3. Hıza ivmeyi ekle
+      // ZAYIFLATILMIŞ RÜZGAR (Eski değer 0.0003, yeni değer 0.00006)
+      if (currentLevel >= 2) {
+        windForce = Math.sin(Date.now() * 0.001) * 0.00006;
+        angularAcceleration += windForce;
+      }
+
       angularVelocity += angularAcceleration * timeStep;
-
-      // 4. Hıza sürtünme uygula (Damping'i frame hızından bağımsız hale getiriyoruz)
       angularVelocity *= Math.pow(damping, timeStep);
-
-      // 5. Açıyı güncelle
       angle += angularVelocity * timeStep;
 
-      // Bitiş koşulu: Yıkılma sınırı (1.0 radyan ~ 57 derece)
       if (Math.abs(angle) > 1.0) {
         gameOver();
       }
 
-      // Update score (1 point per second balanced)
-      scoreTimer += dt;
-      if (scoreTimer > 1000) {
-        score++;
-        if (scoreEl) scoreEl.textContent = score;
-        scoreTimer -= 1000;
+      // SÜRE SİSTEMİ GÜNCELLENDİ (Tam saniye bazlı artış)
+      timeTimer += dt;
+      if (timeTimer >= 1000) {
+        survivalTime++;
+        if (scoreEl) scoreEl.textContent = survivalTime + "s";
+        timeTimer -= 1000;
+        checkLevelProgress();
       }
     }
 
-    // Update tower wobble from CSS
     function applyTowerWobble() {
       const tower = document.getElementById('pastaTower');
       if (tower) {
         tower.style.animation = 'none';
-        // 6. Kulenin CSS transform özelliğini güncelle
         tower.style.transform = "translateX(-50%) rotate(" + (angle * 180 / Math.PI) + "deg)";
       }
     }
 
-    // Balance meter animation
     function updateBalanceMeter() {
       const normalizedAngle = (angle + 1.0) / 2.0;
       const leftFill = document.querySelector('.meter-fill-left');
@@ -317,35 +323,29 @@
       }
     }
 
-    // ── User Interaction (Balancing) ──
+    // ── USER INPUT ──
     const panel = document.getElementById('gamePanel');
     if (panel) {
       panel.addEventListener('mousedown', (e) => {
         if (gameState !== 'PLAYING') return;
 
-        // Don't register clicks on UI elements
-        if (e.target.closest('.pasta-game-actions') || e.target.closest('.chef-mascot') || e.target.closest('.pasta-game-close')) return;
+        if (e.target.closest('#pastaGameActions') || e.target.closest('.chef-mascot')) return;
 
         const rect = panel.getBoundingClientRect();
         const clickX = e.clientX - rect.left;
         const panelCenter = rect.width / 2;
-
         const normalizedX = (clickX - panelCenter) / panelCenter;
 
-        // KUVVET GÜNCELLENDİ
         const baseForce = 0.005;
         const edgeBonus = 0.005;
-
         const appliedForce = baseForce + (edgeBonus * Math.abs(normalizedX));
 
-        // MANTIK GÜNCELLENDİ (Sağa tıkla -> Sağa çek)
         if (clickX > panelCenter) {
           angularVelocity += appliedForce;
         } else {
           angularVelocity -= appliedForce;
         }
 
-        // Visual feedback on click
         const tower = document.getElementById('pastaTower');
         if (tower) {
           tower.style.filter = 'brightness(1.3)';
@@ -354,14 +354,12 @@
       });
     }
 
-    // ── Main render loop ──
-    let animFrame;
+    // ── RENDER LOOP ──
     function render(time) {
-      // 1. Delta time hesaplama
+      if (lastTime === null) lastTime = time;
+
       let dt = time - lastTime;
       lastTime = time;
-
-      // Delta time'ı sınırla (Sıçramaları önlemek için)
       if (dt > 100) dt = 100;
 
       if (gameModal.classList.contains('active')) {
@@ -375,25 +373,12 @@
         applyTowerWobble();
         updateBalanceMeter();
       } else {
-        lastTime = time;
+        lastTime = null;
       }
 
-      animFrame = requestAnimationFrame(render);
+      requestAnimationFrame(render);
     }
+    requestAnimationFrame(render);
 
-    animFrame = requestAnimationFrame(render);
-
-    // ── Mascot hover interaction ──
-    const mascot = document.getElementById('chefMascot');
-    if (mascot) {
-      mascot.addEventListener('mouseenter', () => {
-        mascot.style.transform = 'scale(1.05) translateY(-4px)';
-        mascot.style.transition = 'transform 0.3s ease';
-      });
-      mascot.addEventListener('mouseleave', () => {
-        mascot.style.transform = '';
-      });
-    }
   });
-
 })();
