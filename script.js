@@ -455,46 +455,101 @@ document.addEventListener('DOMContentLoaded', () => {
   }
   
   // ═══════════════════════════════════════════
-  // MASCOT
+  // MASCOT — State Machine (idle / waving / pointing)
   // ═══════════════════════════════════════════
-  const mascot = document.getElementById('mascot');
   const mascotContainer = document.getElementById('mascotContainer');
-  const mascotMouth = document.getElementById('mascotMouth');
-  
-  document.addEventListener('mousemove', (e) => {
-    const mouseX = e.clientX;
-    const mouseY = e.clientY;
-    document.querySelectorAll('.mascot-eye').forEach(eye => {
-      const rect = eye.getBoundingClientRect();
-      const eyeCenterX = rect.left + rect.width / 2;
-      const eyeCenterY = rect.top + rect.height / 2;
-      const dx = mouseX - eyeCenterX;
-      const dy = mouseY - eyeCenterY;
-      const angle = Math.atan2(dy, dx);
-      const distance = Math.min(3, Math.hypot(dx, dy) / 10);
-      const pupilX = Math.cos(angle) * distance;
-      const pupilY = Math.sin(angle) * distance;
-      const pupil = eye.querySelector('.pupil');
-      if (pupil) pupil.style.transform = `translate(${pupilX}px, ${pupilY}px)`;
-    });
-  });
-  
-  if (mascotContainer && mascot && mascotMouth) {
-    mascotContainer.addEventListener('click', () => {
-      mascot.classList.add('waving');
-      mascotMouth.classList.add('smiling');
-      setTimeout(() => {
-        mascot.classList.remove('waving');
-        mascotMouth.classList.remove('smiling');
-      }, 1000);
-    });
+  const mascotSpeech = document.getElementById('mascotSpeech');
+
+  if (mascotContainer && mascotSpeech) {
+    // ── State ──
+    let mascotState = 'idle'; // 'idle' | 'waving' | 'pointing'
+    let waveTimeout = null;
+    let activeSection = null; // 'projeler' | 'oyunlar' | null
+
+    // Speech bubble texts per section
+    const speechTexts = {
+      projeler: 'Burası Projelerim! 👉',
+      oyunlar: 'Burası Oyunlarım! 🎮'
+    };
+
+    // ── Wave function ──
+    function triggerWave() {
+      // Don't wave if already pointing (pointing has priority)
+      if (mascotState === 'pointing') return;
+
+      mascotContainer.classList.add('waving');
+      mascotState = 'waving';
+
+      // Clear any previous wave timeout
+      if (waveTimeout) clearTimeout(waveTimeout);
+
+      // Return to idle after wave animation completes (0.7s × 2 repeats = 1.4s + buffer)
+      waveTimeout = setTimeout(() => {
+        mascotContainer.classList.remove('waving');
+        mascotState = 'idle';
+      }, 1600);
+    }
+
+    // ── Pointing function ──
+    function enterPointing(sectionId) {
+      // Clean up waving state if active
+      if (waveTimeout) clearTimeout(waveTimeout);
+      mascotContainer.classList.remove('waving');
+
+      activeSection = sectionId;
+      mascotState = 'pointing';
+      mascotContainer.classList.add('pointing');
+
+      // Update speech bubble text
+      mascotSpeech.textContent = speechTexts[sectionId] || '';
+    }
+
+    function exitPointing() {
+      mascotContainer.classList.remove('pointing');
+      mascotState = 'idle';
+      activeSection = null;
+    }
+
+    // ── Hover → wave ──
     mascotContainer.addEventListener('mouseenter', () => {
-      mascot.classList.add('waving');
-      mascotMouth.classList.add('smiling');
-      setTimeout(() => {
-        mascot.classList.remove('waving');
-        mascotMouth.classList.remove('smiling');
-      }, 1000);
+      triggerWave();
+    });
+
+    // ── Click → wave ──
+    mascotContainer.addEventListener('click', () => {
+      triggerWave();
+    });
+
+    // ── IntersectionObserver for Projeler & Oyunlar ──
+    const mascotSections = {
+      projeler: document.getElementById('projeler'),
+      oyunlar: document.getElementById('oyunlar')
+    };
+
+    const mascotObserverOptions = {
+      root: null,
+      rootMargin: '-15% 0px -35% 0px',
+      threshold: 0
+    };
+
+    const mascotSectionObserver = new IntersectionObserver((entries) => {
+      entries.forEach(entry => {
+        const sectionId = entry.target.id;
+
+        if (entry.isIntersecting) {
+          enterPointing(sectionId);
+        } else {
+          // Only exit if this was the active section
+          if (activeSection === sectionId) {
+            exitPointing();
+          }
+        }
+      });
+    }, mascotObserverOptions);
+
+    // Observe target sections
+    Object.values(mascotSections).forEach(section => {
+      if (section) mascotSectionObserver.observe(section);
     });
   }
 });
