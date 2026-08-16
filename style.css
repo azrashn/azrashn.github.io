@@ -2414,7 +2414,8 @@ button:focus-visible {
 }
 
 /* ═══════════════════════════════════════════
-   EASTER EGG & DUCK GAME
+/* ═══════════════════════════════════════════
+   TORRE DI PASTA BALANCE & EASTER EGG
    ═══════════════════════════════════════════ */
 
 /* ── Egg Trigger ── */
@@ -2439,7 +2440,6 @@ button:focus-visible {
   width: 100%;
   height: 100%;
   object-fit: contain;
-  /* pointer-events removed to allow img to catch clicks or pass them down naturally */
 }
 
 .egg-trigger.shake {
@@ -2464,7 +2464,7 @@ button:focus-visible {
 }
 
 /* ── Game Modal Overlay ── */
-.duck-game-overlay {
+.pasta-game-overlay {
   position: fixed;
   inset: 0;
   background: var(--glass-bg);
@@ -2480,75 +2480,39 @@ button:focus-visible {
   padding: 20px;
 }
 
-.duck-game-overlay.active {
+.pasta-game-overlay.active {
   opacity: 1;
   visibility: visible;
 }
 
-/* ── Game Container ── */
-.duck-game-container {
+/* ── Main Game Panel ── */
+.game-panel {
   position: relative;
   width: 100%;
-  max-width: 500px;
+  max-width: 860px;
   height: 80vh;
-  max-height: 700px;
-  display: flex;
-  flex-direction: column;
-  background: var(--bg-surface);
-  border: 1px solid var(--border);
+  max-height: 620px;
+  background: linear-gradient(145deg, rgba(18, 21, 31, 0.95), rgba(10, 12, 20, 0.98));
+  border: 1px solid rgba(212, 168, 67, 0.15);
   border-radius: 24px;
   overflow: hidden;
-  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.4), inset 0 1px 0 rgba(255, 255, 255, 0.05);
+  box-shadow:
+    0 0 0 1px rgba(212, 168, 67, 0.08),
+    0 24px 80px rgba(0, 0, 0, 0.6),
+    0 0 120px rgba(212, 168, 67, 0.06),
+    inset 0 1px 0 rgba(255, 255, 255, 0.04);
   transform: scale(0.95);
-  transition: transform 0.4s cubic-bezier(0.34, 1.56, 0.64, 1); /* Bouncy enter */
+  transition: transform 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
 }
 
-.duck-game-overlay.active .duck-game-container {
+.pasta-game-overlay.active .game-panel {
   transform: scale(1);
 }
 
-/* ── Game HUD ── */
-.duck-game-hud {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  padding: 20px 24px;
-  background: rgba(0, 0, 0, 0.2);
-  border-bottom: 1px solid var(--border);
-  z-index: 10;
-}
-
-.score-box {
-  display: flex;
-  flex-direction: column;
-  align-items: flex-start;
-}
-
-.score-box.best {
-  align-items: flex-end;
-}
-
-.score-label {
-  font-family: var(--mono);
-  font-size: 11px;
-  color: var(--text-muted);
-  text-transform: uppercase;
-  letter-spacing: 1px;
-  margin-bottom: 4px;
-}
-
-.score-val {
-  font-size: 28px;
-  font-weight: 800;
-  color: var(--accent);
-  line-height: 1;
-  text-shadow: 0 0 15px var(--accent-glow);
-}
-
-.duck-game-close {
+.pasta-game-close {
   background: none;
   border: none;
-  color: var(--text-dim);
+  color: #8a8580;
   cursor: pointer;
   padding: 8px;
   border-radius: 50%;
@@ -2559,121 +2523,628 @@ button:focus-visible {
   position: absolute;
   top: 15px;
   right: 15px;
+  z-index: 50;
 }
 
-.duck-game-close:hover {
+.pasta-game-close:hover {
   background: rgba(255, 255, 255, 0.1);
   color: var(--rose);
 }
 
-/* ── Game Canvas Area ── */
-.duck-game-canvas-wrap {
-  flex: 1;
+/* ── Title Banner ── */
+.game-title-banner {
+  position: absolute;
+  top: 16px;
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 30;
+  text-align: center;
+  padding: 8px 40px;
+}
+
+.game-title-banner h1 {
+  font-family: 'Playfair Display', serif;
+  font-size: 32px;
+  font-weight: 900;
+  background: linear-gradient(180deg, #f0d078 0%, #d4a843 30%, #b8922e 60%, #d4a843 80%, #f0d078 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  text-shadow: none;
+  filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 0.5));
+  letter-spacing: 2px;
+  line-height: 1.1;
   position: relative;
-  background: linear-gradient(to bottom, var(--bg-panel) 0%, var(--bg) 100%);
+  margin: 0;
+}
+
+.game-title-banner h1::before {
+  content: 'TORRE DI PASTA BALANCE';
+  position: absolute;
+  left: 0;
+  top: 0;
+  background: linear-gradient(180deg, rgba(255, 255, 255, 0.3) 0%, transparent 50%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  pointer-events: none;
+}
+
+.game-title-banner .title-swirl-left,
+.game-title-banner .title-swirl-right {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 40px;
+  height: 20px;
+  opacity: 0.5;
+}
+
+.game-title-banner .title-swirl-left { right: 100%; margin-right: 8px; }
+.game-title-banner .title-swirl-right { left: 100%; margin-left: 8px; }
+
+.swirl-svg {
+  fill: none;
+  stroke: #d4a843;
+  stroke-width: 1.5;
+  stroke-linecap: round;
+}
+
+/* ── HUD ── */
+.game-hud {
+  position: absolute;
+  top: 16px;
+  left: 20px;
+  z-index: 30;
+  display: flex;
+  gap: 16px;
+}
+
+.hud-item {
+  background: rgba(0, 0, 0, 0.4);
+  backdrop-filter: blur(8px);
+  border: 1px solid rgba(212, 168, 67, 0.15);
+  border-radius: 12px;
+  padding: 8px 16px;
+  text-align: center;
+}
+
+.hud-label {
+  font-family: var(--mono);
+  font-size: 9px;
+  color: #d4a843;
+  text-transform: uppercase;
+  letter-spacing: 1.5px;
+  margin-bottom: 2px;
+}
+
+.hud-value {
+  font-size: 22px;
+  font-weight: 800;
+  color: #f0d078;
+  text-shadow: 0 0 12px rgba(212, 168, 67, 0.4);
+}
+
+/* ── Canvas Area ── */
+.game-field {
+  position: absolute;
+  inset: 0;
   overflow: hidden;
   cursor: crosshair;
 }
 
-#duckGameCanvas {
+#pastaGameCanvas {
   display: block;
   width: 100%;
   height: 100%;
 }
 
-.duck-game-message {
+/* ── Ground / Tablecloth ── */
+.ground-layer {
   position: absolute;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%);
-  font-size: 32px;
-  font-weight: 800;
-  text-align: center;
-  pointer-events: none;
-  opacity: 0;
-  transition: opacity 0.3s, transform 0.3s;
-  text-shadow: 0 2px 10px rgba(0,0,0,0.5);
-  white-space: nowrap;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  height: 140px;
+  z-index: 5;
+  overflow: hidden;
 }
 
-/* ── Game Actions (Start/Retry menu) ── */
-.duck-game-actions {
+.tablecloth {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  height: 100px;
+  background: repeating-conic-gradient(#c0392b 0% 25%, #faf0e6 0% 50%) 0 0 / 28px 28px;
+  box-shadow: inset 0 2px 20px rgba(0, 0, 0, 0.3);
+}
+
+.tablecloth::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(180deg, rgba(0, 0, 0, 0.3) 0%, transparent 30%, rgba(0, 0, 0, 0.15) 100%);
+}
+
+.table-edge {
+  position: absolute;
+  bottom: 100px;
+  left: 0;
+  right: 0;
+  height: 40px;
+  background: linear-gradient(180deg, #4a2318 0%, #6b3a2a 40%, #4a2318 70%, #3a1a10 100%);
+  box-shadow: 0 -2px 8px rgba(0, 0, 0, 0.3), inset 0 1px 0 rgba(255, 255, 255, 0.08), inset 0 -2px 0 rgba(0, 0, 0, 0.2);
+}
+
+.table-edge::before {
+  content: '';
+  position: absolute;
+  top: 4px;
+  left: 30px;
+  right: 30px;
+  height: 1px;
+  background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.08), transparent);
+}
+
+/* ── Chef Mascot ── */
+.chef-mascot {
+  position: absolute;
+  bottom: 10px;
+  right: 40px;
+  z-index: 20;
+  width: 180px;
+  height: auto;
+  filter: drop-shadow(0 8px 20px rgba(0, 0, 0, 0.5));
+  animation: mascotBreathe 3s ease-in-out infinite;
+  cursor: default;
+}
+
+.chef-mascot img {
+  width: 100%;
+  height: auto;
+  border-radius: 12px;
+}
+
+@keyframes mascotBreathe {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-4px); }
+}
+
+/* ── Speech Bubble ── */
+.speech-bubble {
+  position: absolute;
+  bottom: 210px;
+  right: 20px;
+  z-index: 25;
+  max-width: 260px;
+  background: linear-gradient(135deg, rgba(212, 168, 67, 0.2), rgba(212, 168, 67, 0.1));
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  border: 1px solid rgba(212, 168, 67, 0.25);
+  border-radius: 18px;
+  padding: 14px 18px;
+  font-size: 13px;
+  line-height: 1.5;
+  color: #fdf6e3;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.3), inset 0 1px 0 rgba(255, 255, 255, 0.08);
+  animation: bubbleFadeIn 0.8s ease-out 0.5s both;
+}
+
+.speech-bubble::after {
+  content: '';
+  position: absolute;
+  bottom: -18px;
+  right: 60px;
+  width: 0;
+  height: 0;
+  border-left: 12px solid transparent;
+  border-right: 12px solid transparent;
+  border-top: 18px solid rgba(212, 168, 67, 0.15);
+  filter: blur(0.5px);
+}
+
+.speech-bubble .swirl-tail {
+  position: absolute;
+  bottom: -24px;
+  right: 55px;
+  width: 30px;
+  height: 24px;
+  opacity: 0.6;
+}
+
+@keyframes bubbleFadeIn {
+  from { opacity: 0; transform: translateY(10px) scale(0.95); }
+  to { opacity: 1; transform: translateY(0) scale(1); }
+}
+
+/* ── Game Actions Overlay (Start/Game Over) ── */
+.pasta-game-actions {
   position: absolute;
   inset: 0;
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  background: rgba(8, 12, 16, 0.7);
-  backdrop-filter: blur(4px);
-  z-index: 20;
+  background: rgba(8, 12, 16, 0.85);
+  backdrop-filter: blur(8px);
+  z-index: 28; /* above tower, below HUD */
 }
 
-.duck-game-actions h2 {
-  font-size: 24px;
-  margin-bottom: 30px;
-  color: var(--text);
-  text-shadow: 0 0 20px var(--accent-glow);
+.pasta-game-actions h2 {
+  font-family: 'Playfair Display', serif;
+  font-size: 32px;
+  margin-bottom: 10px;
+  color: #f0d078;
+  text-shadow: 0 0 20px rgba(212, 168, 67, 0.5);
 }
 
-.duck-game-actions button {
+.pasta-game-actions button {
   min-width: 200px;
   padding: 16px 24px;
   font-size: 16px;
-  box-shadow: 0 0 30px var(--accent-glow);
+  box-shadow: 0 0 30px rgba(212, 168, 67, 0.3);
 }
 
-/* ── Mascot Spectator ── */
-.duck-game-mascot {
+/* ── Pasta Tower ── */
+.pasta-tower-container {
   position: absolute;
-  bottom: 20px;
-  left: 20px;
-  width: 80px;
-  height: 100px;
-  pointer-events: none;
-  z-index: 5;
-  filter: drop-shadow(0 5px 15px rgba(0,0,0,0.4));
-  opacity: 0.8;
-  transform: scaleX(-1); /* Face the tower */
+  bottom: 140px;
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 15;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  animation: towerWobble 4s ease-in-out infinite;
 }
 
-.duck-game-mascot svg {
+@keyframes towerWobble {
+  0%, 100% { transform: translateX(-50%) rotate(0deg); }
+  25% { transform: translateX(-50%) rotate(1.2deg); }
+  75% { transform: translateX(-50%) rotate(-1.2deg); }
+}
+
+/* Ceramic Plate */
+.ceramic-plate {
+  width: 200px;
+  height: 32px;
+  background: radial-gradient(ellipse, #f5e6c8 0%, #e8d5b0 60%, #d4c090 100%);
+  border-radius: 50%;
+  border: 3px solid #3a6fa0;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3), inset 0 -2px 6px rgba(0, 0, 0, 0.1), 0 0 0 6px rgba(58, 111, 160, 0.15);
+  position: relative;
+  z-index: 1;
+}
+
+.ceramic-plate::before {
+  content: '';
+  position: absolute;
+  top: 3px;
+  left: 12px;
+  right: 12px;
+  bottom: 3px;
+  border: 1px dashed rgba(58, 111, 160, 0.3);
+  border-radius: 50%;
+}
+
+.plate-decor {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: #3a6fa0;
+  opacity: 0.5;
+}
+
+.plate-decor:nth-child(1) { left: 18px; }
+.plate-decor:nth-child(2) { right: 18px; }
+.plate-decor:nth-child(3) { left: 50%; transform: translate(-50%, -50%); background: rgba(192, 57, 43, 0.3); width: 8px; height: 8px; }
+
+/* Tower Items */
+.tower-stack {
+  display: flex;
+  flex-direction: column-reverse;
+  align-items: center;
+  position: relative;
+  bottom: 6px;
+}
+
+.pasta-piece {
+  position: relative;
+  transition: transform 0.3s ease;
+}
+
+.ravioli {
+  width: 110px;
+  height: 45px;
+  background: radial-gradient(ellipse at 40% 35%, #e8c84a, #d4a843, #b8922e);
+  border-radius: 50%;
+  border: 2px solid rgba(139, 105, 20, 0.5);
+  box-shadow: 0 3px 8px rgba(0, 0, 0, 0.3), inset 0 -4px 8px rgba(0, 0, 0, 0.15), inset 0 2px 4px rgba(255, 255, 255, 0.2);
+  position: relative;
+}
+
+.ravioli::before {
+  content: '';
+  position: absolute;
+  inset: 4px;
+  border: 1px dashed rgba(139, 105, 20, 0.4);
+  border-radius: 50%;
+}
+
+.ravioli::after {
+  content: '';
+  position: absolute;
+  top: 6px;
+  left: 20%;
+  width: 60%;
+  height: 30%;
+  background: radial-gradient(ellipse, rgba(255, 255, 255, 0.25), transparent);
+  border-radius: 50%;
+}
+
+.meatball-stack {
+  display: flex;
+  gap: 2px;
+  justify-content: center;
+  position: relative;
+}
+
+.meatball {
+  width: 38px;
+  height: 38px;
+  border-radius: 50%;
+  background: radial-gradient(circle at 35% 30%, #a0522d, #8b4513, #5c2d0e);
+  box-shadow: 0 3px 6px rgba(0, 0, 0, 0.4), inset 0 2px 4px rgba(255, 255, 255, 0.1), inset 0 -3px 6px rgba(0, 0, 0, 0.3);
+  position: relative;
+}
+
+.meatball::before {
+  content: '';
+  position: absolute;
+  top: 5px;
+  left: 8px;
+  width: 12px;
+  height: 8px;
+  background: radial-gradient(ellipse, rgba(255, 255, 255, 0.2), transparent);
+  border-radius: 50%;
+}
+
+.meatball::after {
+  content: '';
+  position: absolute;
+  top: -2px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 20px;
+  height: 8px;
+  background: #c0392b;
+  border-radius: 0 0 50% 50%;
+  opacity: 0.7;
+}
+
+.rotini {
+  width: 50px;
+  height: 80px;
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+
+.rotini-coil {
+  width: 40px;
+  height: 14px;
+  border-radius: 50%;
+  border: 4px solid #e0c060;
+  border-top-color: transparent;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.2);
+  margin: -3px 0;
+}
+
+.rotini-coil:nth-child(odd) {
+  border-color: #c8a830;
+  border-top-color: transparent;
+  transform: rotate(15deg);
+}
+
+.rotini-coil:nth-child(even) {
+  transform: rotate(-15deg);
+}
+
+.tortellini {
+  width: 60px;
+  height: 35px;
+  background: radial-gradient(ellipse at 40% 35%, #f0d078, #dbb548, #b89830);
+  border-radius: 50% 50% 30% 30%;
+  border: 2px solid rgba(139, 105, 20, 0.4);
+  box-shadow: 0 3px 8px rgba(0, 0, 0, 0.3), inset 0 2px 4px rgba(255, 255, 255, 0.2);
+  position: relative;
+  transform: rotate(-8deg);
+}
+
+.tortellini::before {
+  content: '';
+  position: absolute;
+  top: 40%;
+  left: 20%;
+  width: 60%;
+  height: 30%;
+  background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.15), transparent);
+  border-radius: 50%;
+}
+
+/* ── Balance Meter ── */
+.balance-meter {
+  position: absolute;
+  bottom: 148px;
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 18;
+  width: 200px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 4px;
+}
+
+.meter-track {
   width: 100%;
+  height: 8px;
+  background: rgba(0, 0, 0, 0.4);
+  border-radius: 4px;
+  border: 1px solid rgba(212, 168, 67, 0.2);
+  position: relative;
+  overflow: hidden;
+}
+
+.meter-fill {
+  position: absolute;
+  top: 0;
   height: 100%;
+  border-radius: 4px;
+  transition: all 0.3s ease;
 }
 
-/* ── Light Theme Adjustments ── */
-[data-theme="light"] .duck-game-canvas-wrap {
-  background: linear-gradient(to bottom, #e2e8f0 0%, #f1f5f9 100%);
-}
-[data-theme="light"] .duck-game-actions {
-  background: rgba(255, 255, 255, 0.7);
-}
-[data-theme="light"] .duck-game-actions h2 {
-  color: var(--text);
-}
-[data-theme="light"] .duck-game-hud {
-  background: rgba(255, 255, 255, 0.5);
+.meter-fill-left {
+  right: 50%;
+  width: 30%;
+  background: linear-gradient(90deg, #e74c3c, #f39c12);
+  border-radius: 4px 0 0 4px;
 }
 
-/* ── Mobile Adjustments ── */
+.meter-fill-right {
+  left: 50%;
+  width: 35%;
+  background: linear-gradient(90deg, #f39c12, #e74c3c);
+  border-radius: 0 4px 4px 0;
+}
+
+.meter-center {
+  position: absolute;
+  top: -3px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 3px;
+  height: 14px;
+  background: #d4a843;
+  border-radius: 2px;
+  box-shadow: 0 0 6px rgba(212, 168, 67, 0.4);
+}
+
+.spoon-indicator {
+  position: absolute;
+  top: -16px;
+  left: 55%;
+  transform: translateX(-50%) rotate(-15deg);
+  width: 28px;
+  height: 28px;
+  animation: spoonSwing 3s ease-in-out infinite;
+}
+
+@keyframes spoonSwing {
+  0%, 100% { transform: translateX(-50%) rotate(-15deg); }
+  50% { transform: translateX(-50%) rotate(15deg); }
+}
+
+.meter-label {
+  font-family: var(--mono);
+  font-size: 9px;
+  color: #d4a843;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+  opacity: 0.6;
+}
+
+/* Floating Particles */
+.particle {
+  position: absolute;
+  border-radius: 50%;
+  pointer-events: none;
+  z-index: 2;
+}
+
+.particle-gold {
+  background: radial-gradient(circle, #f0d078, transparent);
+  opacity: 0.3;
+  animation: floatUp 6s ease-in infinite;
+}
+
+@keyframes floatUp {
+  0% { transform: translateY(0) scale(1); opacity: 0.3; }
+  50% { opacity: 0.5; }
+  100% { transform: translateY(-200px) scale(0.3); opacity: 0; }
+}
+
+.steam {
+  position: absolute;
+  width: 20px;
+  height: 40px;
+  z-index: 16;
+  opacity: 0;
+  animation: steamRise 3s ease-out infinite;
+}
+
+.steam::before, .steam::after {
+  content: '';
+  position: absolute;
+  width: 12px;
+  height: 12px;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.08);
+  filter: blur(4px);
+}
+
+.steam::before { bottom: 0; left: 2px; }
+.steam::after { bottom: 15px; left: 6px; width: 10px; height: 10px; }
+
+@keyframes steamRise {
+  0% { opacity: 0; transform: translateY(0); }
+  20% { opacity: 0.6; }
+  100% { opacity: 0; transform: translateY(-60px) translateX(10px); }
+}
+
+.steam:nth-child(2) { animation-delay: 1s; left: 10px; }
+.steam:nth-child(3) { animation-delay: 2s; left: -5px; }
+
+@keyframes gentleBob {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-3px); }
+}
+
+@media (max-width: 900px) {
+  .game-panel {
+    height: 85vh;
+  }
+  .game-title-banner h1 {
+    font-size: 22px;
+  }
+  .chef-mascot {
+    width: 120px;
+    right: 10px;
+    bottom: 5px;
+  }
+  .speech-bubble {
+    max-width: 200px;
+    font-size: 11px;
+    right: 5px;
+    bottom: 150px;
+  }
+}
+
 @media (max-width: 480px) {
-  .duck-game-overlay {
-    padding: 10px;
+  .game-title-banner h1 {
+    font-size: 16px;
+    letter-spacing: 1px;
   }
-  .duck-game-container {
-    height: 90vh;
+  .chef-mascot {
+    width: 90px;
   }
-  .duck-game-hud {
-    padding: 15px;
-  }
-  .score-val {
-    font-size: 24px;
-  }
-  .duck-game-mascot {
-    width: 60px;
-    height: 75px;
-    bottom: 10px;
-    left: 10px;
+  .speech-bubble {
+    display: none;
   }
 }

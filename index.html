@@ -1333,46 +1333,148 @@
 
   <!-- ═══ EASTER EGG TRIGGER & MODAL ═══ -->
   <!-- Sol alt kosedeki yumurta tetikleyicisi -->
-  <div class="egg-trigger" id="eggTrigger" title="Balance Duck Mini Game" data-i18n-title="easter_egg_tooltip">
+  <div class="egg-trigger" id="eggTrigger" title="Torre di Pasta Mini Game" data-i18n-title="easter_egg_tooltip">
     <img src="start.png" id="eggTriggerImg" alt="Easter Egg" draggable="false">
   </div>
 
   <!-- Oyun Modali Overlay -->
-  <div class="duck-game-overlay" id="duckGameModal">
-    <div class="duck-game-container glass-card">
-      
-      <!-- Ust Bilgi Paneli -->
-      <div class="duck-game-hud">
-        <div class="score-box">
-          <span class="score-label" data-i18n="duck_game_score">Skor</span>
-          <span class="score-val" id="duckGameScoreVal">0</span>
+  <div class="pasta-game-overlay" id="pastaGameModal">
+    <div class="game-panel" id="gamePanel">
+
+      <!-- Modal Close Button -->
+      <button class="pasta-game-close" id="pastaGameCloseBtn" aria-label="Kapat">
+        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <path d="M18 6L6 18M6 6l12 12" />
+        </svg>
+      </button>
+
+      <!-- Title Banner -->
+      <div class="game-title-banner">
+        <svg class="title-swirl-left" viewBox="0 0 40 20">
+          <path class="swirl-svg" d="M38 10 C30 2, 20 18, 10 10 C5 5, 2 10, 0 10"/>
+        </svg>
+        <h1>TORRE DI PASTA BALANCE</h1>
+        <svg class="title-swirl-right" viewBox="0 0 40 20">
+          <path class="swirl-svg" d="M2 10 C10 2, 20 18, 30 10 C35 5, 38 10, 40 10"/>
+        </svg>
+      </div>
+
+      <!-- HUD -->
+      <div class="game-hud">
+        <div class="hud-item">
+          <div class="hud-label">Skor</div>
+          <div class="hud-value" id="pastaScoreVal">0</div>
         </div>
-        <div class="score-box best">
-          <span class="score-label" data-i18n="duck_game_best">En İyi</span>
-          <span class="score-val" id="duckGameBestVal">0</span>
+        <div class="hud-item">
+          <div class="hud-label">En İyi</div>
+          <div class="hud-value" id="pastaBestVal">0</div>
         </div>
-        <button class="duck-game-close" id="duckGameCloseBtn" aria-label="Kapat">
-          <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-            <path d="M18 6L6 18M6 6l12 12" />
+      </div>
+
+      <!-- Game Field (Canvas) -->
+      <div class="game-field" id="pastaGameField">
+        <canvas id="pastaGameCanvas"></canvas>
+
+        <!-- Floating particles -->
+        <div class="particle particle-gold" style="width:6px;height:6px;left:15%;bottom:180px;animation-delay:0s;"></div>
+        <div class="particle particle-gold" style="width:4px;height:4px;left:35%;bottom:200px;animation-delay:1.5s;"></div>
+        <div class="particle particle-gold" style="width:5px;height:5px;left:60%;bottom:160px;animation-delay:3s;"></div>
+        <div class="particle particle-gold" style="width:3px;height:3px;left:80%;bottom:220px;animation-delay:4.5s;"></div>
+        <div class="particle particle-gold" style="width:5px;height:5px;left:25%;bottom:250px;animation-delay:2s;"></div>
+      </div>
+
+      <!-- Game Actions (Start / Game Over) -->
+      <div class="pasta-game-actions" id="pastaGameActions">
+        <h2 id="pastaGameTitle">Torre di Pasta 🍝</h2>
+        <p id="pastaGameDesc" style="margin-bottom: 20px; color: var(--gold-light); font-size: 14px; text-align: center;">Kule sağa veya sola devrilirken ekranın o tarafına tıklayarak dengele!</p>
+        <button class="btn-primary" id="pastaGameStartBtn">Başla</button>
+      </div>
+
+      <!-- Ground Layer -->
+      <div class="ground-layer">
+        <div class="table-edge"></div>
+        <div class="tablecloth"></div>
+      </div>
+
+      <!-- Pasta Tower -->
+      <div class="pasta-tower-container" id="pastaTower">
+        <!-- Steam effects -->
+        <div class="steam" style="top:-20px;left:15px;"></div>
+        <div class="steam" style="top:-25px;left:30px;"></div>
+        <div class="steam" style="top:-15px;left:5px;"></div>
+
+        <div class="tower-stack">
+          <!-- Tortellini (top cap) -->
+          <div class="pasta-piece" style="animation: gentleBob 2.5s ease-in-out infinite; animation-delay: 0.8s;">
+            <div class="tortellini"></div>
+          </div>
+
+          <!-- Rotini spiral -->
+          <div class="pasta-piece" style="animation: gentleBob 3s ease-in-out infinite; animation-delay: 0.4s;">
+            <div class="rotini">
+              <div class="rotini-coil"></div>
+              <div class="rotini-coil"></div>
+              <div class="rotini-coil"></div>
+              <div class="rotini-coil"></div>
+              <div class="rotini-coil"></div>
+            </div>
+          </div>
+
+          <!-- Meatball stack -->
+          <div class="pasta-piece" style="animation: gentleBob 2.8s ease-in-out infinite; animation-delay: 0.2s;">
+            <div class="meatball-stack">
+              <div class="meatball"></div>
+              <div class="meatball" style="position:relative;top:-8px;"></div>
+              <div class="meatball"></div>
+            </div>
+          </div>
+
+          <!-- Ravioli base -->
+          <div class="pasta-piece">
+            <div class="ravioli"></div>
+          </div>
+        </div>
+
+        <!-- Ceramic Plate -->
+        <div class="ceramic-plate">
+          <span class="plate-decor"></span>
+          <span class="plate-decor"></span>
+          <span class="plate-decor"></span>
+        </div>
+      </div>
+
+      <!-- Balance Meter -->
+      <div class="balance-meter">
+        <!-- Spoon indicator -->
+        <div class="spoon-indicator">
+          <svg viewBox="0 0 28 28" fill="none">
+            <ellipse cx="14" cy="7" rx="8" ry="6" fill="none" stroke="var(--gold)" stroke-width="1.5"/>
+            <ellipse cx="14" cy="7" rx="5" ry="4" fill="rgba(212, 168, 67, 0.2)"/>
+            <line x1="14" y1="13" x2="14" y2="26" stroke="var(--gold)" stroke-width="2" stroke-linecap="round"/>
           </svg>
-        </button>
+        </div>
+        <div class="meter-track">
+          <div class="meter-fill meter-fill-left"></div>
+          <div class="meter-fill meter-fill-right"></div>
+          <div class="meter-center"></div>
+        </div>
+        <span class="meter-label">Denge</span>
       </div>
 
-      <!-- Orta Oyun Alani -->
-      <div class="duck-game-canvas-wrap">
-        <canvas id="duckGameCanvas"></canvas>
-        <div class="duck-game-message" id="duckGameMessage"></div>
+      <!-- Chef Mascot -->
+      <div class="chef-mascot" id="chefMascot">
+        <img src="chef_mascot.jpg" alt="Chef Mascot - Blue blob developer as master chef">
       </div>
 
-      <!-- Alt Islem Menusu -->
-      <div class="duck-game-actions">
-        <h2 data-i18n="duck_game_title">Balance Duck 🦆</h2>
-        <button class="btn-primary" id="duckGameStartBtn" data-i18n="duck_game_start">Başlamak için tıkla</button>
-        <button class="btn-primary" id="duckGameRetryBtn" data-i18n="duck_game_retry" style="display: none;">Tekrar Oyna</button>
+      <!-- Speech Bubble -->
+      <div class="speech-bubble" id="speechBubble">
+        <span>Ravioli dengede... ama sakın gizli malzemeyi düşürme! 👉</span>
+        <!-- Pasta swirl tail -->
+        <svg class="swirl-tail" viewBox="0 0 30 24" fill="none">
+          <path d="M15 0 C18 8, 25 10, 20 16 C18 20, 12 22, 15 24" stroke="rgba(212, 168, 67, 0.3)" stroke-width="1.5" fill="none" stroke-linecap="round"/>
+          <path d="M12 4 C10 12, 5 14, 10 18" stroke="rgba(212, 168, 67, 0.2)" stroke-width="1" fill="none" stroke-linecap="round"/>
+        </svg>
       </div>
-
-      <!-- Kose Maskotu -->
-      <div class="duck-game-mascot"></div>
 
     </div>
   </div>
