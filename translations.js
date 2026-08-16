@@ -171,6 +171,8 @@ const translations = {
 
     // Maskot
     mascot_speech: "Merhaba! 👋",
+    mascot_speech_projects: "Burası Projelerim! 👉",
+    mascot_speech_games: "Burası Oyunlarım! 🎮",
 
     // Typewriter
     typewriter_1: "Yazılım Mühendisliği Öğrencisi",
@@ -349,6 +351,8 @@ const translations = {
 
     // Maskot
     mascot_speech: "Hello! 👋",
+    mascot_speech_projects: "Here are my Projects! 👉",
+    mascot_speech_games: "Here are my Games! 🎮",
 
     // Typewriter
     typewriter_1: "Software Engineering Student",

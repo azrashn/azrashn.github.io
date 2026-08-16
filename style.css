@@ -73,17 +73,21 @@
   background: rgba(248, 250, 252, 0.8);
   border-bottom-color: var(--border);
 }
+
 [data-theme="light"] .navbar.scrolled {
   background: rgba(248, 250, 252, 0.95);
 }
+
 [data-theme="light"] .hero-bg-glow {
   opacity: 0.3;
 }
+
 [data-theme="light"] .logo-text {
   background: linear-gradient(135deg, #0284c7 0%, #e11d48 100%);
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
 }
+
 [data-theme="light"] .logo-img {
   filter: invert(1);
 }
@@ -95,6 +99,7 @@
   color: var(--text);
   border-color: var(--border);
 }
+
 [data-theme="light"] .video-btn:hover,
 [data-theme="light"] .details-btn:hover {
   background: rgba(0, 0, 0, 0.1);
@@ -106,6 +111,7 @@
 [data-theme="light"] .project-link {
   color: var(--text-dim);
 }
+
 [data-theme="light"] .project-link:hover {
   color: var(--accent-dim);
 }
@@ -114,11 +120,13 @@
 [data-theme="light"] .details-content h3 {
   color: var(--text);
 }
+
 [data-theme="light"] .details-modal-close {
   background: rgba(0, 0, 0, 0.05);
   border-color: var(--border);
   color: var(--text);
 }
+
 [data-theme="light"] .details-modal-close:hover {
   background: rgba(0, 0, 0, 0.1);
   color: var(--text);
@@ -129,6 +137,7 @@
   background: rgba(255, 255, 255, 0.8);
   color: #0f172a;
 }
+
 [data-theme="light"] .video-modal-close:hover {
   background: rgba(255, 255, 255, 0.95);
 }
@@ -197,7 +206,8 @@ body {
   flex-shrink: 0;
 }
 
-.icon-btn, .text-btn {
+.icon-btn,
+.text-btn {
   background: var(--bg-panel);
   border: 1px solid var(--border);
   color: var(--text-dim);
@@ -222,7 +232,8 @@ body {
   font-weight: 600;
 }
 
-.icon-btn:hover, .text-btn:hover {
+.icon-btn:hover,
+.text-btn:hover {
   border-color: var(--accent);
   color: var(--accent);
   background: var(--accent-soft);
@@ -606,24 +617,29 @@ body {
 
 #kariyer {
   background: radial-gradient(circle at 0% 50%, rgba(129, 140, 248, 0.05) 0%, transparent 50%),
-              radial-gradient(circle at 100% 100%, rgba(236, 72, 153, 0.05) 0%, transparent 50%), /* Pink added */
-              radial-gradient(circle at 50% 0%, rgba(56, 189, 248, 0.03) 0%, transparent 40%);
+    radial-gradient(circle at 100% 100%, rgba(236, 72, 153, 0.05) 0%, transparent 50%),
+    /* Pink added */
+    radial-gradient(circle at 50% 0%, rgba(56, 189, 248, 0.03) 0%, transparent 40%);
 }
 
 #projeler {
   background: radial-gradient(circle at 100% 30%, rgba(52, 211, 153, 0.04) 0%, transparent 50%),
-              radial-gradient(circle at 0% 50%, rgba(217, 70, 239, 0.05) 0%, transparent 50%), /* Fuchsia added */
-              radial-gradient(circle at 0% 80%, rgba(96, 165, 250, 0.04) 0%, transparent 40%);
+    radial-gradient(circle at 0% 50%, rgba(217, 70, 239, 0.05) 0%, transparent 50%),
+    /* Fuchsia added */
+    radial-gradient(circle at 0% 80%, rgba(96, 165, 250, 0.04) 0%, transparent 40%);
 }
 
 #oyunlar {
   background: radial-gradient(circle at 50% 100%, rgba(251, 191, 36, 0.03) 0%, transparent 60%),
-              radial-gradient(circle at 100% 0%, rgba(251, 113, 133, 0.05) 0%, transparent 50%); /* Rose added */
+    radial-gradient(circle at 100% 0%, rgba(251, 113, 133, 0.05) 0%, transparent 50%);
+  /* Rose added */
 }
 
 #iletisim {
-  background: radial-gradient(circle at 0% 100%, rgba(251, 113, 133, 0.07) 0%, transparent 60%), /* Increased Rose */
-              radial-gradient(circle at 100% 0%, rgba(236, 72, 153, 0.05) 0%, transparent 50%); /* Added Pink */
+  background: radial-gradient(circle at 0% 100%, rgba(251, 113, 133, 0.07) 0%, transparent 60%),
+    /* Increased Rose */
+    radial-gradient(circle at 100% 0%, rgba(236, 72, 153, 0.05) 0%, transparent 50%);
+  /* Added Pink */
 }
 
 .section-inner {
@@ -687,12 +703,29 @@ body {
 }
 
 /* Accent color variants for glass cards */
-.glass-card[data-accent="accent"] { --card-glow-color: 125, 211, 252; }
-.glass-card[data-accent="blue"] { --card-glow-color: 96, 165, 250; }
-.glass-card[data-accent="emerald"] { --card-glow-color: 52, 211, 153; }
-.glass-card[data-accent="amber"] { --card-glow-color: 251, 191, 36; }
-.glass-card[data-accent="rose"] { --card-glow-color: 251, 113, 133; }
-.glass-card[data-accent="indigo"] { --card-glow-color: 129, 140, 248; }
+.glass-card[data-accent="accent"] {
+  --card-glow-color: 125, 211, 252;
+}
+
+.glass-card[data-accent="blue"] {
+  --card-glow-color: 96, 165, 250;
+}
+
+.glass-card[data-accent="emerald"] {
+  --card-glow-color: 52, 211, 153;
+}
+
+.glass-card[data-accent="amber"] {
+  --card-glow-color: 251, 191, 36;
+}
+
+.glass-card[data-accent="rose"] {
+  --card-glow-color: 251, 113, 133;
+}
+
+.glass-card[data-accent="indigo"] {
+  --card-glow-color: 129, 140, 248;
+}
 
 /* ═══════════════════════════════════════════
    JOURNEY TIMELINE
@@ -2121,43 +2154,98 @@ button:focus-visible {
   animation: mascotBreathing 4s ease-in-out infinite;
   transform-origin: center bottom;
   transition: filter 0.3s ease;
-  filter: drop-shadow(0 4px 16px rgba(0,0,0,0.3));
+  filter: drop-shadow(0 4px 16px rgba(0, 0, 0, 0.3));
 }
 
 /* Idle breathing animation */
 @keyframes mascotBreathing {
-  0%, 100% {
+
+  0%,
+  100% {
     transform: scaleY(1) translateY(0);
   }
+
   50% {
     transform: scaleY(1.015) translateY(-3px);
   }
 }
 
 /* ── Arm Pose System ── */
-/* Default: idle arm visible, pointing arm hidden */
-.arm-idle { display: block; }
-.arm-pointing { display: none; }
+/* Default: idle arm visible, others hidden */
+.arm-idle {
+  display: block;
+}
+
+.arm-pointing,
+.arm-waving {
+  display: none;
+}
 
 /* Pointing state: swap arm visibility */
-.mascot-container.pointing .arm-idle { display: none; }
-.mascot-container.pointing .arm-pointing { display: block; }
+.mascot-container.pointing .arm-idle {
+  display: none;
+}
+
+.mascot-container.pointing .arm-pointing {
+  display: block;
+}
+
+/* Waving state: swap arm visibility */
+.mascot-container.waving .arm-idle {
+  display: none;
+}
+
+.mascot-container.waving .arm-waving {
+  display: block;
+}
+
+/* ── Mouth Pose System ── */
+.mouth-idle {
+  display: block;
+}
+
+.mouth-open {
+  display: none;
+}
+
+.mascot-container.pointing .mouth-idle,
+.mascot-container.waving .mouth-idle {
+  display: none;
+}
+
+.mascot-container.pointing .mouth-open,
+.mascot-container.waving .mouth-open {
+  display: block;
+}
 
 /* ── Wave Animation (left arm, on hover/click) ── */
 @keyframes mascotWave {
-  0%   { transform: rotate(0deg); }
-  15%  { transform: rotate(-25deg); }
-  30%  { transform: rotate(5deg); }
-  45%  { transform: rotate(-20deg); }
-  60%  { transform: rotate(3deg); }
-  75%  { transform: rotate(-15deg); }
-  100% { transform: rotate(0deg); }
+  0% {
+    transform: rotate(0deg);
+  }
+
+  25% {
+    transform: rotate(-18deg);
+  }
+
+  50% {
+    transform: rotate(12deg);
+  }
+
+  75% {
+    transform: rotate(-8deg);
+  }
+
+  100% {
+    transform: rotate(0deg);
+  }
 }
 
-/* Waving state: animate the idle left arm */
-.mascot-container.waving #mascot-arm-left-idle {
-  transform-origin: 118px 255px; /* shoulder pivot */
-  animation: mascotWave 0.7s ease-in-out 2;
+/* Waving state: animate the bent left arm */
+.mascot-container.waving #mascot-arm-left-waving {
+  transform-origin: 118px 248px;
+  /* shoulder pivot */
+  animation: mascotWave 1.4s cubic-bezier(0.4, 0, 0.2, 1) forwards;
 }
 
 /* Hover glow when waving */
@@ -2209,8 +2297,9 @@ button:focus-visible {
   z-index: -1;
 }
 
-/* Show speech bubble ONLY in pointing mode (projeler/oyunlar) */
-.mascot-container.pointing .mascot-speech {
+/* Show speech bubble ONLY in pointing mode (projeler/oyunlar) or waving mode */
+.mascot-container.pointing .mascot-speech,
+.mascot-container.waving .mascot-speech {
   opacity: 1;
   transform: translateY(0) scale(1);
   pointer-events: auto;
@@ -2239,6 +2328,7 @@ button:focus-visible {
     bottom: 14px;
     right: 12px;
   }
+
   .mascot-speech {
     font-size: 11px;
     padding: 7px 12px;
@@ -2253,6 +2343,7 @@ button:focus-visible {
     bottom: 10px;
     right: 8px;
   }
+
   .mascot-speech {
     font-size: 10px;
     padding: 6px 10px;

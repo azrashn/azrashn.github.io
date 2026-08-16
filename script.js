@@ -466,12 +466,6 @@ document.addEventListener('DOMContentLoaded', () => {
     let waveTimeout = null;
     let activeSection = null; // 'projeler' | 'oyunlar' | null
 
-    // Speech bubble texts per section
-    const speechTexts = {
-      projeler: 'Burası Projelerim! 👉',
-      oyunlar: 'Burası Oyunlarım! 🎮'
-    };
-
     // ── Wave function ──
     function triggerWave() {
       // Don't wave if already pointing (pointing has priority)
@@ -480,10 +474,20 @@ document.addEventListener('DOMContentLoaded', () => {
       mascotContainer.classList.add('waving');
       mascotState = 'waving';
 
+      // Set speech text for waving
+      mascotSpeech.setAttribute('data-i18n', 'mascot_speech');
+      if (typeof applyLanguage === 'function' && typeof currentLang !== 'undefined') {
+        applyLanguage(currentLang);
+      } else if (typeof translations !== 'undefined') {
+        // Fallback if currentLang isn't directly accessible but translations is
+        const lang = localStorage.getItem('lang') || 'tr';
+        mascotSpeech.innerHTML = translations[lang]['mascot_speech'];
+      }
+
       // Clear any previous wave timeout
       if (waveTimeout) clearTimeout(waveTimeout);
 
-      // Return to idle after wave animation completes (0.7s × 2 repeats = 1.4s + buffer)
+      // Return to idle after wave animation completes (1.6s)
       waveTimeout = setTimeout(() => {
         mascotContainer.classList.remove('waving');
         mascotState = 'idle';
@@ -500,14 +504,62 @@ document.addEventListener('DOMContentLoaded', () => {
       mascotState = 'pointing';
       mascotContainer.classList.add('pointing');
 
-      // Update speech bubble text
-      mascotSpeech.textContent = speechTexts[sectionId] || '';
+      // Update speech bubble text with i18n keys
+      const key = sectionId === 'projeler' ? 'mascot_speech_projects' : 'mascot_speech_games';
+      mascotSpeech.setAttribute('data-i18n', key);
+      
+      if (typeof applyLanguage === 'function' && typeof currentLang !== 'undefined') {
+        applyLanguage(currentLang);
+      } else if (typeof translations !== 'undefined') {
+        const lang = localStorage.getItem('lang') || 'tr';
+        mascotSpeech.innerHTML = translations[lang][key];
+      }
     }
 
     function exitPointing() {
       mascotContainer.classList.remove('pointing');
       mascotState = 'idle';
       activeSection = null;
+    }
+
+    // ── Eye Tracking (Optimized with requestAnimationFrame) ──
+    let mouseX = 0;
+    let mouseY = 0;
+    let isTracking = false;
+
+    document.addEventListener('mousemove', (e) => {
+      mouseX = e.clientX;
+      mouseY = e.clientY;
+
+      if (!isTracking) {
+        requestAnimationFrame(updateEyes);
+        isTracking = true;
+      }
+    });
+
+    function updateEyes() {
+      document.querySelectorAll('.mascot-eye').forEach(eye => {
+        const rect = eye.getBoundingClientRect();
+        // Calculate separate center for each eye
+        const eyeCenterX = rect.left + rect.width / 2;
+        const eyeCenterY = rect.top + rect.height / 2;
+
+        const dx = mouseX - eyeCenterX;
+        const dy = mouseY - eyeCenterY;
+        const angle = Math.atan2(dy, dx);
+        
+        // Strict boundary to keep pupil inside eye white (max radius 4px)
+        const distance = Math.min(4, Math.hypot(dx, dy) / 40);
+
+        const pupilX = Math.cos(angle) * distance;
+        const pupilY = Math.sin(angle) * distance;
+
+        const pupilGroup = eye.querySelector('.pupil-group');
+        if (pupilGroup) {
+          pupilGroup.style.transform = `translate(${pupilX}px, ${pupilY}px)`;
+        }
+      });
+      isTracking = false;
     }
 
     // ── Hover → wave ──
