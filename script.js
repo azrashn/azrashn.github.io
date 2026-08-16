@@ -363,12 +363,23 @@ document.addEventListener('DOMContentLoaded', () => {
   const sunIcon = document.querySelector('.sun-icon');
   const moonIcon = document.querySelector('.moon-icon');
   
-  const currentTheme = localStorage.getItem('theme') || 'dark';
+  let currentTheme = localStorage.getItem('theme');
+  if (!currentTheme) {
+    currentTheme = 'dark';
+    localStorage.setItem('theme', 'dark');
+  }
+
   if (currentTheme === 'light') {
     document.documentElement.setAttribute('data-theme', 'light');
     if (sunIcon && moonIcon) {
       sunIcon.style.display = 'none';
       moonIcon.style.display = 'block';
+    }
+  } else {
+    document.documentElement.removeAttribute('data-theme');
+    if (sunIcon && moonIcon) {
+      sunIcon.style.display = 'block';
+      moonIcon.style.display = 'none';
     }
   }
   
@@ -397,7 +408,11 @@ document.addEventListener('DOMContentLoaded', () => {
   // LANGUAGE TOGGLE
   // ═══════════════════════════════════════════
   const langToggle = document.getElementById('langToggle');
-  let currentLang = localStorage.getItem('lang') || 'tr';
+  let currentLang = localStorage.getItem('lang');
+  if (!currentLang) {
+    currentLang = 'tr';
+    localStorage.setItem('lang', 'tr');
+  }
   
   function applyLanguage(lang) {
     if (typeof translations === 'undefined') return;
