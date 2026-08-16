@@ -37,20 +37,41 @@
   <!-- ═══ NAVBAR ═══ -->
   <nav class="navbar" id="navbar">
     <div class="nav-inner">
-      <a href="#hero" class="nav-logo">
-        <img src="logo.png" alt="PWRHP Logo" class="logo-img">
-        <span class="logo-text">azrashn</span>
-      </a>
+      <div class="nav-actions">
+        <button id="themeToggle" class="icon-btn" aria-label="Tema Değiştir">
+          <!-- Sun Icon -->
+          <svg class="sun-icon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+            <circle cx="12" cy="12" r="5"></circle>
+            <line x1="12" y1="1" x2="12" y2="3"></line>
+            <line x1="12" y1="21" x2="12" y2="23"></line>
+            <line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line>
+            <line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line>
+            <line x1="1" y1="12" x2="3" y2="12"></line>
+            <line x1="21" y1="12" x2="23" y2="12"></line>
+            <line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line>
+            <line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line>
+          </svg>
+          <!-- Moon Icon -->
+          <svg class="moon-icon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" style="display: none;">
+            <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path>
+          </svg>
+        </button>
+        <button id="langToggle" class="text-btn" aria-label="Dil Değiştir">EN</button>
+      </div>
       <button class="nav-hamburger" id="navHamburger" aria-label="Menüyü aç/kapat">
         <span></span><span></span><span></span>
       </button>
       <ul class="nav-links" id="navLinks">
-        <li><a href="#hero" class="nav-link active" data-section="hero">Hakkımda</a></li>
-        <li><a href="#kariyer" class="nav-link" data-section="kariyer">Kariyer</a></li>
-        <li><a href="#projeler" class="nav-link" data-section="projeler">Projeler</a></li>
-        <li><a href="#oyunlar" class="nav-link" data-section="oyunlar">Oyunlar</a></li>
-        <li><a href="#iletisim" class="nav-link" data-section="iletisim">İletişim</a></li>
+        <li><a href="#hero" class="nav-link active" data-section="hero" data-i18n="nav_about">Hakkımda</a></li>
+        <li><a href="#kariyer" class="nav-link" data-section="kariyer" data-i18n="nav_career">Kariyer</a></li>
+        <li><a href="#projeler" class="nav-link" data-section="projeler" data-i18n="nav_projects">Projeler</a></li>
+        <li><a href="#oyunlar" class="nav-link" data-section="oyunlar" data-i18n="nav_games">Oyunlar</a></li>
+        <li><a href="#iletisim" class="nav-link" data-section="iletisim" data-i18n="nav_contact">İletişim</a></li>
       </ul>
+      <a href="#hero" class="nav-logo">
+        <img src="logo.png" alt="PWRHP Logo" class="logo-img">
+        <span class="logo-text">azrashn</span>
+      </a>
     </div>
   </nav>
 
@@ -58,7 +79,7 @@
   <section id="hero" class="hero-section">
     <div class="hero-bg-glow" aria-hidden="true"></div>
     <div class="hero-content">
-      <p class="hero-eyebrow">merhaba, ben</p>
+      <p class="hero-eyebrow" data-i18n="hero_eyebrow">merhaba, ben</p>
       <h1 class="hero-name">Esma Azra<br>Şahin</h1>
       <p class="hero-tagline">
         <span class="typed-gt" aria-hidden="true">&gt; </span>
@@ -66,7 +87,7 @@
         <span class="cursor" aria-hidden="true">▌</span>
       </p>
       <div class="hero-bio">
-        <p>
+        <p data-i18n="hero_bio">
           Ankara Bilim Üniversitesi Yazılım Mühendisliği son sınıf ve İstanbul Üniversitesi Grafik Tasarım bölümü
           öğrencisiyim. Nesne
           Yönelimli Programlama (OOP) prensiplerine hakim olup, C# ve Python
@@ -80,9 +101,9 @@
         </p>
       </div>
       <div class="hero-cta">
-        <a href="#projeler" class="btn-primary">Projeleri Gör</a>
-        <a href="#iletisim" class="btn-ghost">İletişim</a>
-        <a href="Özgeçmiş.pdf" download target="_blank" class="btn-cv">CV İndir <svg width="14" height="14"
+        <a href="#projeler" class="btn-primary" data-i18n="hero_btn_projects">Projeleri Gör</a>
+        <a href="#iletisim" class="btn-ghost" data-i18n="hero_btn_contact">İletişim</a>
+        <a href="Özgeçmiş.pdf" download target="_blank" class="btn-cv"><span data-i18n="hero_btn_cv">CV İndir</span> <svg width="14" height="14"
             viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"
             stroke-linejoin="round">
             <path d="M4 6l4 4 4-4M8 10V1M2 14h12" />
@@ -90,7 +111,7 @@
       </div>
     </div>
     <a href="#kariyer" class="scroll-indicator" aria-label="Aşağı kaydır">
-      <span>aşağı kaydır</span>
+      <span data-i18n="hero_scroll">aşağı kaydır</span>
       <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
         <path d="M4 6l4 4 4-4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" />
       </svg>
@@ -100,9 +121,9 @@
   <!-- ═══ KARİYER YOLCULUĞU ═══ -->
   <section id="kariyer" class="section">
     <div class="section-inner">
-      <p class="section-eyebrow">kariyer yolculuğum</p>
-      <h2 class="section-title">Deneyim &amp; Yolculuk</h2>
-      <p class="section-desc">Durağa tıkla veya fareyi üzerine getir</p>
+      <p class="section-eyebrow" data-i18n="career_eyebrow">kariyer yolculuğum</p>
+      <h2 class="section-title" data-i18n="career_title">Deneyim &amp; Yolculuk</h2>
+      <p class="section-desc" data-i18n="career_desc">Durağa tıkla veya fareyi üzerine getir</p>
 
       <div class="journey-track">
 
@@ -288,8 +309,8 @@
   <!-- ═══ PROJELER ═══ -->
   <section id="projeler" class="section">
     <div class="section-inner">
-      <p class="section-eyebrow">projeler</p>
-      <h2 class="section-title">Projeler</h2>
+      <p class="section-eyebrow" data-i18n="projects_eyebrow">projeler</p>
+      <h2 class="section-title" data-i18n="projects_title">Projeler</h2>
       <div class="project-grid">
 
         <article class="glass-card project-card" data-accent="accent">
@@ -323,7 +344,7 @@
                 <path
                   d="M11.596 8.697l-6.363 3.692c-.54.313-1.233-.066-1.233-.697V4.308c0-.63.692-1.01 1.233-.696l6.363 3.692a.802.802 0 0 1 0 1.393z" />
               </svg>
-              videoyu izle
+              <span data-i18n="project_btn_video">videoyu izle</span>
             </button>
           </div>
         </article>
@@ -359,15 +380,15 @@
                 <path
                   d="M11.596 8.697l-6.363 3.692c-.54.313-1.233-.066-1.233-.697V4.308c0-.63.692-1.01 1.233-.696l6.363 3.692a.802.802 0 0 1 0 1.393z" />
               </svg>
-              videoyu izle
+              <span data-i18n="project_btn_video">videoyu izle</span>
             </button>
             <a href="https://github.com/azrashn/Facial-Image-Warping" target="_blank" class="project-link"
-              aria-label="Facial Image Warping kaynak kodu">
+              aria-label="Facial Image Warping <span data-i18n="project_btn_code">kaynak kod</span>u">
               <svg width="14" height="14" viewBox="0 0 16 16" fill="currentColor" aria-hidden="true">
                 <path
                   d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27.68 0 1.36.09 2 .27 1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.013 8.013 0 0 0 16 8c0-4.42-3.58-8-8-8z" />
               </svg>
-              kaynak kod
+              <span data-i18n="project_btn_code">kaynak kod</span>
             </a>
           </div>
         </article>
@@ -394,7 +415,7 @@
                 <path
                   d="M11.596 8.697l-6.363 3.692c-.54.313-1.233-.066-1.233-.697V4.308c0-.63.692-1.01 1.233-.696l6.363 3.692a.802.802 0 0 1 0 1.393z" />
               </svg>
-              videoyu izle
+              <span data-i18n="project_btn_video">videoyu izle</span>
             </button>
           </div>
         </article>
@@ -425,12 +446,12 @@
               detayları incele
             </button>
             <a href="https://github.com/azrashn/Automated-Assessment-and-Feedback-AI-Assessment-Feedback-"
-              target="_blank" class="project-link" aria-label="Feedback System kaynak kodu">
+              target="_blank" class="project-link" aria-label="Feedback System <span data-i18n="project_btn_code">kaynak kod</span>u">
               <svg width="14" height="14" viewBox="0 0 16 16" fill="currentColor" aria-hidden="true">
                 <path
                   d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27.68 0 1.36.09 2 .27 1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.013 8.013 0 0 0 16 8c0-4.42-3.58-8-8-8z" />
               </svg>
-              kaynak kod
+              <span data-i18n="project_btn_code">kaynak kod</span>
             </a>
           </div>
         </article>
@@ -442,8 +463,8 @@
   <!-- ═══ OYUNLAR ═══ -->
   <section id="oyunlar" class="section">
     <div class="section-inner">
-      <p class="section-eyebrow">oyunlar</p>
-      <h2 class="section-title">Oyunlar</h2>
+      <p class="section-eyebrow" data-i18n="games_eyebrow">oyunlar</p>
+      <h2 class="section-title" data-i18n="games_title">Oyunlar</h2>
       <div class="game-grid">
 
         <article class="glass-card game-card" data-accent="rose">
@@ -524,12 +545,12 @@
                 detayları incele
               </button>
               <a href="https://github.com/azrashn/ShooterGame" target="_blank" class="project-link"
-                aria-label="Shooter Game kaynak kodu">
+                aria-label="Shooter Game <span data-i18n="project_btn_code">kaynak kod</span>u">
                 <svg width="14" height="14" viewBox="0 0 16 16" fill="currentColor" aria-hidden="true">
                   <path
                     d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27.68 0 1.36.09 2 .27 1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.013 8.013 0 0 0 16 8c0-4.42-3.58-8-8-8z" />
                 </svg>
-                kaynak kod
+                <span data-i18n="project_btn_code">kaynak kod</span>
               </a>
             </div>
           </div>
@@ -552,12 +573,12 @@
             </div>
             <div class="project-links">
               <a href="https://github.com/azrashn/BalanceDuck" target="_blank" class="project-link"
-                aria-label="BalanceDuck kaynak kodu">
+                aria-label="BalanceDuck <span data-i18n="project_btn_code">kaynak kod</span>u">
                 <svg width="14" height="14" viewBox="0 0 16 16" fill="currentColor" aria-hidden="true">
                   <path
                     d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27.68 0 1.36.09 2 .27 1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.013 8.013 0 0 0 16 8c0-4.42-3.58-8-8-8z" />
                 </svg>
-                kaynak kod
+                <span data-i18n="project_btn_code">kaynak kod</span>
               </a>
             </div>
           </div>
@@ -570,8 +591,8 @@
   <!-- ═══ ARAÇLAR & SERTİFİKALAR ═══ -->
   <section id="araclar" class="section">
     <div class="section-inner">
-      <p class="section-eyebrow">araçlar &amp; yetenekler</p>
-      <h2 class="section-title">Araçlarım</h2>
+      <p class="section-eyebrow" data-i18n="tools_eyebrow">araçlar &amp; yetenekler</p>
+      <h2 class="section-title" data-i18n="tools_title">Araçlarım</h2>
 
       <div class="skills-grid">
         <div class="glass-card info-card">
@@ -579,9 +600,9 @@
             <svg width="16" height="16" viewBox="0 0 16 16" fill="none" aria-hidden="true">
               <path d="M8 1v14M1 8h14" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" />
             </svg>
-            Neyle uğraşıyorum
+            <span data-i18n="tools_what_i_do">Neyle uğraşıyorum</span>
           </h3>
-          <p>Oyun geliştirme ve yazılım mühendisliği odaklı çalışıyor, temel olarak karmaşık algoritmalar, problem çözme
+          <p data-i18n="tools_what_i_do_desc">Oyun geliştirme ve yazılım mühendisliği odaklı çalışıyor, temel olarak karmaşık algoritmalar, problem çözme
             ve backend mimarileri kurgulama üzerine yoğunlaşıyorum.<br><br>
             Oyun mekanikleri tasarımı, nesne yönelimli programlama (OOP) ve sistem mimarileri geliştirirken projelerin
             hem teknik mantık hem de tasarım süreçlerini bir arada yürütüyorum.</p>
@@ -592,9 +613,9 @@
               <path d="M8 3v5l3 3" stroke="currentColor" stroke-width="1.3" stroke-linecap="round" />
               <circle cx="8" cy="8" r="6.5" stroke="currentColor" stroke-width="1.2" />
             </svg>
-            Şu an üzerinde çalıştığım
+            <span data-i18n="tools_current">Şu an üzerinde çalıştığım</span>
           </h3>
-          <p><strong>Yeni Oyun Projesi:</strong> Mekanikleri ve tasarımı üzerinde aktif olarak çalıştığım yeni bir oyun
+          <p data-i18n="tools_current_desc"><strong>Yeni Oyun Projesi:</strong> Mekanikleri ve tasarımı üzerinde aktif olarak çalıştığım yeni bir oyun
             fikri.<br><br>
             <strong>Akademik & Proje Süreçleri:</strong> Yazılım Mühendisliği 4. sınıfa geçiş dönemimde, servis
             mimarileri, çakışma algoritmaları ve eşzamanlı veri işleme araçları geliştirmeye devam ediyorum.
@@ -605,7 +626,7 @@
             <svg width="16" height="16" viewBox="0 0 16 16" fill="none" aria-hidden="true">
               <path d="M3 5h10M3 8h7M3 11h10" stroke="currentColor" stroke-width="1.2" stroke-linecap="round" />
             </svg>
-            Teknolojiler
+            <span data-i18n="tools_tech">Teknolojiler</span>
           </h3>
           <div style="font-size: 0.9em; margin-bottom: 8px; color: var(--text-color);"><strong>Diller &
               Motorlar:</strong></div>
@@ -635,7 +656,7 @@
 
       <!-- Sertifikalar -->
       <div class="certs-section">
-        <h3 class="certs-title">Sertifikalar</h3>
+        <h3 class="certs-title" data-i18n="certs_title">Sertifikalar</h3>
         <ul class="cert-list">
           <li class="cert-item">
             <div class="cert-info">
@@ -771,15 +792,15 @@
   <!-- ═══ İLETİŞİM ═══ -->
   <section id="iletisim" class="section">
     <div class="section-inner">
-      <p class="section-eyebrow">iletişim</p>
-      <h2 class="section-title">Bana Ulaşın</h2>
+      <p class="section-eyebrow" data-i18n="contact_eyebrow">iletişim</p>
+      <h2 class="section-title" data-i18n="contact_title">Bana Ulaşın</h2>
       <div class="contact-cards">
         <a href="mailto:esmaazrasahin@outlook.com" class="glass-card contact-card">
           <svg width="22" height="22" viewBox="0 0 16 16" fill="none" aria-hidden="true">
             <rect x="2" y="3.5" width="12" height="9" rx="1.5" stroke="currentColor" stroke-width="1.2" />
             <path d="m2 4.5 6 4.5 6-4.5" stroke="currentColor" stroke-width="1.2" />
           </svg>
-          <span class="contact-card-label">e-posta</span>
+          <span class="contact-card-label" data-i18n="contact_email">e-posta</span>
           <span class="contact-card-value">esmaazrasahin@outlook.com</span>
         </a>
         <a href="https://github.com/azrashn" target="_blank" rel="noopener" class="glass-card contact-card">
@@ -796,8 +817,8 @@
             <path d="M13 13c0-2.76-2.24-5-5-5s-5 2.24-5 5" stroke="currentColor" stroke-width="1.2"
               stroke-linecap="round" />
           </svg>
-          <span class="contact-card-label">konum</span>
-          <span class="contact-card-value">Ankara, Türkiye</span>
+          <span class="contact-card-label" data-i18n="contact_location">konum</span>
+          <span class="contact-card-value" data-i18n="contact_location_val">Ankara, Türkiye</span>
         </div>
       </div>
     </div>
@@ -985,6 +1006,27 @@
     </div>
   </div>
 
+  <!-- ═══ MASCOT ═══ -->
+  <div class="mascot-container" id="mascotContainer">
+    <div class="mascot" id="mascot">
+      <div class="mascot-speech" data-i18n="mascot_speech">Merhaba! 👋</div>
+      <div class="mascot-head">
+        <div class="mascot-headphone-band"></div>
+        <div class="mascot-headphone-cup left-cup"></div>
+        <div class="mascot-headphone-cup right-cup"></div>
+        <div class="mascot-eye left-eye"><div class="pupil"></div></div>
+        <div class="mascot-eye right-eye"><div class="pupil"></div></div>
+        <div class="mascot-blush left-blush"></div>
+        <div class="mascot-blush right-blush"></div>
+        <div class="mascot-mouth" id="mascotMouth"></div>
+      </div>
+      <div class="mascot-arm left-arm"></div>
+      <div class="mascot-arm right-arm" id="mascotArm"></div>
+      <div class="mascot-body"></div>
+    </div>
+  </div>
+
+  <script src="translations.js"></script>
   <script src="script.js"></script>
 </body>
 

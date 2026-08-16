@@ -94,11 +94,6 @@
   // TYPEWRITER — write/delete loop
   // ═══════════════════════════════════════════
   const typedEl = document.getElementById('typed');
-  const phrases = [
-    'Yazılım Mühendisliği Öğrencisi',
-    'Grafik Tasarım Öğrencisi',
-    'Oyun Geliştirici (Unity)'
-  ];
   let phraseIndex = 0;
   let charIndex = 0;
   let isDeleting = false;
@@ -106,7 +101,19 @@
   function typeLoop() {
     if (!typedEl) return;
 
-    const currentPhrase = phrases[phraseIndex];
+    // Dinamik dil dizisini al
+    let currentLangStr = typeof currentLang !== 'undefined' ? currentLang : (localStorage.getItem('lang') || 'tr');
+    let phrases = ['...', '...', '...'];
+    if (typeof translations !== 'undefined' && translations[currentLangStr]) {
+      phrases = [
+        translations[currentLangStr].typewriter_1,
+        translations[currentLangStr].typewriter_2,
+        translations[currentLangStr].typewriter_3
+      ];
+    }
+    
+    if (phraseIndex >= phrases.length) phraseIndex = 0;
+    const currentPhrase = phrases[phraseIndex] || "";
 
     if (!isDeleting) {
       typedEl.textContent = currentPhrase.substring(0, charIndex + 1);
@@ -325,8 +332,6 @@ document.addEventListener('DOMContentLoaded', () => {
         if (modalIframe) modalIframe.src = '';
         document.body.style.overflow = '';
         
-        // Custom event dispatch to trigger the closeVideoModal logic if needed
-        // But since we can't easily access the scoped variables from here, we will just fire a general escape event
         if (typeof window.gtag === 'function') {
            window.gtag('event', 'modal_closed_via_escape');
         }
@@ -350,4 +355,131 @@ document.addEventListener('DOMContentLoaded', () => {
       }
     }
   });
+
+  // ═══════════════════════════════════════════
+  // THEME TOGGLE
+  // ═══════════════════════════════════════════
+  const themeToggle = document.getElementById('themeToggle');
+  const sunIcon = document.querySelector('.sun-icon');
+  const moonIcon = document.querySelector('.moon-icon');
+  
+  const currentTheme = localStorage.getItem('theme') || 'dark';
+  if (currentTheme === 'light') {
+    document.documentElement.setAttribute('data-theme', 'light');
+    if (sunIcon && moonIcon) {
+      sunIcon.style.display = 'none';
+      moonIcon.style.display = 'block';
+    }
+  }
+  
+  if (themeToggle) {
+    themeToggle.addEventListener('click', () => {
+      const isLight = document.documentElement.getAttribute('data-theme') === 'light';
+      if (isLight) {
+        document.documentElement.removeAttribute('data-theme');
+        localStorage.setItem('theme', 'dark');
+        if (sunIcon && moonIcon) {
+          sunIcon.style.display = 'block';
+          moonIcon.style.display = 'none';
+        }
+      } else {
+        document.documentElement.setAttribute('data-theme', 'light');
+        localStorage.setItem('theme', 'light');
+        if (sunIcon && moonIcon) {
+          sunIcon.style.display = 'none';
+          moonIcon.style.display = 'block';
+        }
+      }
+    });
+  }
+
+  // ═══════════════════════════════════════════
+  // LANGUAGE TOGGLE
+  // ═══════════════════════════════════════════
+  const langToggle = document.getElementById('langToggle');
+  let currentLang = localStorage.getItem('lang') || 'tr';
+  
+  function applyLanguage(lang) {
+    if (typeof translations === 'undefined') return;
+    const dict = translations[lang];
+    if (!dict) return;
+    document.querySelectorAll('[data-i18n]').forEach(el => {
+      const key = el.getAttribute('data-i18n');
+      if (dict[key]) {
+        if (el.tagName === 'INPUT' || el.tagName === 'TEXTAREA') {
+          el.placeholder = dict[key];
+        } else {
+          el.innerHTML = dict[key];
+        }
+      }
+    });
+    if (langToggle) {
+      langToggle.textContent = lang === 'tr' ? 'EN' : 'TR';
+    }
+    
+    // Reset typewriter to show new language immediately
+    if (typeof charIndex !== 'undefined') {
+      charIndex = 0;
+      phraseIndex = 0;
+      isDeleting = false;
+      const typedEl = document.getElementById('typed');
+      if(typedEl) typedEl.textContent = '';
+    }
+  }
+  
+  if (langToggle) {
+    langToggle.addEventListener('click', () => {
+      currentLang = currentLang === 'tr' ? 'en' : 'tr';
+      localStorage.setItem('lang', currentLang);
+      applyLanguage(currentLang);
+    });
+  }
+  
+  if (typeof translations !== 'undefined') {
+    applyLanguage(currentLang);
+  }
+  
+  // ═══════════════════════════════════════════
+  // MASCOT
+  // ═══════════════════════════════════════════
+  const mascot = document.getElementById('mascot');
+  const mascotContainer = document.getElementById('mascotContainer');
+  const mascotMouth = document.getElementById('mascotMouth');
+  
+  document.addEventListener('mousemove', (e) => {
+    const mouseX = e.clientX;
+    const mouseY = e.clientY;
+    document.querySelectorAll('.mascot-eye').forEach(eye => {
+      const rect = eye.getBoundingClientRect();
+      const eyeCenterX = rect.left + rect.width / 2;
+      const eyeCenterY = rect.top + rect.height / 2;
+      const dx = mouseX - eyeCenterX;
+      const dy = mouseY - eyeCenterY;
+      const angle = Math.atan2(dy, dx);
+      const distance = Math.min(3, Math.hypot(dx, dy) / 10);
+      const pupilX = Math.cos(angle) * distance;
+      const pupilY = Math.sin(angle) * distance;
+      const pupil = eye.querySelector('.pupil');
+      if (pupil) pupil.style.transform = `translate(${pupilX}px, ${pupilY}px)`;
+    });
+  });
+  
+  if (mascotContainer && mascot && mascotMouth) {
+    mascotContainer.addEventListener('click', () => {
+      mascot.classList.add('waving');
+      mascotMouth.classList.add('smiling');
+      setTimeout(() => {
+        mascot.classList.remove('waving');
+        mascotMouth.classList.remove('smiling');
+      }, 1000);
+    });
+    mascotContainer.addEventListener('mouseenter', () => {
+      mascot.classList.add('waving');
+      mascotMouth.classList.add('smiling');
+      setTimeout(() => {
+        mascot.classList.remove('waving');
+        mascotMouth.classList.remove('smiling');
+      }, 1000);
+    });
+  }
 });
