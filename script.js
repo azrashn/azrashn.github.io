@@ -574,35 +574,57 @@ document.addEventListener('DOMContentLoaded', () => {
       }
     });
 
-    // ── Click → Hurt ──
+    // ── Interaction (Touch/Click) → Hello then Hurt ──
     let hurtTimeout = null;
     let nextHurtType = 1; // 1, 2, 3 cycle
+    let interactionCycleTimer = null;
+    let isFirstInteractionInCycle = true;
 
-    mascotContainer.addEventListener('click', () => {
-      if (mascotState === 'hurt') return;
+    mascotContainer.addEventListener('pointerdown', (e) => {
+      // On touch devices, first touch says hello. Subsequent touches (or mouse clicks) hurt.
+      const isTouch = e.pointerType === 'touch' || e.pointerType === 'pen';
 
-      // Clean up previous animations
-      if (waveTimeout) clearTimeout(waveTimeout);
-      mascotContainer.classList.remove('waving');
-
-      mascotState = 'hurt';
-      
-      // Select sequential hurt type (1 -> 2 -> 3 -> 1)
-      const hurtClass = `hurt-${nextHurtType}`;
-      nextHurtType = nextHurtType >= 3 ? 1 : nextHurtType + 1;
-      
-      mascotContainer.classList.add(hurtClass);
-
-      if (hurtTimeout) clearTimeout(hurtTimeout);
-      hurtTimeout = setTimeout(() => {
-        mascotContainer.classList.remove(hurtClass);
-        // Return to appropriate state
-        if (activeSection) {
-          mascotState = 'pointing';
-        } else {
-          mascotState = 'idle';
+      if (isTouch && isFirstInteractionInCycle) {
+        // Mobile first touch -> say hello
+        if (mascotState !== 'waving') {
+          triggerWave();
         }
-      }, 1500);
+        isFirstInteractionInCycle = false;
+      } else {
+        // Desktop click or mobile subsequent touch -> hurt
+        if (mascotState === 'hurt') return;
+
+        // Clean up previous animations
+        if (waveTimeout) clearTimeout(waveTimeout);
+        mascotContainer.classList.remove('waving');
+
+        mascotState = 'hurt';
+        
+        // Select sequential hurt type (1 -> 2 -> 3 -> 1)
+        const hurtClass = `hurt-${nextHurtType}`;
+        nextHurtType = nextHurtType >= 3 ? 1 : nextHurtType + 1;
+        
+        mascotContainer.classList.add(hurtClass);
+
+        if (hurtTimeout) clearTimeout(hurtTimeout);
+        hurtTimeout = setTimeout(() => {
+          mascotContainer.classList.remove(hurtClass);
+          // Return to appropriate state
+          if (activeSection) {
+            mascotState = 'pointing';
+          } else {
+            mascotState = 'idle';
+          }
+        }, 1500);
+
+        isFirstInteractionInCycle = false;
+      }
+
+      // Reset the cycle after 3 seconds of inactivity
+      if (interactionCycleTimer) clearTimeout(interactionCycleTimer);
+      interactionCycleTimer = setTimeout(() => {
+        isFirstInteractionInCycle = true;
+      }, 3000);
     });
 
     // ── IntersectionObserver for Projeler & Oyunlar ──
