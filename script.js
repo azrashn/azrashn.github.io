@@ -262,7 +262,7 @@ document.addEventListener('DOMContentLoaded', () => {
     document.addEventListener('mousemove', onPointerMove, { passive: true });
     document.addEventListener('touchmove', onPointerMove, { passive: true });
   }
-})();
+});
 
 // --- DETAILS MODAL LOGIC ---
 document.addEventListener('DOMContentLoaded', () => {
