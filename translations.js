@@ -177,7 +177,15 @@ const translations = {
     // Typewriter
     typewriter_1: "Yazılım Mühendisliği Öğrencisi",
     typewriter_2: "Grafik Tasarım Öğrencisi",
-    typewriter_3: "Oyun Geliştirici (Unity)"
+    typewriter_3: "Oyun Geliştirici (Unity)",
+
+    // Duck Game Easter Egg
+    easter_egg_tooltip: "Sırrı çözmek için tıkla!",
+    duck_game_title: "Balance Duck 🦆",
+    duck_game_start: "Başlamak için tıkla",
+    duck_game_retry: "Tekrar Oyna",
+    duck_game_score: "Skor",
+    duck_game_best: "En İyi"
   },
   en: {
     // Navbar
@@ -357,6 +365,14 @@ const translations = {
     // Typewriter
     typewriter_1: "Software Engineering Student",
     typewriter_2: "Graphic Design Student",
-    typewriter_3: "Game Developer (Unity)"
+    typewriter_3: "Game Developer (Unity)",
+
+    // Duck Game Easter Egg
+    easter_egg_tooltip: "Click to uncover the secret!",
+    duck_game_title: "Balance Duck 🦆",
+    duck_game_start: "Click to start",
+    duck_game_retry: "Play Again",
+    duck_game_score: "Score",
+    duck_game_best: "Best"
   }
 };

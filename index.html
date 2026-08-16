@@ -1331,8 +1331,55 @@
     </svg>
   </div>
 
+  <!-- ═══ EASTER EGG TRIGGER & MODAL ═══ -->
+  <!-- Sol alt kosedeki yumurta tetikleyicisi -->
+  <div class="egg-trigger" id="eggTrigger" title="Balance Duck Mini Game" data-i18n-title="easter_egg_tooltip">
+    <img src="start.png" id="eggTriggerImg" alt="Easter Egg" draggable="false">
+  </div>
+
+  <!-- Oyun Modali Overlay -->
+  <div class="duck-game-overlay" id="duckGameModal">
+    <div class="duck-game-container glass-card">
+      
+      <!-- Ust Bilgi Paneli -->
+      <div class="duck-game-hud">
+        <div class="score-box">
+          <span class="score-label" data-i18n="duck_game_score">Skor</span>
+          <span class="score-val" id="duckGameScoreVal">0</span>
+        </div>
+        <div class="score-box best">
+          <span class="score-label" data-i18n="duck_game_best">En İyi</span>
+          <span class="score-val" id="duckGameBestVal">0</span>
+        </div>
+        <button class="duck-game-close" id="duckGameCloseBtn" aria-label="Kapat">
+          <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <path d="M18 6L6 18M6 6l12 12" />
+          </svg>
+        </button>
+      </div>
+
+      <!-- Orta Oyun Alani -->
+      <div class="duck-game-canvas-wrap">
+        <canvas id="duckGameCanvas"></canvas>
+        <div class="duck-game-message" id="duckGameMessage"></div>
+      </div>
+
+      <!-- Alt Islem Menusu -->
+      <div class="duck-game-actions">
+        <h2 data-i18n="duck_game_title">Balance Duck 🦆</h2>
+        <button class="btn-primary" id="duckGameStartBtn" data-i18n="duck_game_start">Başlamak için tıkla</button>
+        <button class="btn-primary" id="duckGameRetryBtn" data-i18n="duck_game_retry" style="display: none;">Tekrar Oyna</button>
+      </div>
+
+      <!-- Kose Maskotu -->
+      <div class="duck-game-mascot"></div>
+
+    </div>
+  </div>
+
   <script src="translations.js"></script>
   <script src="script.js"></script>
+  <script src="duck-game.js"></script>
 </body>
 
 </html>
