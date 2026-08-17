@@ -1,5 +1,5 @@
 /**
- * Torre di Pasta Balance - V2.2 (Time-Based Survival & Wind Nerf)
+ * Torre di Pasta Balance - V5 (Visual Wind Curves & Level 4 Fix)
  */
 
 (function () {
@@ -67,12 +67,13 @@
     // ── GAME STATE & LEVEL MANAGER ──
     let gameState = 'IDLE';
     let currentLevel = 1;
-    let survivalTime = 0; // Skor yerine saniye bazlı hayatta kalma süresi
+    let survivalTime = 0;
     let lastTime = null;
     let timeTimer = 0;
+    let gameTime = 0; // YENİ: Rüzgarın aniden tokat atmamasını sağlayan oyun içi saat
     let bestTime = parseInt(localStorage.getItem('pastaBalanceBestTime') || '0', 10);
 
-    // Fizik ve Rüzgar (Wind)
+    // Fizik ve Rüzgar
     let angle = 0;
     let angularVelocity = 0;
     let angularAcceleration = 0;
@@ -81,7 +82,10 @@
     let difficultyMultiplier = 1;
     let windForce = 0;
 
-    // DOM Elements (Skor yazılarını Süre'ye çeviriyoruz)
+    // Köfte Havuzu
+    let meatballs = [];
+    let meatballTimer = 0;
+
     const scoreEl = document.getElementById('scoreVal') || document.getElementById('pastaScoreVal');
     const bestEl = document.getElementById('bestVal') || document.getElementById('pastaBestVal');
     const actionsOverlay = document.getElementById('pastaGameActions');
@@ -89,7 +93,6 @@
     const descEl = document.getElementById('pastaGameDesc');
     const startBtn = document.getElementById('pastaGameStartBtn');
 
-    // UI Etiketlerini Dinamik Olarak Güncelleme ("Skor" -> "Süre")
     const hudLabels = document.querySelectorAll('.hud-label');
     if (hudLabels.length >= 2) {
       hudLabels[0].textContent = "Süre";
@@ -134,7 +137,7 @@
     function drawDustParticles(time) {
       dustParticles.forEach(p => {
         p.y -= p.speed;
-        let visualWind = (currentLevel >= 2) ? Math.sin(time * 0.001) * 1.5 : 0;
+        let visualWind = (currentLevel >= 2) ? Math.sin(gameTime * 0.001) * 1.5 : 0;
         p.x += Math.sin(time * 0.001 + p.wobble) * 0.3 + visualWind;
         p.opacity = 0.1 + Math.sin(time * 0.002 + p.wobble) * 0.1;
 
@@ -150,6 +153,73 @@
       });
     }
 
+    function drawMeatballs() {
+      meatballs.forEach(mb => {
+        if (mb.hit) return;
+
+        ctx.beginPath();
+        ctx.arc(mb.x, mb.y, mb.size, 0, Math.PI * 2);
+        ctx.fillStyle = '#8b4513';
+        ctx.fill();
+
+        ctx.beginPath();
+        ctx.arc(mb.x - mb.size * 0.3, mb.y - mb.size * 0.3, mb.size * 0.25, 0, Math.PI * 2);
+        ctx.fillStyle = 'rgba(255, 255, 255, 0.15)';
+        ctx.fill();
+      });
+    }
+
+    // YENİ: Senin çizdiğin tasarıma uygun rüzgar çizgileri (Wind Swirls)
+    function drawWindLines(time) {
+      if (currentLevel < 2) return;
+
+      let maxWind = 0.00006;
+      let normalizedWind = windForce / maxWind;
+
+      // Rüzgar çok yavaşken (dalga dönüş noktasındayken) çizgileri gizle
+      if (Math.abs(normalizedWind) < 0.2) return;
+
+      ctx.save();
+      ctx.lineWidth = 4;
+      ctx.lineCap = "round";
+
+      let isBlowingRight = normalizedWind > 0;
+      // Rüzgar sağa esiyorsa soldan (x=50) başlar, sola esiyorsa sağdan (x=canvas.width-50) başlar.
+      let originX = isBlowingRight ? 50 : canvas.width - 50;
+      let dir = isBlowingRight ? 1 : -1;
+
+      // Rüzgarın şiddetine göre opaklık ayarı
+      let alpha = Math.abs(normalizedWind) * 0.4;
+      ctx.strokeStyle = `rgba(255, 255, 255, ${alpha})`; // Tatlı beyaz/saydam bir rüzgar
+
+      let baseY = canvas.height - 350; // Kule hizası
+
+      // 3 adet kıvrımlı rüzgar çizgisi çizelim
+      for (let i = 0; i < 3; i++) {
+        let y = baseY + (i * 70) - 50;
+        let speed = (time * 0.003) + (i * 100);
+
+        ctx.beginPath();
+        // Çizginin başlangıcı
+        ctx.moveTo(originX, y + Math.sin(speed) * 15);
+
+        // Çizgiyi uzat ve kıvır (Senin sketch'teki gibi uçları döngülü)
+        ctx.quadraticCurveTo(
+          originX + (120 * dir), y - 40 + Math.cos(speed) * 20, // Kontrol noktası
+          originX + (180 * dir), y + Math.sin(speed + 1) * 30   // Bitiş noktası
+        );
+
+        // Ucuna ufak bir kıvrım (swirl) ekle
+        ctx.quadraticCurveTo(
+          originX + (220 * dir), y + 40 + Math.cos(speed) * 10,
+          originX + (160 * dir), y + 20 + Math.sin(speed) * 10
+        );
+
+        ctx.stroke();
+      }
+      ctx.restore();
+    }
+
     // ── CORE SYSTEMS: COUNTDOWN & LEVEL TRANSITION ──
     function startCountdown() {
       gameState = 'COUNTDOWN';
@@ -160,7 +230,14 @@
       angularAcceleration = 0;
       difficultyMultiplier = 1;
       timeTimer = 0;
+      gameTime = 0; // Oyun içi saati sıfırla
       windForce = 0;
+      meatballs = [];
+      meatballTimer = 0;
+
+      // Varsa Level 4 domatesini sil (Yeniden başlarken)
+      const lvl4Item = document.getElementById('level4Item');
+      if (lvl4Item) lvl4Item.remove();
 
       if (scoreEl) scoreEl.textContent = "0s";
       applyTowerWobble();
@@ -197,13 +274,14 @@
     }
 
     function checkLevelProgress() {
-      // 10. Saniyede Level 2 (Rüzgar)
       if (currentLevel === 1 && survivalTime === 10) {
         startLevelTransition(2, "Rüzgarlı Teras! Dikkatli Ol 💨");
       }
-      // 25. Saniyede Level 3 (Köfte Yağmuru)
       if (currentLevel === 2 && survivalTime === 25) {
         startLevelTransition(3, "Mamma Mia! Köfte Yağmuru Başlıyor ☄️");
+      }
+      if (currentLevel === 3 && survivalTime === 45) {
+        startLevelTransition(4, "Şefin Şaheseri! Ağırlık Merkezi Kaydı 🍅");
       }
     }
 
@@ -216,6 +294,25 @@
         if (descEl) descEl.textContent = message;
         if (startBtn) startBtn.style.display = 'none';
         actionsOverlay.style.display = 'flex';
+      }
+
+      // LEVEL 4 DOMATESİNİ KULEYE EKLEME MANTIĞI
+      if (level === 4) {
+        const stack = document.querySelector('.tower-stack');
+        if (stack && !document.getElementById('level4Item')) {
+          const tomatoHtml = `
+             <div class="pasta-piece" id="level4Item" style="animation: gentleBob 2s ease-in-out infinite; transform: scale(0); transition: transform 0.6s cubic-bezier(0.175, 0.885, 0.32, 1.275); z-index: 10;">
+               <div style="width: 55px; height: 50px; background: radial-gradient(circle at 30% 30%, #ff6b6b, #c0392b, #8b0000); border-radius: 50%; box-shadow: 0 4px 8px rgba(0,0,0,0.4), inset 0 -3px 6px rgba(0,0,0,0.3), inset 0 2px 4px rgba(255,255,255,0.4); border: 2px solid rgba(139,0,0,0.5); position:relative; bottom: -8px;">
+                  <div style="position: absolute; top: -4px; left: 50%; transform: translateX(-50%); width: 14px; height: 12px; background: #27ae60; border-radius: 50% 50% 0 0; box-shadow: inset 0 -2px 4px rgba(0,0,0,0.3);"></div>
+               </div>
+             </div>
+           `;
+          stack.insertAdjacentHTML('afterbegin', tomatoHtml);
+          setTimeout(() => {
+            const item = document.getElementById('level4Item');
+            if (item) item.style.transform = 'scale(1)';
+          }, 50);
+        }
       }
 
       setTimeout(() => {
@@ -272,16 +369,61 @@
     function updateGameLogic(dt) {
       if (gameState !== 'PLAYING') return;
 
+      gameTime += dt; // Rüzgar için kesintisiz oyun saati akışı
       let timeStep = dt / 16.666;
       difficultyMultiplier += dt * 0.00001;
 
       let effectiveGravity = gravity * difficultyMultiplier;
       angularAcceleration = effectiveGravity * Math.sin(angle);
 
-      // ZAYIFLATILMIŞ RÜZGAR (Eski değer 0.0003, yeni değer 0.00006)
+      // RÜZGAR: Artık 'Date.now()' değil, duraksamaları tolere eden 'gameTime' kullanılıyor
       if (currentLevel >= 2) {
-        windForce = Math.sin(Date.now() * 0.001) * 0.00006;
+        windForce = Math.sin(gameTime * 0.001) * 0.00006;
         angularAcceleration += windForce;
+      }
+
+      // LEVEL 3 ve 4 MEKANİĞİ: Yağan Köfteler ve DINAMIK ÇARPIŞMA (Hitbox)
+      if (currentLevel >= 3) {
+        meatballTimer += dt;
+
+        if (meatballTimer > 1000 + Math.random() * 1000) {
+          meatballs.push({
+            x: Math.random() * canvas.width,
+            y: -30,
+            size: 15 + Math.random() * 10,
+            speed: 0.2 + Math.random() * 0.3,
+            hit: false
+          });
+          meatballTimer = 0;
+        }
+
+        const pivotY = canvas.height - 140;
+
+        for (let i = meatballs.length - 1; i >= 0; i--) {
+          let mb = meatballs[i];
+          mb.y += mb.speed * dt;
+
+          if (!mb.hit && mb.y > pivotY - 280 && mb.y < pivotY) {
+            let distanceY = pivotY - mb.y;
+            let currentTowerX = (canvas.width / 2) + Math.tan(angle) * distanceY;
+
+            if (Math.abs(mb.x - currentTowerX) < 55) {
+              mb.hit = true;
+              let impact = mb.x > currentTowerX ? -0.015 : 0.015;
+              angularVelocity += impact;
+
+              const tower = document.getElementById('pastaTower');
+              if (tower) {
+                tower.style.filter = 'brightness(1.5) sepia(1) hue-rotate(-50deg)';
+                setTimeout(() => { tower.style.filter = ''; }, 150);
+              }
+            }
+          }
+
+          if (mb.y > canvas.height) {
+            meatballs.splice(i, 1);
+          }
+        }
       }
 
       angularVelocity += angularAcceleration * timeStep;
@@ -292,7 +434,6 @@
         gameOver();
       }
 
-      // SÜRE SİSTEMİ GÜNCELLENDİ (Tam saniye bazlı artış)
       timeTimer += dt;
       if (timeTimer >= 1000) {
         survivalTime++;
@@ -328,7 +469,6 @@
     if (panel) {
       panel.addEventListener('mousedown', (e) => {
         if (gameState !== 'PLAYING') return;
-
         if (e.target.closest('#pastaGameActions') || e.target.closest('.chef-mascot')) return;
 
         const rect = panel.getBoundingClientRect();
@@ -336,9 +476,15 @@
         const panelCenter = rect.width / 2;
         const normalizedX = (clickX - panelCenter) / panelCenter;
 
-        const baseForce = 0.005;
-        const edgeBonus = 0.005;
-        const appliedForce = baseForce + (edgeBonus * Math.abs(normalizedX));
+        // LEVEL 4'te oyuncunun kontrol gücü zayıflar
+        let currentBaseForce = 0.005;
+        let currentEdgeBonus = 0.005;
+        if (currentLevel >= 4) {
+          currentBaseForce = 0.0035;
+          currentEdgeBonus = 0.0035;
+        }
+
+        const appliedForce = currentBaseForce + (currentEdgeBonus * Math.abs(normalizedX));
 
         if (clickX > panelCenter) {
           angularVelocity += appliedForce;
@@ -365,6 +511,15 @@
       if (gameModal.classList.contains('active')) {
         drawBackground();
         drawDustParticles(time);
+
+        if (currentLevel >= 3) {
+          drawMeatballs();
+        }
+
+        // YENİ: Canvas üzeri Rüzgar animasyonları
+        if (currentLevel >= 2) {
+          drawWindLines(time);
+        }
 
         if (gameState === 'PLAYING') {
           updateGameLogic(dt);
