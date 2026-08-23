@@ -150,6 +150,9 @@ const translations = {
     tools_lang: "Diller & Motorlar:",
     tools_arch: "Mimari & Yaklaşımlar:",
     tools_data: "Veri & Kütüphaneler:",
+    tools_languages_title: "Diller",
+    tools_languages_desc: "<strong>İngilizce</strong> — B1<br><strong>Almanca</strong> — A1",
+    project_1_repo_note: "Ekip projesi — repo yönetimi başka bir üyede",
 
     // Sertifikalar
     certs_title: "Sertifikalar",
@@ -330,6 +333,9 @@ const translations = {
     tools_lang: "Languages & Engines:",
     tools_arch: "Architecture & Approaches:",
     tools_data: "Data & Libraries:",
+    tools_languages_title: "Languages",
+    tools_languages_desc: "<strong>English</strong> — B1<br><strong>German</strong> — A1",
+    project_1_repo_note: "Team project — repo managed by another member",
     
     // Sertifikalar
     certs_title: "Certificates",
