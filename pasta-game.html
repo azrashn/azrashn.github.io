@@ -1,0 +1,419 @@
+<!DOCTYPE html>
+<html lang="tr">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Torre di Pasta Balance — Oyun</title>
+  <meta name="description" content="Torre di Pasta Balance - Pasta kulesi dengeleme oyunu. Ravioli, köfte ve makarna parçalarını dengede tut!">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&family=JetBrains+Mono:wght@400;500;600&family=Playfair+Display:wght@700;800;900&family=Dancing+Script:wght@700&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --bg-deep: #0a0c14;
+      --bg-panel: #12151f;
+      --gold: #d4a843;
+      --gold-light: #f0d078;
+      --gold-glow: rgba(212, 168, 67, 0.4);
+      --gold-dark: #8b6914;
+      --cream: #fdf6e3;
+      --mahogany: #4a2318;
+      --mahogany-light: #6b3a2a;
+      --red-check: #c0392b;
+      --white-check: #faf0e6;
+      --meatball: #8b4513;
+      --meatball-sauce: #c0392b;
+      --pasta-gold: #e8c84a;
+      --ravioli-fill: #d4a843;
+      --rotini-color: #e0c060;
+      --tortellini: #dbb548;
+      --plate-cream: #f5e6c8;
+      --plate-blue: #3a6fa0;
+      --blue-blob: #7cc8f5;
+      --blue-blob-dark: #5ab0de;
+      --text: #e8e6e3;
+      --text-dim: #8a8580;
+      --border: rgba(212, 168, 67, 0.15);
+      --font-display: 'Playfair Display', serif;
+      --font-script: 'Dancing Script', cursive;
+      --font-body: 'Inter', sans-serif;
+      --font-mono: 'JetBrains Mono', monospace;
+    }
+
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+
+    body {
+      font-family: var(--font-body);
+      background: var(--bg-deep);
+      color: var(--text);
+      overflow: hidden;
+      width: 100vw;
+      height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .circuit-bg {
+      position: fixed; inset: 0; z-index: 0; overflow: hidden;
+      background: radial-gradient(ellipse at 50% 40%, rgba(212, 168, 67, 0.06) 0%, transparent 60%), var(--bg-deep);
+    }
+    .circuit-bg::before {
+      content: ''; position: absolute; inset: 0;
+      background-image:
+        linear-gradient(0deg, transparent 49.5%, rgba(212, 168, 67, 0.04) 49.5%, rgba(212, 168, 67, 0.04) 50.5%, transparent 50.5%),
+        linear-gradient(90deg, transparent 49.5%, rgba(212, 168, 67, 0.04) 49.5%, rgba(212, 168, 67, 0.04) 50.5%, transparent 50.5%);
+      background-size: 40px 40px;
+      animation: circuitPulse 8s ease-in-out infinite alternate;
+    }
+    .circuit-bg::after {
+      content: ''; position: absolute; inset: 0;
+      background-image: radial-gradient(circle 3px at 20px 20px, rgba(212, 168, 67, 0.12) 0%, transparent 100%);
+      background-size: 40px 40px;
+    }
+    @keyframes circuitPulse { 0% { opacity: 0.5; } 100% { opacity: 1; } }
+
+    .warm-light {
+      position: fixed; top: -120px; left: 50%; transform: translateX(-50%);
+      width: 600px; height: 400px;
+      background: radial-gradient(ellipse, rgba(255, 200, 80, 0.12) 0%, transparent 70%);
+      pointer-events: none; z-index: 1;
+    }
+
+    .game-panel {
+      position: relative; z-index: 10;
+      width: 860px; height: 620px;
+      background: linear-gradient(145deg, rgba(18, 21, 31, 0.95), rgba(10, 12, 20, 0.98));
+      border: 1px solid var(--border);
+      border-radius: 24px;
+      overflow: hidden;
+      box-shadow:
+        0 0 0 1px rgba(212, 168, 67, 0.08),
+        0 24px 80px rgba(0, 0, 0, 0.6),
+        0 0 120px rgba(212, 168, 67, 0.06),
+        inset 0 1px 0 rgba(255, 255, 255, 0.04);
+    }
+
+    .game-title-banner {
+      position: absolute; top: 16px; left: 50%; transform: translateX(-50%);
+      z-index: 30; text-align: center; padding: 8px 40px;
+    }
+    .game-title-banner h1 {
+      font-family: var(--font-display);
+      font-size: 32px; font-weight: 900;
+      background: linear-gradient(180deg, #f0d078 0%, #d4a843 30%, #b8922e 60%, #d4a843 80%, #f0d078 100%);
+      -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text;
+      filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 0.5));
+      letter-spacing: 2px; line-height: 1.1; position: relative;
+    }
+
+    .swirl-svg { fill: none; stroke: var(--gold); stroke-width: 1.5; stroke-linecap: round; }
+
+    .game-field { position: absolute; inset: 0; overflow: hidden; }
+    #pastaGameCanvas { display: block; width: 100%; height: 100%; }
+
+    .ground-layer { position: absolute; bottom: 0; left: 0; right: 0; height: 140px; z-index: 5; overflow: hidden; }
+    .tablecloth {
+      position: absolute; bottom: 0; left: 0; right: 0; height: 100px;
+      background: repeating-conic-gradient(var(--red-check) 0% 25%, var(--white-check) 0% 50%) 0 0 / 28px 28px;
+      box-shadow: inset 0 2px 20px rgba(0, 0, 0, 0.3);
+    }
+    .tablecloth::before {
+      content: ''; position: absolute; inset: 0;
+      background: linear-gradient(180deg, rgba(0, 0, 0, 0.3) 0%, transparent 30%, rgba(0, 0, 0, 0.15) 100%);
+    }
+    .table-edge {
+      position: absolute; bottom: 100px; left: 0; right: 0; height: 40px;
+      background: linear-gradient(180deg, var(--mahogany) 0%, var(--mahogany-light) 40%, var(--mahogany) 70%, #3a1a10 100%);
+      box-shadow: 0 -2px 8px rgba(0, 0, 0, 0.3), inset 0 1px 0 rgba(255, 255, 255, 0.08), inset 0 -2px 0 rgba(0, 0, 0, 0.2);
+    }
+    .table-edge::before {
+      content: ''; position: absolute; top: 4px; left: 30px; right: 30px; height: 1px;
+      background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.08), transparent);
+    }
+
+    .chef-mascot {
+      position: absolute; bottom: 10px; right: 40px; z-index: 20;
+      width: 180px; height: auto;
+      filter: drop-shadow(0 8px 20px rgba(0, 0, 0, 0.5));
+      animation: mascotBreathe 3s ease-in-out infinite;
+    }
+    .chef-mascot img { width: 100%; height: auto; border-radius: 12px; }
+    @keyframes mascotBreathe { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-4px); } }
+
+    .speech-bubble {
+      position: absolute; bottom: 210px; right: 20px; z-index: 25; max-width: 260px;
+      background: linear-gradient(135deg, rgba(212, 168, 67, 0.2), rgba(212, 168, 67, 0.1));
+      backdrop-filter: blur(10px);
+      border: 1px solid rgba(212, 168, 67, 0.25);
+      border-radius: 18px; padding: 14px 18px; font-size: 13px; line-height: 1.5; color: var(--cream);
+      box-shadow: 0 8px 24px rgba(0, 0, 0, 0.3), inset 0 1px 0 rgba(255, 255, 255, 0.08);
+      animation: bubbleFadeIn 0.8s ease-out 0.5s both;
+    }
+    .speech-bubble .swirl-tail { position: absolute; bottom: -24px; right: 55px; width: 30px; height: 24px; opacity: 0.6; }
+    @keyframes bubbleFadeIn { from { opacity: 0; transform: translateY(10px) scale(0.95); } to { opacity: 1; transform: translateY(0) scale(1); } }
+
+    .pasta-tower-container {
+      position: absolute; bottom: 140px; left: 50%; transform: translateX(-50%); z-index: 15;
+      display: flex; flex-direction: column; align-items: center;
+      animation: towerWobble 4s ease-in-out infinite;
+    }
+    @keyframes towerWobble {
+      0%, 100% { transform: translateX(-50%) rotate(0deg); }
+      25% { transform: translateX(-50%) rotate(1.2deg); }
+      75% { transform: translateX(-50%) rotate(-1.2deg); }
+    }
+
+    .ceramic-plate {
+      width: 200px; height: 32px;
+      background: radial-gradient(ellipse, var(--plate-cream) 0%, #e8d5b0 60%, #d4c090 100%);
+      border-radius: 50%; border: 3px solid var(--plate-blue);
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3), inset 0 -2px 6px rgba(0, 0, 0, 0.1), 0 0 0 6px rgba(58, 111, 160, 0.15);
+      position: relative; z-index: 1;
+    }
+    .ceramic-plate::before {
+      content: ''; position: absolute; top: 3px; left: 12px; right: 12px; bottom: 3px;
+      border: 1px dashed rgba(58, 111, 160, 0.3); border-radius: 50%;
+    }
+    .plate-decor { position: absolute; top: 50%; transform: translateY(-50%); width: 6px; height: 6px; border-radius: 50%; background: var(--plate-blue); opacity: 0.5; }
+    .plate-decor:nth-child(1) { left: 18px; }
+    .plate-decor:nth-child(2) { right: 18px; }
+    .plate-decor:nth-child(3) { left: 50%; transform: translate(-50%, -50%); background: rgba(192, 57, 43, 0.3); width: 8px; height: 8px; }
+
+    .tower-stack { display: flex; flex-direction: column-reverse; align-items: center; position: relative; bottom: 6px; }
+    .pasta-piece { position: relative; transition: transform 0.3s ease; }
+
+    .ravioli {
+      width: 110px; height: 45px;
+      background: radial-gradient(ellipse at 40% 35%, var(--pasta-gold), var(--ravioli-fill), #b8922e);
+      border-radius: 50%; border: 2px solid rgba(139, 105, 20, 0.5);
+      box-shadow: 0 3px 8px rgba(0, 0, 0, 0.3), inset 0 -4px 8px rgba(0, 0, 0, 0.15), inset 0 2px 4px rgba(255, 255, 255, 0.2);
+      position: relative;
+    }
+    .ravioli::before { content: ''; position: absolute; inset: 4px; border: 1px dashed rgba(139, 105, 20, 0.4); border-radius: 50%; }
+    .ravioli::after {
+      content: ''; position: absolute; top: 6px; left: 20%; width: 60%; height: 30%;
+      background: radial-gradient(ellipse, rgba(255, 255, 255, 0.25), transparent); border-radius: 50%;
+    }
+
+    .meatball-stack { display: flex; gap: 2px; justify-content: center; position: relative; }
+    .meatball {
+      width: 38px; height: 38px; border-radius: 50%;
+      background: radial-gradient(circle at 35% 30%, #a0522d, var(--meatball), #5c2d0e);
+      box-shadow: 0 3px 6px rgba(0, 0, 0, 0.4), inset 0 2px 4px rgba(255, 255, 255, 0.1), inset 0 -3px 6px rgba(0, 0, 0, 0.3);
+      position: relative;
+    }
+    .meatball::before {
+      content: ''; position: absolute; top: 5px; left: 8px; width: 12px; height: 8px;
+      background: radial-gradient(ellipse, rgba(255, 255, 255, 0.2), transparent); border-radius: 50%;
+    }
+    .meatball::after {
+      content: ''; position: absolute; top: -2px; left: 50%; transform: translateX(-50%);
+      width: 20px; height: 8px; background: var(--meatball-sauce); border-radius: 0 0 50% 50%; opacity: 0.7;
+    }
+
+    .rotini { width: 50px; height: 80px; position: relative; display: flex; flex-direction: column; align-items: center; justify-content: center; }
+    .rotini-coil {
+      width: 40px; height: 14px; border-radius: 50%; border: 4px solid var(--rotini-color); border-top-color: transparent;
+      box-shadow: 0 1px 3px rgba(0, 0, 0, 0.2); margin: -3px 0;
+    }
+    .rotini-coil:nth-child(odd) { border-color: #c8a830; border-top-color: transparent; transform: rotate(15deg); }
+    .rotini-coil:nth-child(even) { transform: rotate(-15deg); }
+
+    .tortellini {
+      width: 60px; height: 35px;
+      background: radial-gradient(ellipse at 40% 35%, #f0d078, var(--tortellini), #b89830);
+      border-radius: 50% 50% 30% 30%; border: 2px solid rgba(139, 105, 20, 0.4);
+      box-shadow: 0 3px 8px rgba(0, 0, 0, 0.3), inset 0 2px 4px rgba(255, 255, 255, 0.2);
+      position: relative; transform: rotate(-8deg);
+    }
+    .tortellini::before {
+      content: ''; position: absolute; top: 40%; left: 20%; width: 60%; height: 30%;
+      background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.15), transparent); border-radius: 50%;
+    }
+
+    .balance-meter {
+      position: absolute; bottom: 148px; left: 50%; transform: translateX(-50%); z-index: 18;
+      width: 200px; display: flex; flex-direction: column; align-items: center; gap: 4px;
+    }
+    .meter-track {
+      width: 100%; height: 8px; background: rgba(0, 0, 0, 0.4); border-radius: 4px;
+      border: 1px solid rgba(212, 168, 67, 0.2); position: relative; overflow: hidden;
+    }
+    .meter-fill { position: absolute; top: 0; height: 100%; border-radius: 4px; transition: all 0.3s ease; }
+    .meter-fill-left { right: 50%; width: 30%; background: linear-gradient(90deg, #e74c3c, #f39c12); border-radius: 4px 0 0 4px; }
+    .meter-fill-right { left: 50%; width: 35%; background: linear-gradient(90deg, #f39c12, #e74c3c); border-radius: 0 4px 4px 0; }
+    .meter-center {
+      position: absolute; top: -3px; left: 50%; transform: translateX(-50%);
+      width: 3px; height: 14px; background: var(--gold); border-radius: 2px; box-shadow: 0 0 6px var(--gold-glow);
+    }
+    .spoon-indicator {
+      position: absolute; top: -16px; left: 55%; transform: translateX(-50%) rotate(-15deg);
+      width: 28px; height: 28px; animation: spoonSwing 3s ease-in-out infinite;
+    }
+    @keyframes spoonSwing { 0%, 100% { transform: translateX(-50%) rotate(-15deg); } 50% { transform: translateX(-50%) rotate(15deg); } }
+    .meter-label { font-family: var(--font-mono); font-size: 9px; color: var(--gold); letter-spacing: 2px; text-transform: uppercase; opacity: 0.6; }
+
+    .particle { position: absolute; border-radius: 50%; pointer-events: none; z-index: 2; }
+    .particle-gold { background: radial-gradient(circle, var(--gold-light), transparent); opacity: 0.3; animation: floatUp 6s ease-in infinite; }
+    @keyframes floatUp {
+      0% { transform: translateY(0) scale(1); opacity: 0.3; }
+      50% { opacity: 0.5; }
+      100% { transform: translateY(-200px) scale(0.3); opacity: 0; }
+    }
+
+    .steam { position: absolute; width: 20px; height: 40px; z-index: 16; opacity: 0; animation: steamRise 3s ease-out infinite; }
+    .steam::before, .steam::after {
+      content: ''; position: absolute; width: 12px; height: 12px; border-radius: 50%;
+      background: rgba(255, 255, 255, 0.08); filter: blur(4px);
+    }
+    .steam::before { bottom: 0; left: 2px; }
+    .steam::after { bottom: 15px; left: 6px; width: 10px; height: 10px; }
+    @keyframes steamRise {
+      0% { opacity: 0; transform: translateY(0); }
+      20% { opacity: 0.6; }
+      100% { opacity: 0; transform: translateY(-60px) translateX(10px); }
+    }
+    .steam:nth-child(2) { animation-delay: 1s; left: 10px; }
+    .steam:nth-child(3) { animation-delay: 2s; left: -5px; }
+
+    .game-hud { position: absolute; top: 16px; left: 20px; z-index: 30; display: flex; gap: 16px; }
+    .hud-item {
+      background: rgba(0, 0, 0, 0.4); backdrop-filter: blur(8px);
+      border: 1px solid rgba(212, 168, 67, 0.15); border-radius: 12px; padding: 8px 16px; text-align: center;
+    }
+    .hud-label { font-family: var(--font-mono); font-size: 9px; color: var(--gold); text-transform: uppercase; letter-spacing: 1.5px; margin-bottom: 2px; }
+    .hud-value { font-size: 22px; font-weight: 800; color: var(--gold-light); text-shadow: 0 0 12px var(--gold-glow); }
+
+    @keyframes gentleBob { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-3px); } }
+
+    @media (max-width: 900px) {
+      .game-panel { width: 95vw; height: 85vh; border-radius: 16px; }
+      .game-title-banner h1 { font-size: 22px; }
+      .chef-mascot { width: 120px; right: 10px; bottom: 5px; }
+      .speech-bubble { max-width: 200px; font-size: 11px; right: 5px; bottom: 150px; }
+    }
+    @media (max-width: 480px) {
+      .game-title-banner h1 { font-size: 16px; letter-spacing: 1px; }
+      .chef-mascot { width: 90px; }
+      .speech-bubble { display: none; }
+    }
+  </style>
+</head>
+
+<body>
+  <div class="circuit-bg"></div>
+  <div class="warm-light"></div>
+
+  <div class="game-panel" id="gamePanel">
+    <div id="pastaGameActions" style="display: flex; position: absolute; inset: 0; z-index: 40; background: rgba(10, 12, 20, 0.85); backdrop-filter: blur(4px); flex-direction: column; align-items: center; justify-content: center; text-align: center;">
+      <h2 id="pastaGameTitle" style="font-family: var(--font-display); font-size: 42px; color: var(--gold-light); margin-bottom: 16px; text-shadow: 0 4px 16px rgba(0,0,0,0.5);">Torre di Pasta 🍝</h2>
+      <p id="pastaGameDesc" style="font-family: var(--font-body); font-size: 16px; color: var(--cream); max-width: 400px; margin-bottom: 32px; line-height: 1.5;">Kule devrilirken onu tutmak istediğin yöne (sağa veya sola) tıklayarak dengele!</p>
+      <button id="pastaGameStartBtn" style="padding: 12px 32px; font-family: var(--font-mono); font-size: 16px; font-weight: bold; color: var(--bg-deep); background: linear-gradient(180deg, var(--gold-light), var(--gold)); border: none; border-radius: 8px; cursor: pointer; box-shadow: 0 4px 12px rgba(212, 168, 67, 0.3); transition: transform 0.2s;">Başla</button>
+    </div>
+
+    <div class="game-title-banner">
+      <svg class="title-swirl-left" viewBox="0 0 40 20" style="position:absolute;top:50%;right:100%;transform:translateY(-50%);margin-right:8px;width:40px;height:20px;">
+        <path class="swirl-svg" d="M38 10 C30 2, 20 18, 10 10 C5 5, 2 10, 0 10"/>
+      </svg>
+      <h1>TORRE DI PASTA BALANCE</h1>
+      <svg class="title-swirl-right" viewBox="0 0 40 20" style="position:absolute;top:50%;left:100%;transform:translateY(-50%);margin-left:8px;width:40px;height:20px;">
+        <path class="swirl-svg" d="M2 10 C10 2, 20 18, 30 10 C35 5, 38 10, 40 10"/>
+      </svg>
+    </div>
+
+    <div class="game-hud">
+      <div class="hud-item">
+        <div class="hud-label">Skor</div>
+        <div class="hud-value" id="scoreVal">0</div>
+      </div>
+      <div class="hud-item">
+        <div class="hud-label">En İyi</div>
+        <div class="hud-value" id="bestVal">0</div>
+      </div>
+    </div>
+
+    <div class="game-field">
+      <canvas id="pastaGameCanvas"></canvas>
+      <div class="particle particle-gold" style="width:6px;height:6px;left:15%;bottom:180px;animation-delay:0s;"></div>
+      <div class="particle particle-gold" style="width:4px;height:4px;left:35%;bottom:200px;animation-delay:1.5s;"></div>
+      <div class="particle particle-gold" style="width:5px;height:5px;left:60%;bottom:160px;animation-delay:3s;"></div>
+      <div class="particle particle-gold" style="width:3px;height:3px;left:80%;bottom:220px;animation-delay:4.5s;"></div>
+      <div class="particle particle-gold" style="width:5px;height:5px;left:25%;bottom:250px;animation-delay:2s;"></div>
+    </div>
+
+    <div class="ground-layer">
+      <div class="table-edge"></div>
+      <div class="tablecloth"></div>
+    </div>
+
+    <div class="pasta-tower-container" id="pastaTower">
+      <div class="steam" style="top:-20px;left:15px;"></div>
+      <div class="steam" style="top:-25px;left:30px;"></div>
+      <div class="steam" style="top:-15px;left:5px;"></div>
+
+      <div class="tower-stack">
+        <div class="pasta-piece" style="animation: gentleBob 2.5s ease-in-out infinite; animation-delay: 0.8s;">
+          <div class="tortellini"></div>
+        </div>
+        <div class="pasta-piece" style="animation: gentleBob 3s ease-in-out infinite; animation-delay: 0.4s;">
+          <div class="rotini">
+            <div class="rotini-coil"></div>
+            <div class="rotini-coil"></div>
+            <div class="rotini-coil"></div>
+            <div class="rotini-coil"></div>
+            <div class="rotini-coil"></div>
+          </div>
+        </div>
+        <div class="pasta-piece" style="animation: gentleBob 2.8s ease-in-out infinite; animation-delay: 0.2s;">
+          <div class="meatball-stack">
+            <div class="meatball"></div>
+            <div class="meatball" style="position:relative;top:-8px;"></div>
+            <div class="meatball"></div>
+          </div>
+        </div>
+        <div class="pasta-piece">
+          <div class="ravioli"></div>
+        </div>
+      </div>
+
+      <div class="ceramic-plate">
+        <span class="plate-decor"></span>
+        <span class="plate-decor"></span>
+        <span class="plate-decor"></span>
+      </div>
+    </div>
+
+    <div class="balance-meter">
+      <div class="spoon-indicator">
+        <svg viewBox="0 0 28 28" fill="none">
+          <ellipse cx="14" cy="7" rx="8" ry="6" fill="none" stroke="var(--gold)" stroke-width="1.5"/>
+          <ellipse cx="14" cy="7" rx="5" ry="4" fill="rgba(212, 168, 67, 0.2)"/>
+          <line x1="14" y1="13" x2="14" y2="26" stroke="var(--gold)" stroke-width="2" stroke-linecap="round"/>
+        </svg>
+      </div>
+      <div class="meter-track">
+        <div class="meter-fill meter-fill-left"></div>
+        <div class="meter-fill meter-fill-right"></div>
+        <div class="meter-center"></div>
+      </div>
+      <span class="meter-label">Denge</span>
+    </div>
+
+    <div class="chef-mascot" id="chefMascot">
+      <img src="assets/chef_mascot.jpg" alt="Chef Mascot - Blue blob developer as master chef">
+    </div>
+
+    <div class="speech-bubble" id="speechBubble">
+      <span>Ravioli dengede... ama sakın gizli malzemeyi düşürme! 👉</span>
+      <svg class="swirl-tail" viewBox="0 0 30 24" fill="none">
+        <path d="M15 0 C18 8, 25 10, 20 16 C18 20, 12 22, 15 24" stroke="rgba(212, 168, 67, 0.3)" stroke-width="1.5" fill="none" stroke-linecap="round"/>
+        <path d="M12 4 C10 12, 5 14, 10 18" stroke="rgba(212, 168, 67, 0.2)" stroke-width="1" fill="none" stroke-linecap="round"/>
+      </svg>
+    </div>
+  </div>
+
+  <script src="pasta-game.js"></script>
+</body>
+</html>

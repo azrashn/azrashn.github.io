@@ -1,5 +1,14 @@
 /**
- * Torre di Pasta Balance - V6.1 (Stronger Wind, Ketchup on Top & Auto-Round Meatballs)
+ * Torre di Pasta Balance - V6.2 (Bağımsız sayfa modu + GDD güncellemesi + fizik düzeltmeleri)
+ *
+ * DEĞİŞİKLİKLER (V6.1 -> V6.2):
+ * 1. [KRİTİK FIX] Artık #pastaGameModal aramıyor — bu dosya bağımsız bir sayfa
+ *    (pasta-game.html) olarak çalışacak şekilde yeniden düzenlendi. index.html'den
+ *    iframe ile açılması önerilir (aşağıdaki entegrasyon dosyasına bak).
+ * 2. [FIX] Rüzgar interpolasyonu artık timeStep ile ölçekleniyor (FPS'e bağımlı değil).
+ * 3. [GÜNCELLEME] Seviye eşikleri yeni GDD'ye göre: L2=30sn, L3=70sn, L4=120sn.
+ * 4. [GÜNCELLEME] Seviye geçiş duraklaması 2000ms -> 1500ms (GDD: "1.5 saniyeliğine duraklatılır").
+ * 5. [GÜNCELLEME] Level 4 mesajı GDD metnine göre güncellendi.
  */
 
 (function () {
@@ -29,66 +38,28 @@
   const imgMeatball = new Image();
   imgMeatball.src = 'assets/meatball.png';
 
-  // --- EGG TRIGGER LOGIC ---
-  let eggClicks = 0;
-  let isResetting = false;
+  // ── LEVEL / GDD SABİTLERİ ──
+  const LEVEL_THRESHOLDS = { 2: 10, 3: 70, 4: 120 }; // saniye (skor) — L1 test için kısaltıldı
+  const TRANSITION_PAUSE_MS = 1500; // GDD: "1.5 saniyeliğine duraklatılır"
 
   document.addEventListener('DOMContentLoaded', () => {
-    const eggImg = document.getElementById('eggTriggerImg');
-    const gameModal = document.getElementById('pastaGameModal');
-    const eggWrapper = document.getElementById('eggTrigger');
-
-    if (eggImg && eggWrapper) {
-      eggWrapper.addEventListener('click', () => {
-        if (isResetting) return;
-        eggClicks++;
-        eggWrapper.classList.add('shake');
-        setTimeout(() => eggWrapper.classList.remove('shake'), 200);
-
-        if (eggClicks === 1) eggImg.src = 'assets/crack.png';
-        else if (eggClicks === 2) eggImg.src = 'assets/opened.png';
-        else if (eggClicks >= 3) {
-          openGameModal();
-          isResetting = true;
-          setTimeout(() => {
-            eggClicks = 0;
-            eggImg.src = 'assets/start.png';
-            isResetting = false;
-          }, 1000);
-        }
-      });
-    }
-
     // --- GAME ENGINE ---
     const canvas = document.getElementById('pastaGameCanvas');
-    if (!canvas || !gameModal) return;
+    const gamePanel = document.getElementById('gamePanel');
+    if (!canvas || !gamePanel) {
+      console.error('pasta-game.js: #pastaGameCanvas veya #gamePanel bulunamadı.');
+      return;
+    }
     const ctx = canvas.getContext('2d');
-    const closeBtn = document.getElementById('pastaGameCloseBtn');
-
-    if (closeBtn) {
-      closeBtn.addEventListener('click', () => {
-        gameModal.classList.remove('active');
-        document.body.style.overflow = '';
-        gameOver();
-      });
-    }
-
-    function openGameModal() {
-      gameModal.classList.add('active');
-      document.body.style.overflow = 'hidden';
-      resizeCanvas();
-      showStartScreen();
-    }
 
     function resizeCanvas() {
-      const panel = document.getElementById('gamePanel');
-      if (!panel) return;
-      canvas.width = panel.clientWidth;
-      canvas.height = panel.clientHeight;
+      canvas.width = gamePanel.clientWidth;
+      canvas.height = gamePanel.clientHeight;
     }
     window.addEventListener('resize', resizeCanvas);
+    resizeCanvas();
 
-    // ── GAME STATE & LEVEL MANAGER ──
+    // ── GAME STATE ──
     let gameState = 'IDLE';
     let currentLevel = 1;
     let survivalTime = 0;
@@ -108,6 +79,7 @@
     let windForce = 0;
     let targetWind = 0;
     let windChangeTimer = 0;
+    const WIND_LERP_SPEED = 0.02; // 60fps baz alınarak ayarlandı, artık timeStep ile çarpılıyor
 
     let meatballs = [];
     let meatballTimer = 0;
@@ -123,8 +95,8 @@
       });
     }
 
-    const scoreEl = document.getElementById('scoreVal') || document.getElementById('pastaScoreVal');
-    const bestEl = document.getElementById('bestVal') || document.getElementById('pastaBestVal');
+    const scoreEl = document.getElementById('pastaScoreVal');
+    const bestEl = document.getElementById('pastaBestVal');
     const actionsOverlay = document.getElementById('pastaGameActions');
     const titleEl = document.getElementById('pastaGameTitle');
     const descEl = document.getElementById('pastaGameDesc');
@@ -174,7 +146,6 @@
     function drawDustParticles(time) {
       dustParticles.forEach(p => {
         p.y -= p.speed;
-        // Rüzgar gücü artırıldığı için görsel etki katsayısı ayarlandı
         let visualWind = (currentLevel >= 2) ? windForce * 3000 : 0;
         p.x += Math.sin(time * 0.001 + p.wobble) * 0.3 + visualWind;
         p.opacity = 0.1 + Math.sin(time * 0.002 + p.wobble) * 0.1;
@@ -196,23 +167,20 @@
         if (mb.hit) return;
 
         if (imgMeatball.complete && imgMeatball.naturalHeight !== 0) {
-          // YENİ: Beyaz arka planlı kare resimleri kusursuz yuvarlağa çeviren maske (Clip)
           ctx.save();
           ctx.beginPath();
           ctx.arc(mb.x, mb.y, mb.size, 0, Math.PI * 2);
           ctx.closePath();
-          ctx.clip(); // Sınırları belirle
+          ctx.clip();
 
           ctx.drawImage(imgMeatball, mb.x - mb.size, mb.y - mb.size, mb.size * 2, mb.size * 2);
-          ctx.restore(); // Maskeyi kaldır
+          ctx.restore();
 
-          // Yuvarlağın üstüne tatlı bir parlama
           ctx.beginPath();
           ctx.arc(mb.x - mb.size * 0.3, mb.y - mb.size * 0.3, mb.size * 0.25, 0, Math.PI * 2);
           ctx.fillStyle = 'rgba(255, 255, 255, 0.15)';
           ctx.fill();
         } else {
-          // Görsel yoksa veya hata verirse kahverengi top çizmeye devam
           ctx.beginPath();
           ctx.arc(mb.x, mb.y, mb.size, 0, Math.PI * 2);
           ctx.fillStyle = '#8b4513';
@@ -224,7 +192,7 @@
     function drawWindStreaks(dt) {
       if (currentLevel < 2) return;
 
-      let maxWind = 0.00030; // Görsel şiddet limiti
+      let maxWind = 0.00030;
       let windIntensity = Math.abs(windForce) / maxWind;
       if (windIntensity < 0.1) return;
 
@@ -359,14 +327,14 @@
     }
 
     function checkLevelProgress() {
-      if (currentLevel === 1 && survivalTime === 10) {
-        startLevelTransition(2, "Rüzgarlı Teras! Dikkatli Ol 💨");
+      if (currentLevel === 1 && survivalTime === LEVEL_THRESHOLDS[2]) {
+        startLevelTransition(2, "Level 2: Rüzgarlı Teras! Dikkatli Ol 💨");
       }
-      if (currentLevel === 2 && survivalTime === 25) {
-        startLevelTransition(3, "Mamma Mia! Köfte Yağmuru Başlıyor ☄️");
+      if (currentLevel === 2 && survivalTime === LEVEL_THRESHOLDS[3]) {
+        startLevelTransition(3, "Level 3: Mamma Mia! Köfte Yağmuru Başlıyor ☄️");
       }
-      if (currentLevel === 3 && survivalTime === 40) {
-        startLevelTransition(4, "Şefin Şaheseri! Sos Yağmuru! 🍅");
+      if (currentLevel === 3 && survivalTime === LEVEL_THRESHOLDS[4]) {
+        startLevelTransition(4, "Level 4: Şefin Şaheseri! Ağırlık Merkezi Kayıyor ⚖️");
       }
     }
 
@@ -387,8 +355,6 @@
       }
 
       if (level === 4) {
-        const gamePanel = document.getElementById('gamePanel');
-
         const bottle = document.createElement('div');
         bottle.id = "ketchupBottleAnim";
         bottle.style = "position:absolute; top:-150px; left:50%; transform:translateX(-50%) rotate(180deg); width:100px; height:150px; background:url('assets/ketchup.png') center/contain no-repeat; z-index:100; transition: top 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);";
@@ -406,7 +372,6 @@
           setTimeout(() => {
             playSound('squirt');
 
-            // YENİ: KETÇAP ARTIK KULENİN TEPESİNE EKLENİYOR
             const stack = document.querySelector('.tower-stack');
             if (stack && !document.getElementById('level4Item')) {
               const ketchupBlobHtml = `
@@ -436,7 +401,7 @@
         if (actionsOverlay) actionsOverlay.style.display = 'none';
         lastTime = null;
         gameState = 'PLAYING';
-      }, 2000);
+      }, TRANSITION_PAUSE_MS);
     }
 
     function gameOver() {
@@ -495,20 +460,32 @@
       let effectiveGravity = gravity * difficultyMultiplier;
       angularAcceleration = effectiveGravity * Math.sin(angle);
 
-      // YENİ: RÜZGAR ÇOK DAHA GÜÇLÜ (Destek mekaniği belirginleşti)
       if (currentLevel >= 2) {
         windChangeTimer += dt;
 
         if (windChangeTimer > 1500 + Math.random() * 2000) {
-          // Rüzgar gücü 0.00030'dan 0.00060'a çıkarıldı (Yerçekimi ile yarışabilir güçte)
           targetWind = (Math.random() - 0.5) * 0.00060;
           windChangeTimer = 0;
         }
 
-        windForce += (targetWind - windForce) * 0.02;
-        angularAcceleration += windForce;
+        // [FIX] Artık timeStep ile ölçekleniyor, FPS'e bağımlı değil
+        windForce += (targetWind - windForce) * Math.min(WIND_LERP_SPEED * timeStep, 1);
 
-        // YENİ: Rüzgar sesi %80'e kadar çıkabiliyor
+        // Rüzgar fiziği: Rüzgar yönü kulenin yatma yönüyle aynıysa daha çok devirir,
+        // ters yöndeyse kuleyi destekler (stabize eder)
+        // windForce > 0 = sağa esiyor, angle > 0 = sağa yatık
+        let windEffect = windForce;
+        if (Math.sign(windForce) !== 0 && Math.sign(angle) !== 0) {
+          if (Math.sign(windForce) === Math.sign(angle)) {
+            // Rüzgar kulenin yattığı yöne esiyor → daha fazla devirir
+            windEffect = windForce * 1.5;
+          } else {
+            // Rüzgar kulenin ters yönüne esiyor → kuleyi güçlü şekilde destekler
+            windEffect = windForce * 1.8;
+          }
+        }
+        angularAcceleration += windEffect;
+
         let windVol = Math.abs(windForce) / 0.00040;
         if (windVol > 1) windVol = 1;
         sfx.wind.volume = windVol * 0.8;
@@ -540,7 +517,6 @@
 
             if (Math.abs(mb.x - currentTowerX) < 55) {
               mb.hit = true;
-
               playSound('hit');
 
               let impact = mb.x > currentTowerX ? -0.010 : 0.010;
@@ -599,39 +575,36 @@
     }
 
     // ── USER INPUT ──
-    const panel = document.getElementById('gamePanel');
-    if (panel) {
-      panel.addEventListener('mousedown', (e) => {
-        if (gameState !== 'PLAYING') return;
-        if (e.target.closest('#pastaGameActions') || e.target.closest('.chef-mascot')) return;
+    gamePanel.addEventListener('mousedown', (e) => {
+      if (gameState !== 'PLAYING') return;
+      if (e.target.closest('#pastaGameActions') || e.target.closest('.chef-mascot')) return;
 
-        const rect = panel.getBoundingClientRect();
-        const clickX = e.clientX - rect.left;
-        const panelCenter = rect.width / 2;
-        const normalizedX = (clickX - panelCenter) / panelCenter;
+      const rect = gamePanel.getBoundingClientRect();
+      const clickX = e.clientX - rect.left;
+      const panelCenter = rect.width / 2;
+      const normalizedX = (clickX - panelCenter) / panelCenter;
 
-        let currentBaseForce = 0.005;
-        let currentEdgeBonus = 0.005;
-        if (currentLevel >= 4) {
-          currentBaseForce = 0.0035;
-          currentEdgeBonus = 0.0035;
-        }
+      let currentBaseForce = 0.005;
+      let currentEdgeBonus = 0.005;
+      if (currentLevel >= 4) {
+        currentBaseForce = 0.0035;
+        currentEdgeBonus = 0.0035;
+      }
 
-        const appliedForce = currentBaseForce + (currentEdgeBonus * Math.abs(normalizedX));
+      const appliedForce = currentBaseForce + (currentEdgeBonus * Math.abs(normalizedX));
 
-        if (clickX > panelCenter) {
-          angularVelocity += appliedForce;
-        } else {
-          angularVelocity -= appliedForce;
-        }
+      if (clickX > panelCenter) {
+        angularVelocity += appliedForce;
+      } else {
+        angularVelocity -= appliedForce;
+      }
 
-        const tower = document.getElementById('pastaTower');
-        if (tower) {
-          tower.style.filter = 'brightness(1.3)';
-          setTimeout(() => { tower.style.filter = ''; }, 100);
-        }
-      });
-    }
+      const tower = document.getElementById('pastaTower');
+      if (tower) {
+        tower.style.filter = 'brightness(1.3)';
+        setTimeout(() => { tower.style.filter = ''; }, 100);
+      }
+    });
 
     // ── RENDER LOOP ──
     function render(time) {
@@ -641,32 +614,25 @@
       lastTime = time;
       if (dt > 100) dt = 100;
 
-      if (gameModal.classList.contains('active')) {
-        drawBackground();
-        drawDustParticles(time);
+      drawBackground();
+      drawDustParticles(time);
 
-        if (currentLevel >= 3) {
-          drawMeatballs();
-        }
-
-        if (currentLevel >= 2) {
-          drawWindStreaks(dt);
-          drawWindIndicator();
-        }
-
-        if (gameState === 'PLAYING') {
-          updateGameLogic(dt);
-        }
-
-        applyTowerWobble();
-        updateBalanceMeter();
-      } else {
-        lastTime = null;
+      if (currentLevel >= 3) drawMeatballs();
+      if (currentLevel >= 2) {
+        drawWindStreaks(dt);
+        drawWindIndicator();
       }
+
+      if (gameState === 'PLAYING') updateGameLogic(dt);
+
+      applyTowerWobble();
+      updateBalanceMeter();
 
       requestAnimationFrame(render);
     }
-    requestAnimationFrame(render);
 
+    // Sayfa (iframe) yüklendiği anda oyun hazır ekranı gösterilir
+    showStartScreen();
+    requestAnimationFrame(render);
   });
 })();

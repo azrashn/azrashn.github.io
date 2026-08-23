@@ -660,3 +660,60 @@ document.addEventListener('DOMContentLoaded', () => {
     });
   }
 });
+
+// ═══════════════════════════════════════════
+// EASTER EGG — Yumurta tıklama ile oyun açma
+// 3 tıklama: start.png → crack.png → opened.png → oyun açılır
+// ═══════════════════════════════════════════
+(function () {
+  'use strict';
+
+  let eggClicks = 0;
+  let isResetting = false;
+
+  const eggWrapper = document.getElementById('eggTrigger');
+  const eggImg = document.getElementById('eggTriggerImg');
+  const overlay = document.getElementById('pastaGameModal');
+  const closeBtn = document.getElementById('pastaGameCloseBtn');
+
+  if (!eggWrapper || !eggImg || !overlay) return;
+
+  function openGame() {
+    overlay.classList.add('active');
+    document.body.style.overflow = 'hidden';
+  }
+
+  function closeGame() {
+    overlay.classList.remove('active');
+    document.body.style.overflow = '';
+  }
+
+  eggWrapper.addEventListener('click', () => {
+    if (isResetting) return;
+    eggClicks++;
+    eggWrapper.classList.add('shake');
+    setTimeout(() => eggWrapper.classList.remove('shake'), 200);
+
+    if (eggClicks === 1) {
+      eggImg.src = 'assets/crack.png';
+    } else if (eggClicks === 2) {
+      eggImg.src = 'assets/opened.png';
+    } else if (eggClicks >= 3) {
+      openGame();
+      isResetting = true;
+      setTimeout(() => {
+        eggClicks = 0;
+        eggImg.src = 'assets/start.png';
+        isResetting = false;
+      }, 1000);
+    }
+  });
+
+  if (closeBtn) closeBtn.addEventListener('click', closeGame);
+  overlay.addEventListener('click', (e) => {
+    if (e.target === overlay) closeGame();
+  });
+  document.addEventListener('keydown', (e) => {
+    if (e.key === 'Escape' && overlay.classList.contains('active')) closeGame();
+  });
+})();

@@ -1,0 +1,138 @@
+<!--
+  ENTEGRASYON REHBERİ
+  ===================
+  1. pasta-game.html ve pasta-game.js dosyalarını (assets/ klasörüyle birlikte)
+     repo'nda ayrı bir "pasta-game.html" olarak bırak (index.html'in yanına).
+  2. Aşağıdaki HTML bloğunu index.html'in </body> kapanışından hemen önce ekle.
+  3. Yumurta ikonu için assets/start.png, crack.png, opened.png görsellerini
+     assets/ klasörüne koy (32x32 - 64x64 arası küçük bir yumurta ikonu yeterli).
+  4. İstersen yumurtayı sitenin herhangi bir köşesine (örn. sağ alt) konumlandırabilirsin,
+     aşağıdaki CSS'te .egg-trigger'ın position değerlerini değiştirerek.
+-->
+
+<!-- Gizli Easter Egg tetikleyici -->
+<div class="egg-trigger" id="eggTrigger" title="?">
+  <img id="eggTriggerImg" src="assets/start.png" alt="">
+</div>
+
+<!-- Oyun modalı: iframe ile pasta-game.html'i yükler -->
+<div class="pasta-modal-overlay" id="pastaGameModalOverlay">
+  <button id="pastaGameCloseBtn" class="pasta-modal-close" aria-label="Kapat">✕</button>
+  <iframe
+    id="pastaGameFrame"
+    class="pasta-modal-iframe"
+    title="Torre di Pasta Balance"
+    src="about:blank">
+  </iframe>
+</div>
+
+<style>
+  .egg-trigger{
+    position: fixed;
+    bottom: 20px;
+    left: 20px;
+    z-index: 500;
+    width: 44px;
+    height: 44px;
+    cursor: pointer;
+    opacity: 0.55;
+    transition: opacity .2s, transform .15s;
+  }
+  .egg-trigger:hover{ opacity: 0.9; transform: scale(1.08); }
+  .egg-trigger img{ width: 100%; height: 100%; object-fit: contain; }
+  .egg-trigger.shake{ animation: eggShake .2s; }
+  @keyframes eggShake{
+    0%,100%{ transform: translateX(0); }
+    25%{ transform: translateX(-3px) rotate(-4deg); }
+    75%{ transform: translateX(3px) rotate(4deg); }
+  }
+
+  .pasta-modal-overlay{
+    display: none;
+    position: fixed;
+    inset: 0;
+    z-index: 999;
+    align-items: center;
+    justify-content: center;
+    background: rgba(5,6,10,0.8);
+    backdrop-filter: blur(6px);
+  }
+  .pasta-modal-overlay.active{ display: flex; }
+
+  .pasta-modal-close{
+    position: absolute;
+    top: 24px; right: 28px;
+    z-index: 1001;
+    width: 40px; height: 40px;
+    border-radius: 50%;
+    border: 1px solid rgba(255,255,255,0.2);
+    background: rgba(0,0,0,0.45);
+    color: #e6edf3;
+    font-size: 18px;
+    cursor: pointer;
+  }
+  .pasta-modal-close:hover{ background: rgba(0,0,0,0.7); }
+
+  .pasta-modal-iframe{
+    width: 900px;
+    max-width: 95vw;
+    height: 650px;
+    max-height: 90vh;
+    border: none;
+    border-radius: 24px;
+  }
+</style>
+
+<script>
+(function(){
+  let eggClicks = 0;
+  let isResetting = false;
+
+  const eggWrapper = document.getElementById('eggTrigger');
+  const eggImg = document.getElementById('eggTriggerImg');
+  const overlay = document.getElementById('pastaGameModalOverlay');
+  const frame = document.getElementById('pastaGameFrame');
+  const closeBtn = document.getElementById('pastaGameCloseBtn');
+
+  if (!eggWrapper || !overlay || !frame) return;
+
+  function openGame(){
+    frame.src = 'pasta-game.html'; // dosya adını gerçek yoluna göre güncelle
+    overlay.classList.add('active');
+    document.body.style.overflow = 'hidden';
+  }
+
+  function closeGame(){
+    overlay.classList.remove('active');
+    document.body.style.overflow = '';
+    frame.src = 'about:blank'; // kapatınca oyunu ve sesleri tamamen durdurur
+  }
+
+  eggWrapper.addEventListener('click', () => {
+    if (isResetting) return;
+    eggClicks++;
+    eggWrapper.classList.add('shake');
+    setTimeout(() => eggWrapper.classList.remove('shake'), 200);
+
+    if (eggClicks === 1) eggImg.src = 'assets/crack.png';
+    else if (eggClicks === 2) eggImg.src = 'assets/opened.png';
+    else if (eggClicks >= 3) {
+      openGame();
+      isResetting = true;
+      setTimeout(() => {
+        eggClicks = 0;
+        eggImg.src = 'assets/start.png';
+        isResetting = false;
+      }, 1000);
+    }
+  });
+
+  if (closeBtn) closeBtn.addEventListener('click', closeGame);
+  overlay.addEventListener('click', (e) => {
+    if (e.target === overlay) closeGame();
+  });
+  document.addEventListener('keydown', (e) => {
+    if (e.key === 'Escape' && overlay.classList.contains('active')) closeGame();
+  });
+})();
+</script>
