@@ -726,7 +726,7 @@ document.addEventListener('DOMContentLoaded', () => {
     '     ╭───────╮',
     '    ╱  ◯   ◯  ╲',
     '   │    ╰─╯    │',
-    '   │  ·  🍝  · │',
+    '   │  ·  🍝 · │',
     '    ╲   ═══   ╱',
     '     ╰───────╯'
   ].join('\n');
