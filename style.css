@@ -3205,6 +3205,18 @@ button:focus-visible {
   color: #0a66c2;
 }
 
+.share-btn-whatsapp:hover {
+  background: rgba(37, 211, 102, 0.2);
+  border-color: #25d366;
+  color: #25d366;
+}
+
+.share-btn-instagram:hover {
+  background: rgba(225, 48, 108, 0.2);
+  border-color: #e1306c;
+  color: #e1306c;
+}
+
 /* ═══════════════════════════════════════════
    COMBO HUD
    ═══════════════════════════════════════════ */
