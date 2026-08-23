@@ -717,3 +717,102 @@ document.addEventListener('DOMContentLoaded', () => {
     if (e.key === 'Escape' && overlay.classList.contains('active')) closeGame();
   });
 })();
+
+// ═══════════════════════════════════════════
+// KONSOL EASTER EGG — ASCII Art & Geliştirici Mesajı
+// ═══════════════════════════════════════════
+(function () {
+  const egg = [
+    '     ╭───────╮',
+    '    ╱  ◯   ◯  ╲',
+    '   │    ╰─╯    │',
+    '   │  ·  🍝  · │',
+    '    ╲   ═══   ╱',
+    '     ╰───────╯'
+  ].join('\n');
+
+  console.log(
+    '%c' + egg,
+    'color:#d4a843; font-family:monospace; font-size:12px; line-height:1.4;'
+  );
+  console.log(
+    '%cMerhaba, meraklı geliştirici 👋\n%cKodun tamamına %cgithub.com/azrashn%c adresinden bakabilirsin.\nYumurtayı buldun mu? 🥚',
+    'color:#e6edf3; font-size:14px; font-weight:bold;',
+    'color:#94a3b8; font-size:12px;',
+    'color:#7dd3fc; font-size:12px; font-weight:bold; text-decoration:underline;',
+    'color:#94a3b8; font-size:12px;'
+  );
+})();
+
+// ═══════════════════════════════════════════
+// KONAMİ KODU — ↑↑↓↓←→←→BA
+// Kartları zıplatma + toast bildirimi
+// ═══════════════════════════════════════════
+(function () {
+  'use strict';
+
+  const KONAMI_SEQUENCE = [
+    'ArrowUp', 'ArrowUp', 'ArrowDown', 'ArrowDown',
+    'ArrowLeft', 'ArrowRight', 'ArrowLeft', 'ArrowRight',
+    'b', 'a'
+  ];
+
+  let inputBuffer = [];
+  let konamiCooldown = false;
+
+  document.addEventListener('keydown', (e) => {
+    if (konamiCooldown) return;
+
+    inputBuffer.push(e.key);
+
+    // Son 10 tuşu tut
+    if (inputBuffer.length > KONAMI_SEQUENCE.length) {
+      inputBuffer.shift();
+    }
+
+    // Kontrol et
+    if (inputBuffer.length === KONAMI_SEQUENCE.length) {
+      const match = inputBuffer.every((key, i) =>
+        key.toLowerCase() === KONAMI_SEQUENCE[i].toLowerCase()
+      );
+
+      if (match) {
+        triggerKonami();
+        inputBuffer = [];
+        konamiCooldown = true;
+        setTimeout(() => { konamiCooldown = false; }, 3000);
+      }
+    }
+  });
+
+  function triggerKonami() {
+    // Toast mesajı
+    let toast = document.querySelector('.konami-toast');
+    if (!toast) {
+      toast = document.createElement('div');
+      toast.className = 'konami-toast';
+      toast.textContent = 'Konami kodu bulundu! 🎮';
+      document.body.appendChild(toast);
+    }
+
+    requestAnimationFrame(() => {
+      toast.classList.add('show');
+    });
+
+    setTimeout(() => {
+      toast.classList.remove('show');
+    }, 2500);
+
+    // Kartları zıplat (staggered)
+    const cards = document.querySelectorAll('.project-card, .game-card, .exp-card, .info-card, .contact-card');
+
+    cards.forEach((card, index) => {
+      setTimeout(() => {
+        card.classList.add('konami-bounce');
+        card.addEventListener('animationend', () => {
+          card.classList.remove('konami-bounce');
+        }, { once: true });
+      }, index * 60); // 60ms stagger delay
+    });
+  }
+})();

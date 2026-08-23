@@ -19,7 +19,8 @@
     bgm: new Audio('assets/bgm.mp3'),
     wind: new Audio('assets/wind.mp3'),
     hit: new Audio('assets/hit.mp3'),
-    squirt: new Audio('assets/squirt.mp3')
+    squirt: new Audio('assets/squirt.mp3'),
+    combo: new Audio('assets/combo.mp3')
   };
 
   sfx.bgm.loop = true;
@@ -84,6 +85,13 @@
     let meatballs = [];
     let meatballTimer = 0;
     let windStreaks = [];
+
+    // ── COMBO SİSTEMİ ──
+    let comboCount = 0;
+    let comboDisplay = null; // {text, timer, opacity}
+    let comboParticles = [];
+    const COMBO_THRESHOLDS = [3, 5, 10, 15, 20, 30];
+    const COMBO_DISPLAY_DURATION = 1500; // ms
 
     for (let i = 0; i < 15; i++) {
       windStreaks.push({
@@ -286,6 +294,19 @@
       targetWind = 0;
       meatballs = [];
       meatballTimer = 0;
+      comboCount = 0;
+      comboDisplay = null;
+      comboParticles = [];
+
+      // Paylaşım butonlarını temizle
+      const oldShare = document.getElementById('shareButtons');
+      if (oldShare) oldShare.remove();
+
+      // Combo HUD'ı sıfırla
+      const comboHud = document.getElementById('comboHud');
+      if (comboHud) { comboHud.style.display = 'none'; }
+      const comboVal = document.getElementById('comboVal');
+      if (comboVal) comboVal.textContent = '0';
 
       const lvl4Item = document.getElementById('level4Item');
       if (lvl4Item) lvl4Item.remove();
@@ -410,19 +431,50 @@
       sfx.bgm.pause();
       sfx.wind.pause();
 
-      if (survivalTime > bestTime) {
+      const isNewRecord = survivalTime > bestTime;
+      if (isNewRecord) {
         bestTime = survivalTime;
         localStorage.setItem('pastaBalanceBestTime', bestTime);
         if (bestEl) bestEl.textContent = bestTime + "s";
       }
 
       if (actionsOverlay) {
-        if (titleEl) titleEl.textContent = 'Eyvah, Kule Yıkıldı! 💥';
+        if (titleEl) titleEl.textContent = isNewRecord ? 'Yeni Rekor! 🏆' : 'Eyvah, Kule Yıkıldı! 💥';
         if (descEl) descEl.textContent = `Dayanılan Süre: ${survivalTime} Saniye`;
         if (startBtn) {
           startBtn.textContent = 'Tekrar Dene';
           startBtn.style.display = 'block';
         }
+
+        // Paylaşım butonları
+        const oldShare = document.getElementById('shareButtons');
+        if (oldShare) oldShare.remove();
+
+        const shareDiv = document.createElement('div');
+        shareDiv.id = 'shareButtons';
+        shareDiv.className = 'share-buttons';
+
+        const siteUrl = 'https://azrashn.github.io';
+        const shareText = isNewRecord
+          ? `Yeni rekorumu kırdım: ${survivalTime} saniye! 🏆🍝 Torre di Pasta Balance'da beni geçebilir misin?`
+          : `Torre di Pasta Balance'da ${survivalTime} saniye dayandım! 🍝 Sen benden iyisini yapabilir misin?`;
+
+        const twitterUrl = `https://twitter.com/intent/tweet?text=${encodeURIComponent(shareText)}&url=${encodeURIComponent(siteUrl)}`;
+        const linkedinUrl = `https://www.linkedin.com/sharing/share-offsite/?url=${encodeURIComponent(siteUrl)}`;
+
+        shareDiv.innerHTML = `
+          <span class="share-label">Skorunu Paylaş</span>
+          <div class="share-btn-row">
+            <a href="${twitterUrl}" target="_blank" rel="noopener" class="share-btn share-btn-twitter" title="Twitter/X'te Paylaş">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"/></svg>
+            </a>
+            <a href="${linkedinUrl}" target="_blank" rel="noopener" class="share-btn share-btn-linkedin" title="LinkedIn'de Paylaş">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433a2.062 2.062 0 01-2.063-2.065 2.064 2.064 0 112.063 2.065zm1.782 13.019H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.222 0h.003z"/></svg>
+            </a>
+          </div>
+        `;
+
+        actionsOverlay.appendChild(shareDiv);
         actionsOverlay.style.display = 'flex';
       }
     }
@@ -517,6 +569,8 @@
 
             if (Math.abs(mb.x - currentTowerX) < 55) {
               mb.hit = true;
+              comboCount = 0;
+              updateComboHud();
               playSound('hit');
 
               let impact = mb.x > currentTowerX ? -0.010 : 0.010;
@@ -531,6 +585,14 @@
           }
 
           if (mb.y > canvas.height) {
+            // Köfte çarpmadan geçtiyse → combo artır
+            if (!mb.hit) {
+              comboCount++;
+              updateComboHud();
+              if (COMBO_THRESHOLDS.includes(comboCount)) {
+                triggerComboEffect(comboCount);
+              }
+            }
             meatballs.splice(i, 1);
           }
         }
@@ -606,6 +668,99 @@
       }
     });
 
+    // ── COMBO FONKSİYONLARI ──
+    function updateComboHud() {
+      const comboHud = document.getElementById('comboHud');
+      const comboValEl = document.getElementById('comboVal');
+      if (comboHud && comboValEl) {
+        if (comboCount > 0 && currentLevel >= 3) {
+          comboHud.style.display = '';
+          comboValEl.textContent = comboCount;
+        } else {
+          comboHud.style.display = 'none';
+        }
+      }
+    }
+
+    function triggerComboEffect(count) {
+      playSound('combo');
+
+      // Combo yazısı
+      let emoji = count >= 15 ? '🔥🔥' : count >= 10 ? '🔥' : '⭐';
+      comboDisplay = {
+        text: `COMBO x${count}! ${emoji}`,
+        timer: COMBO_DISPLAY_DURATION,
+        opacity: 1
+      };
+
+      // Konfeti parçacıkları
+      const cx = canvas.width / 2;
+      const cy = 130;
+      for (let i = 0; i < 12; i++) {
+        const angle = (Math.PI * 2 / 12) * i + (Math.random() - 0.5) * 0.3;
+        const speed = 1.5 + Math.random() * 2.5;
+        comboParticles.push({
+          x: cx,
+          y: cy,
+          vx: Math.cos(angle) * speed,
+          vy: Math.sin(angle) * speed - 1,
+          size: 3 + Math.random() * 4,
+          life: 800 + Math.random() * 400,
+          maxLife: 800 + Math.random() * 400,
+          color: ['#ffd700', '#ff6b35', '#d4a843', '#ff4d4d', '#4ade80'][Math.floor(Math.random() * 5)]
+        });
+      }
+    }
+
+    function drawComboDisplay(dt) {
+      if (!comboDisplay) return;
+
+      comboDisplay.timer -= dt;
+      if (comboDisplay.timer <= 0) {
+        comboDisplay = null;
+        return;
+      }
+
+      // Fade out in last 400ms
+      if (comboDisplay.timer < 400) {
+        comboDisplay.opacity = comboDisplay.timer / 400;
+      }
+
+      ctx.save();
+      ctx.globalAlpha = comboDisplay.opacity;
+      ctx.font = "bold 28px 'Inter', sans-serif";
+      ctx.textAlign = 'center';
+      ctx.fillStyle = '#ffd700';
+      ctx.shadowColor = '#ffd700';
+      ctx.shadowBlur = 15;
+      ctx.fillText(comboDisplay.text, canvas.width / 2, 130);
+      ctx.shadowBlur = 0;
+      ctx.restore();
+    }
+
+    function drawComboParticles(dt) {
+      for (let i = comboParticles.length - 1; i >= 0; i--) {
+        const p = comboParticles[i];
+        p.life -= dt;
+        if (p.life <= 0) {
+          comboParticles.splice(i, 1);
+          continue;
+        }
+        p.x += p.vx * (dt / 16);
+        p.y += p.vy * (dt / 16);
+        p.vy += 0.08 * (dt / 16); // gravity
+
+        const alpha = p.life / p.maxLife;
+        ctx.save();
+        ctx.globalAlpha = alpha;
+        ctx.fillStyle = p.color;
+        ctx.beginPath();
+        ctx.arc(p.x, p.y, p.size * alpha, 0, Math.PI * 2);
+        ctx.fill();
+        ctx.restore();
+      }
+    }
+
     // ── RENDER LOOP ──
     function render(time) {
       if (lastTime === null) lastTime = time;
@@ -624,6 +779,10 @@
       }
 
       if (gameState === 'PLAYING') updateGameLogic(dt);
+
+      // Combo efektleri (canvas üzerine)
+      drawComboDisplay(dt);
+      drawComboParticles(dt);
 
       applyTowerWobble();
       updateBalanceMeter();
