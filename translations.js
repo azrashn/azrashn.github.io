@@ -23,13 +23,13 @@ const translations = {
     // Kariyer Kartları - Journey
     journey_node_1: "Ankara Bilim Üni.",
     journey_title_1: "Ankara Bilim Üniversitesi",
-    journey_role_1: "Yazılım Mühendisliği — Son sınıf",
+    journey_role_1: "Yazılım Mühendisliği — Lisans Eğitimi (2022 - 2027)",
     journey_desc_1: "OOP, C++, C#, Python, veri yapıları ve algoritma derslerinde güçlü bir teknik altyapı edinmekteyim.",
 
     journey_node_2: "Kariyer Top.",
     journey_title_2: "Kariyer Topluluğu Başkanı",
     journey_role_2: "Yönetim Kurulu Başkanı — 10/2023 – 10/2024",
-    journey_desc_2: "Kurucu üyesi olduğum Kariyer Topluluğunda liderlik ve organizasyon yönetimi deneyimi kazandım. Kariyer etkinlikleri planlayıp iş birlikleri kurdum.",
+    journey_desc_2: "Kurucu Yönetim Kurulu Başkanı olduğum Kariyer Topluluğunda liderlik ve organizasyon yönetimi deneyimi kazandım. Kariyer etkinlikleri planlayıp iş birlikleri kurdum.",
 
     journey_node_3: "Freelance",
     journey_title_3: "Freelance Grafik Tasarım",
@@ -65,16 +65,17 @@ const translations = {
     exp_role_1: "Oyun Geliştirme Stajyeri",
     exp_date_1: "07/2025 – 09/2025",
     exp_company_1: "Ryse Soft",
-    exp_desc_1: "C# ve Unity kullanarak yeni oyun özellikleri geliştirdim ve oyun tasarımı öğrendim. Oyun mekaniklerinin tasarım, kodlama, test ve hata giderme süreçlerine katkı sağladım. Oyun kurgusu yapmayı ve döküman hazırlamayı öğrendim.",
+    exp_desc_1: "C# ve Unity kullanarak yeni oyun özellikleri geliştirdim ve oyun mekaniklerinin tasarım, kodlama, test ve hata giderme süreçlerine katkı sağladım. Algoritmik düşünme ve en iyi kodlama pratikleriyle oyun sistemlerinin kalitesini ve bakım kolaylığını artırdım.",
 
     exp_role_2: "Yönetim Kurulu Başkanı",
     exp_date_2: "10/2023 – 10/2024",
     exp_company_2: "Kariyer Topluluğu",
-    exp_desc_2: "Liderlik ve operasyon yönetimi deneyimi kazandım. Kariyer geliştirme etkinlikleri planlayıp yürüttüm, yeni projeler oluşturdum. Topluluk üyeleriyle etkileşimi artırma ve şirket/organizasyonlarla iş birlikleri kurma konularında deneyim edindim.",
+    exp_desc_2: "Kurucu Yönetim Kurulu Başkanlığını üstlendiğim Kariyer Topluluğunda liderlik, operasyon ve ekip yönetimi süreçlerini yürüttüm. Sektör temsilcileri ve şirketlerle iş birlikleri kurarak kariyer geliştirme etkinlikleri ve yeni projeler organize ettim.",
 
     exp_role_3: "Grafik Tasarımcı",
+    exp_date_3: "2022 – 2024",
     exp_company_3: "Freelance",
-    exp_desc_3: "İstanbul Üniversitesi Grafik Tasarım bölümünde öğrenim görmekteyim. Dijital medya tasarımı alanında markalaşma, pazarlama materyalleri ve sosyal medya içerikleri geliştirdim. Kupa, defter, davetiye, dergi, kartvizit ve topluluk etkinlikleri için poster ve sosyal medya grafikleri tasarladım.",
+    exp_desc_3: "Dijital medya tasarımı alanında markalaşma, pazarlama materyalleri ve sosyal medya içerikleri geliştirdim. Kupa, defter, davetiye, dergi, kartvizit ve topluluk etkinlikleri için poster ve sosyal medya grafikleri tasarlayarak kreatif süreçleri yönettim.",
 
     // Projeler
     projects_eyebrow: "projeler",
@@ -86,11 +87,17 @@ const translations = {
     project_1_title: "Akıllı Öğrenci Bilgi Sistemi (OBS) & AI Yönetim Paneli",
     project_1_desc: "Ankara Bilim Üniversitesi Engineering Design dersi kapsamında 6 kişilik bir ekiple, aktif versiyon kontrol (Git) süreçlerini yürüterek geliştirdiğimiz Full-Stack yazılım projesi. Yapay zeka destekli müfredat yönetimi ve gelişmiş ders çakışma algoritmaları içeren kapsamlı bir altyapı kurguladık.",
     project_2_title: "Gerçek Zamanlı Yüz İşleme & Deepfake AR Sistemi",
-    project_2_desc: "6 kişilik geliştirici ekibiyle birlikte, kameradan alınan canlı görüntüler üzerinde fotogerçekçi yüz manipülasyonu ve Deepfake tabanlı AR filtreleri uygulayan yüksek performanslı bir sistem mimarisi geliştirdik. MediaPipe Face Mesh, Delaunay Üçgenlemesi ve ileri seviye görüntü işleme algoritmalarından (FFT, EMA) yararlandık.",
+    project_2_desc: "MediaPipe FaceMesh ile yüz üzerinde 468 noktalı landmark tespiti ve Delaunay Üçgenlemesi kullanarak canlı video üzerinde fotogerçekçi yüz deformasyonu (warping) ve AR filtreleri uygulayan FastAPI tabanlı yüksek performanslı web sistemi. Figma ile tasarlanan kullanıcı arayüzü üzerinden yönetilen projede; sonuçlar MSE, PSNR ve SSIM metrikleriyle analiz edilmiş, FFT ve EMA filtreleriyle pürüzsüz stabil takip sağlanmıştır.",
     project_3_title: "Bank Queue Management System",
     project_3_desc: "Web tasarımı dersi kapsamında 3 kişilik bir ekiple hayata geçirilen bu proje, banka şubelerindeki müşteri yoğunluğunu yönetmek için tasarlanmış dinamik bir web uygulamasıdır. Kullanıcıların dijital olarak sıra numarası alabildiği, gişe durumlarının gerçek zamanlı izlenebildiği ve kullanıcı dostu bir arayüz ile bekleme sürelerini minimize etmeyi amaçlayan bir sistem mimarisine sahiptir.",
     project_4_title: "Automated Feedback & Assessment System",
     project_4_desc: "Öğrencilerin konuşma, yazma ve test aktivitelerindeki performanslarını NLP ve ses tanıma algoritmalarıyla anlık analiz eden yapay zeka destekli eğitim teknolojisi platformu. Kişiselleştirilmiş geri bildirimler sunarak öğrenci gelişimini otomatize eder.",
+    project_5_title: "K-not",
+    project_5_desc: "Öğrenciler ve araştırmacılar için bilgi yönetimini ve not alma süreçlerini kolaylaştıran, kategorizasyon ve hızlı arama yeteneklerine sahip modern verimlilik platformu.",
+    project_6_title: "Java Travel Planner",
+    project_6_desc: "Nesne Yönelimli Programlama (OOP) mimarisi ve veri yapıları kullanılarak geliştirilen; rota planlama, seyahat bütçe takibi ve kullanıcı dostu arayüz sunan masaüstü seyahat yönetim uygulaması.",
+    project_7_title: "AI-Powered Sponsorship Analysis",
+    project_7_desc: "Sponsorluk verilerini makine öğrenimi ve veri analitiği yöntemleriyle işleyerek marka uyumluluğunu, hedef kitle etkileşimini ve yatırım getirisini (ROI) analiz eden yapay zeka destekli karar destek platformu.",
 
     // Modal İçerikleri
     obs_modal_list: `
@@ -145,7 +152,7 @@ const translations = {
     tools_what_i_do: "Neyle uğraşıyorum",
     tools_what_i_do_desc: "Oyun geliştirme ve yazılım mühendisliği odaklı çalışıyor, temel olarak karmaşık algoritmalar, problem çözme ve backend mimarileri kurgulama üzerine yoğunlaşıyorum.<br><br>Oyun mekanikleri tasarımı, nesne yönelimli programlama (OOP) ve sistem mimarileri geliştirirken projelerin hem teknik mantık hem de tasarım süreçlerini bir arada yürütüyorum.",
     tools_current: "Şu an üzerinde çalıştığım",
-    tools_current_desc: "<strong>Yeni Oyun Projesi:</strong> Mekanikleri ve tasarımı üzerinde aktif olarak çalıştığım yeni bir oyun fikri.<br><br><strong>Akademik & Proje Süreçleri:</strong> Yazılım Mühendisliği 4. sınıfa geçiş dönemimde, servis mimarileri, çakışma algoritmaları ve eşzamanlı veri işleme araçları geliştirmeye devam ediyorum.",
+    tools_current_desc: "<strong>Yeni Oyun Projesi:</strong> Mekanikleri ve tasarımı üzerinde aktif olarak çalıştığım yeni bir oyun fikri.<br><br><strong>Akademik & Proje Süreçleri:</strong> Yazılım Mühendisliği son sınıf dönemimde; servis mimarileri, çakışma algoritmaları, görüntü işleme ve eşzamanlı veri işleme sistemleri geliştirmeye odaklanıyorum.",
     tools_tech: "Teknolojiler",
     tools_lang: "Diller & Motorlar:",
     tools_arch: "Mimari & Yaklaşımlar:",
@@ -191,7 +198,7 @@ const translations = {
     nav_contact: "Contact",
 
     // Hero
-    hero_eyebrow: "hello, ıS am",
+    hero_eyebrow: "hello, I am",
     hero_bio: "I am a senior Software Engineering student at Ankara Bilim University and a Graphic Design student at Istanbul University. Proficient in Object-Oriented Programming (OOP) principles, I possess a strong technical foundation in C# and Python. Through my internship at Ryse Soft and my academic projects so far, I have gained practical experience in simulation systems, data management, and UI design. As the founding president of a student community, I reinforced my leadership, organization, and teamwork skills. I aim to use this technical background in software development to create value in innovative projects and continuously improve myself in my career.",
     hero_btn_projects: "See Projects",
     hero_btn_contact: "Contact Me",
@@ -206,13 +213,13 @@ const translations = {
     // Kariyer Kartları - Journey
     journey_node_1: "Ankara Bilim Uni.",
     journey_title_1: "Ankara Bilim University",
-    journey_role_1: "Software Engineering — Senior Year",
+    journey_role_1: "Software Engineering — Bachelor's Degree (2022 - 2027)",
     journey_desc_1: "Gaining a strong technical foundation in OOP, C++, C#, Python, data structures, and algorithms.",
 
     journey_node_2: "Career Comm.",
     journey_title_2: "Career Community President",
     journey_role_2: "Chairman of the Board — 10/2023 – 10/2024",
-    journey_desc_2: "Gained leadership and organizational management experience as a founding member of the Career Community. Planned career events and established partnerships.",
+    journey_desc_2: "Gained leadership and organizational management experience as the Founding Board President of the Career Community. Planned career events and established partnerships.",
 
     journey_node_3: "Freelance",
     journey_title_3: "Freelance Graphic Design",
@@ -248,16 +255,17 @@ const translations = {
     exp_role_1: "Game Development Intern",
     exp_date_1: "07/2025 – 09/2025",
     exp_company_1: "Ryse Soft",
-    exp_desc_1: "Developed new game features and learned game design using C# and Unity. Contributed to the design, coding, testing, and debugging processes of game mechanics. Learned to create game scenarios and prepare documentation.",
+    exp_desc_1: "Developed new game features using C# and Unity, contributing to the design, coding, testing, and debugging processes of game mechanics. Enhanced game system quality and maintainability through algorithmic thinking and best coding practices.",
 
     exp_role_2: "Chairman of the Board",
     exp_date_2: "10/2023 – 10/2024",
     exp_company_2: "Career Community",
-    exp_desc_2: "Gained leadership and operations management experience. Planned and conducted career development events, created new projects. Gained experience in increasing interaction with community members and establishing collaborations with companies/organizations.",
+    exp_desc_2: "As the Founding Board President of the Career Community, I managed leadership, operations, and team coordination. Organized career development events and initiated new projects by establishing collaborations with industry representatives and organizations.",
 
     exp_role_3: "Graphic Designer",
+    exp_date_3: "2022 – 2024",
     exp_company_3: "Freelance",
-    exp_desc_3: "Currently studying at Istanbul University Graphic Design department. Developed branding, marketing materials, and social media content in the field of digital media design. Designed posters and social media graphics for mugs, notebooks, invitations, magazines, business cards, and community events.",
+    exp_desc_3: "Developed branding, marketing materials, and social media content in the field of digital media design. Managed creative design including posters, invitations, magazines, business cards, and social media graphics for community events.",
 
     // Projeler
     projects_eyebrow: "projects",
@@ -269,11 +277,17 @@ const translations = {
     project_1_title: "Smart Student Information System (OBS) & AI Management Panel",
     project_1_desc: "A Full-Stack software project developed with a team of 6 for the Engineering Design course at Ankara Bilim University, managing active version control (Git) processes. We built a comprehensive infrastructure featuring AI-supported curriculum management and advanced course conflict algorithms.",
     project_2_title: "Real-Time Face Processing & Deepfake AR System",
-    project_2_desc: "Together with a team of 6 developers, we developed a high-performance system architecture that applies photorealistic face manipulation and Deepfake-based AR filters on live camera feeds. We utilized MediaPipe Face Mesh, Delaunay Triangulation, and advanced image processing algorithms (FFT, EMA).",
+    project_2_desc: "A high-performance FastAPI-based web system applying photorealistic face deformation (warping) and AR filters on live video streams using MediaPipe FaceMesh (468 landmarks) and Delaunay Triangulation. Managed via a Figma-designed interface, results are verified using MSE, PSNR, and SSIM metrics, with FFT and EMA filters ensuring jitter-free tracking.",
     project_3_title: "Bank Queue Management System",
     project_3_desc: "Implemented by a team of 3 as part of a Web Design course, this project is a dynamic web application designed to manage customer traffic in bank branches. It features a system architecture where users can get digital queue numbers, counter statuses can be monitored in real-time, and waiting times are minimized with a user-friendly interface.",
     project_4_title: "Automated Feedback & Assessment System",
     project_4_desc: "An AI-supported educational technology platform that instantly analyzes students' performance in speaking, writing, and testing activities using NLP and voice recognition algorithms. It automates student development by providing personalized feedback.",
+    project_5_title: "K-not",
+    project_5_desc: "A modern productivity and knowledge management platform designed for students and researchers to organize, categorize, and quickly search study notes.",
+    project_6_title: "Java Travel Planner",
+    project_6_desc: "A desktop travel management application built with Object-Oriented Programming (OOP) principles and data structures, providing route planning, budget tracking, and an intuitive user interface.",
+    project_7_title: "AI-Powered Sponsorship Analysis",
+    project_7_desc: "An AI-driven decision support platform that processes sponsorship data to evaluate brand compatibility, audience engagement, and return on investment (ROI) through machine learning and analytics.",
 
     // Modal İçerikleri
     obs_modal_list: `
@@ -328,7 +342,7 @@ const translations = {
     tools_what_i_do: "What I do",
     tools_what_i_do_desc: "Focusing on game development and software engineering, I mainly concentrate on complex algorithms, problem-solving, and building backend architectures.<br><br>While developing game mechanics, OOP, and system architectures, I carry out both the technical logic and design processes of projects together.",
     tools_current: "Currently working on",
-    tools_current_desc: "<strong>New Game Project:</strong> A new game idea I am actively working on its mechanics and design.<br><br><strong>Academic & Project Processes:</strong> In my transition to the 4th year of Software Eng., I continue to develop service architectures, conflict algorithms, and concurrent data processing tools.",
+    tools_current_desc: "<strong>New Game Project:</strong> A new game idea I am actively working on its mechanics and design.<br><br><strong>Academic & Project Processes:</strong> In my senior year of Software Engineering, I focus on developing service architectures, conflict algorithms, image processing, and concurrent data processing systems.",
     tools_tech: "Technologies",
     tools_lang: "Languages & Engines:",
     tools_arch: "Architecture & Approaches:",
