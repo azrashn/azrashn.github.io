@@ -28,7 +28,7 @@ const translations = {
 
     journey_node_2: "Kariyer Top.",
     journey_title_2: "Kariyer Topluluğu Başkanı",
-    journey_role_2: "Yönetim Kurulu Başkanı — 10/2023 – 10/2024",
+    journey_role_2: "Yönetim Kurulu Başkanı — 10/2023 – 10/2025",
     journey_desc_2: "Kurucu Yönetim Kurulu Başkanı olduğum Kariyer Topluluğunda liderlik ve organizasyon yönetimi deneyimi kazandım. Kariyer etkinlikleri planlayıp iş birlikleri kurdum.",
 
     journey_node_3: "Freelance",
@@ -44,7 +44,7 @@ const translations = {
     journey_node_5: "Ryse Soft",
     journey_title_5: "Ryse Soft — Stajyer",
     journey_role_5: "Oyun Geliştirme Stajyeri — 07/2025 – 09/2025",
-    journey_desc_5: "C# ve Unity ile yeni oyun özellikleri geliştirdim, oyun tasarımı becerilerimi geliştirdim ve test süreçlerine katkı sağladım.",
+    journey_desc_5: "Flower Shop Simulator oyununu Unity ve C# ile geliştirdim; envanter yönetimi, müşteri siparişleri ve çiçek aranjmanı mekaniklerini tasarlayıp uyguladım.",
 
     journey_node_ist: "İstanbul Üni.",
     journey_title_ist: "İstanbul Üniversitesi",
@@ -65,10 +65,10 @@ const translations = {
     exp_role_1: "Oyun Geliştirme Stajyeri",
     exp_date_1: "07/2025 – 09/2025",
     exp_company_1: "Ryse Soft",
-    exp_desc_1: "C# ve Unity kullanarak yeni oyun özellikleri geliştirdim ve oyun mekaniklerinin tasarım, kodlama, test ve hata giderme süreçlerine katkı sağladım. Algoritmik düşünme ve en iyi kodlama pratikleriyle oyun sistemlerinin kalitesini ve bakım kolaylığını artırdım.",
+    exp_desc_1: "Flower Shop Simulator adlı oyunu Unity ve C# kullanarak geliştirdim. Envanter yönetimi, müşteri siparişleri ve çiçek aranjmanı mekaniklerini tasarlayıp uyguladım.",
 
     exp_role_2: "Yönetim Kurulu Başkanı",
-    exp_date_2: "10/2023 – 10/2024",
+    exp_date_2: "10/2023 – 10/2025",
     exp_company_2: "Kariyer Topluluğu",
     exp_desc_2: "Kurucu Yönetim Kurulu Başkanlığını üstlendiğim Kariyer Topluluğunda liderlik, operasyon ve ekip yönetimi süreçlerini yürüttüm. Sektör temsilcileri ve şirketlerle iş birlikleri kurarak kariyer geliştirme etkinlikleri ve yeni projeler organize ettim.",
 
@@ -76,6 +76,10 @@ const translations = {
     exp_date_3: "2022 – 2024",
     exp_company_3: "Freelance",
     exp_desc_3: "Dijital medya tasarımı alanında markalaşma, pazarlama materyalleri ve sosyal medya içerikleri geliştirdim. Kupa, defter, davetiye, dergi, kartvizit ve topluluk etkinlikleri için poster ve sosyal medya grafikleri tasarlayarak kreatif süreçleri yönettim.",
+    exp_role_4: "Programa Kabul Edilen Katılımcı",
+    exp_date_4: "10/2026 – 03/2027",
+    exp_company_4: "Geleceğe İlerleyen Kadınlar — Şişecam & Turkishe",
+    exp_desc_4: "Şişecam ve Turkishe iş birliğiyle yürütülen Geleceğe İlerleyen Kadınlar programına kabul edilen katılımcıyım.",
 
     // Projeler
     projects_eyebrow: "projeler",
@@ -89,15 +93,15 @@ const translations = {
     project_2_title: "Gerçek Zamanlı Yüz İşleme & Deepfake AR Sistemi",
     project_2_desc: "MediaPipe FaceMesh ile yüz üzerinde 468 noktalı landmark tespiti ve Delaunay Üçgenlemesi kullanarak canlı video üzerinde fotogerçekçi yüz deformasyonu (warping) ve AR filtreleri uygulayan FastAPI tabanlı yüksek performanslı web sistemi. Figma ile tasarlanan kullanıcı arayüzü üzerinden yönetilen projede; sonuçlar MSE, PSNR ve SSIM metrikleriyle analiz edilmiş, FFT ve EMA filtreleriyle pürüzsüz stabil takip sağlanmıştır.",
     project_3_title: "Bank Queue Management System",
-    project_3_desc: "Web tasarımı dersi kapsamında 3 kişilik bir ekiple hayata geçirilen bu proje, banka şubelerindeki müşteri yoğunluğunu yönetmek için tasarlanmış dinamik bir web uygulamasıdır. Kullanıcıların dijital olarak sıra numarası alabildiği, gişe durumlarının gerçek zamanlı izlenebildiği ve kullanıcı dostu bir arayüz ile bekleme sürelerini minimize etmeyi amaçlayan bir sistem mimarisine sahiptir.",
+    project_3_desc: "Banka şubelerindeki müşteri yoğunluğunu yönetmek için tasarlanmış dinamik bir web uygulamasıdır. Ekip çalışmasıyla kuyruk yönetimi, sıra takibi ve web arayüzü modüllerinin geliştirilmesine frontend geliştirici olarak katkı sağladım.",
     project_4_title: "Automated Feedback & Assessment System",
-    project_4_desc: "Öğrencilerin konuşma, yazma ve test aktivitelerindeki performanslarını NLP ve ses tanıma algoritmalarıyla anlık analiz eden yapay zeka destekli eğitim teknolojisi platformu. Kişiselleştirilmiş geri bildirimler sunarak öğrenci gelişimini otomatize eder.",
-    project_5_title: "K-not",
-    project_5_desc: "Öğrenciler ve araştırmacılar için bilgi yönetimini ve not alma süreçlerini kolaylaştıran, kategorizasyon ve hızlı arama yeteneklerine sahip modern verimlilik platformu.",
+    project_4_desc: "Python, FastAPI ve MySQL tabanlı, 6 kişilik ekiple geliştirilen İngilizce değerlendirme sistemi. Yazılı yanıtlar Gemini ile analiz edilir, konuşma Whisper ile metne dönüştürülür ve öğrenciye kişiselleştirilmiş geri bildirim sunulur.",
+    project_5_title: "K-not — Kaynak Temelli Öğrenme Platformu",
+    project_5_desc: "RAG tabanlı bir ekip projesi: ders materyallerinden kaynak gösteren yanıtlar, quiz üretimi ve öğrenci cevaplarının değerlendirilmesi. 5 kişilik ekibi proje yöneticisi olarak yönetiyorum.",
     project_6_title: "Java Travel Planner",
-    project_6_desc: "Nesne Yönelimli Programlama (OOP) mimarisi ve veri yapıları kullanılarak geliştirilen; rota planlama, seyahat bütçe takibi ve kullanıcı dostu arayüz sunan masaüstü seyahat yönetim uygulaması.",
+    project_6_desc: "Decorator, Observer, Strategy, Command ve Iterator tasarım desenleri kullanılarak Java Swing ile geliştirilen, rota planlama ve seyahat bütçe takibi sunan interaktif bir masaüstü seyahat planlama uygulaması.",
     project_7_title: "AI-Powered Sponsorship Analysis",
-    project_7_desc: "Sponsorluk verilerini makine öğrenimi ve veri analitiği yöntemleriyle işleyerek marka uyumluluğunu, hedef kitle etkileşimini ve yatırım getirisini (ROI) analiz eden yapay zeka destekli karar destek platformu.",
+    project_7_desc: "Video içeriklerinde yapay zekâ destekli marka/logo tespiti, görünürlük analizi ve sponsorluk performansı ölçümüne odaklanan bir bitirme projesi. Gereksinim analizi, sistem tasarımı ve arayüz geliştirme süreçlerine katkı sağladım.",
 
     // Modal İçerikleri
     obs_modal_list: `
@@ -218,7 +222,7 @@ const translations = {
 
     journey_node_2: "Career Comm.",
     journey_title_2: "Career Community President",
-    journey_role_2: "Chairman of the Board — 10/2023 – 10/2024",
+    journey_role_2: "Chairman of the Board — 10/2023 – 10/2025",
     journey_desc_2: "Gained leadership and organizational management experience as the Founding Board President of the Career Community. Planned career events and established partnerships.",
 
     journey_node_3: "Freelance",
@@ -234,7 +238,7 @@ const translations = {
     journey_node_5: "Ryse Soft",
     journey_title_5: "Ryse Soft — Intern",
     journey_role_5: "Game Development Intern — 07/2025 – 09/2025",
-    journey_desc_5: "Developed new game features using C# and Unity, improved game design skills, and contributed to testing processes.",
+    journey_desc_5: "Developed the Flower Shop Simulator game in Unity and C#, designing and implementing inventory management, customer orders, and flower arrangement mechanics.",
 
     journey_node_ist: "Istanbul Uni.",
     journey_title_ist: "Istanbul University",
@@ -255,10 +259,10 @@ const translations = {
     exp_role_1: "Game Development Intern",
     exp_date_1: "07/2025 – 09/2025",
     exp_company_1: "Ryse Soft",
-    exp_desc_1: "Developed new game features using C# and Unity, contributing to the design, coding, testing, and debugging processes of game mechanics. Enhanced game system quality and maintainability through algorithmic thinking and best coding practices.",
+    exp_desc_1: "Developed the Flower Shop Simulator game in Unity and C#. Designed and implemented inventory management, customer orders, and flower arrangement mechanics.",
 
     exp_role_2: "Chairman of the Board",
-    exp_date_2: "10/2023 – 10/2024",
+    exp_date_2: "10/2023 – 10/2025",
     exp_company_2: "Career Community",
     exp_desc_2: "As the Founding Board President of the Career Community, I managed leadership, operations, and team coordination. Organized career development events and initiated new projects by establishing collaborations with industry representatives and organizations.",
 
@@ -266,6 +270,10 @@ const translations = {
     exp_date_3: "2022 – 2024",
     exp_company_3: "Freelance",
     exp_desc_3: "Developed branding, marketing materials, and social media content in the field of digital media design. Managed creative design including posters, invitations, magazines, business cards, and social media graphics for community events.",
+    exp_role_4: "Accepted Participant",
+    exp_date_4: "10/2026 – 03/2027",
+    exp_company_4: "Geleceğe İlerleyen Kadınlar — Şişecam & Turkishe",
+    exp_desc_4: "Accepted participant in the Geleceğe İlerleyen Kadınlar program run by Şişecam and Turkishe.",
 
     // Projeler
     projects_eyebrow: "projects",
@@ -279,15 +287,15 @@ const translations = {
     project_2_title: "Real-Time Face Processing & Deepfake AR System",
     project_2_desc: "A high-performance FastAPI-based web system applying photorealistic face deformation (warping) and AR filters on live video streams using MediaPipe FaceMesh (468 landmarks) and Delaunay Triangulation. Managed via a Figma-designed interface, results are verified using MSE, PSNR, and SSIM metrics, with FFT and EMA filters ensuring jitter-free tracking.",
     project_3_title: "Bank Queue Management System",
-    project_3_desc: "Implemented by a team of 3 as part of a Web Design course, this project is a dynamic web application designed to manage customer traffic in bank branches. It features a system architecture where users can get digital queue numbers, counter statuses can be monitored in real-time, and waiting times are minimized with a user-friendly interface.",
+    project_3_desc: "A dynamic web application designed to manage customer traffic in bank branches. As part of a team, I contributed as a frontend developer to the queue management, queue tracking, and web interface modules.",
     project_4_title: "Automated Feedback & Assessment System",
-    project_4_desc: "An AI-supported educational technology platform that instantly analyzes students' performance in speaking, writing, and testing activities using NLP and voice recognition algorithms. It automates student development by providing personalized feedback.",
-    project_5_title: "K-not",
-    project_5_desc: "A modern productivity and knowledge management platform designed for students and researchers to organize, categorize, and quickly search study notes.",
+    project_4_desc: "An English assessment system built with Python, FastAPI, and MySQL by a team of six. Written responses are analyzed with Gemini, speech is transcribed with Whisper, and students receive personalized feedback.",
+    project_5_title: "K-not — Source-Based Learning Platform",
+    project_5_desc: "A RAG-based team project delivering source-cited answers from course materials, quiz generation, and evaluation of student responses. Leading a team of five as project manager.",
     project_6_title: "Java Travel Planner",
-    project_6_desc: "A desktop travel management application built with Object-Oriented Programming (OOP) principles and data structures, providing route planning, budget tracking, and an intuitive user interface.",
+    project_6_desc: "A desktop travel planning application built with Java Swing, using Decorator, Observer, Strategy, Command, and Iterator design patterns to offer route planning and travel budget tracking.",
     project_7_title: "AI-Powered Sponsorship Analysis",
-    project_7_desc: "An AI-driven decision support platform that processes sponsorship data to evaluate brand compatibility, audience engagement, and return on investment (ROI) through machine learning and analytics.",
+    project_7_desc: "A graduation project focused on AI-powered brand and logo detection in video content, visibility analysis, and sponsorship performance measurement. I contributed to requirements analysis, system design, and interface development.",
 
     // Modal İçerikleri
     obs_modal_list: `
